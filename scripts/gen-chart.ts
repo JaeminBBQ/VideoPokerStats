@@ -9,17 +9,18 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { handToString } from '../src/engine/cards.ts';
 import { buildTables } from '../src/engine/ev.ts';
 import { GAMES, type GameId } from '../src/engine/games.ts';
-import { canonicalHands, deucesPattern, deucesSection, generateChart } from '../src/engine/strategy.ts';
+import { canonicalHands, chartKind, generateChart } from '../src/engine/strategy.ts';
 
 const id = (process.argv[2] ?? 'nsud') as GameId;
 const game = GAMES[id];
 if (!game) throw new Error(`unknown game ${id}`);
-if (!game.rows.some((r) => r.key === 'four-deuces')) throw new Error('only deuces-wild charts are supported so far');
+const kind = chartKind(game);
+if (!kind) throw new Error(`no chart classifier for ${id} yet`);
 
 const t0 = performance.now();
 const tables = buildTables(game);
 const hands = canonicalHands();
-const chart = generateChart(tables, deucesPattern, deucesSection, hands);
+const chart = generateChart(tables, kind, hands);
 const secs = ((performance.now() - t0) / 1000).toFixed(1);
 
 const pct = (x: number, d = 2) => `${(x * 100).toFixed(d)}%`;
@@ -32,11 +33,11 @@ const md: string[] = [
   `- Following this chart: **${pct(chart.chartReturn, 4)}** (gives up ${pct(chart.perfectReturn - chart.chartReturn, 4)})`,
   `- Hands where the chart is not optimal: ${pct(chart.errorRate, 3)}`,
   '',
-  'Always hold every deuce. Find the section for the number of deuces you were dealt, then play the **first** line you can make.',
+  chart.rule,
   '',
 ];
 for (const s of chart.sections) {
-  md.push(`## ${s.section === 1 ? '1 deuce' : `${s.section} deuces`} dealt (${pct(s.share)} of hands)`, '');
+  md.push(`## ${s.title}`, '');
   md.push('| # | Hold | Used | Example |', '|---|---|---|---|');
   s.lines.forEach((l, i) => md.push(`| ${i + 1} | ${l.label} | ${pct(l.share, 1)} | \`${handToString(l.example)}\` |`));
   md.push('');

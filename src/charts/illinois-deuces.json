@@ -1,13 +1,15 @@
 {
  "gameId": "illinois-deuces",
+ "rule": "Always hold every deuce. Find the section for the number of deuces you were dealt, then play the first line you can make.",
  "sections": [
   {
    "section": 4,
+   "title": "4 deuces dealt (0.00% of hands)",
    "share": 0.00001846892603195124,
    "lines": [
     {
-     "key": "made:Four Deuces",
-     "label": "Pat Four Deuces",
+     "key": "d4",
+     "label": "Four deuces",
      "share": 1,
      "example": [
       0,
@@ -21,6 +23,7 @@
   },
   {
    "section": 3,
+   "title": "3 deuces dealt (0.17% of hands)",
    "share": 0.0017360790470034167,
    "lines": [
     {
@@ -63,6 +66,7 @@
   },
   {
    "section": 2,
+   "title": "2 deuces dealt (3.99% of hands)",
    "share": 0.03992981808107859,
    "lines": [
     {
@@ -165,32 +169,9 @@
   },
   {
    "section": 1,
+   "title": "1 deuce dealt (29.95% of hands)",
    "share": 0.2994736356080894,
    "lines": [
-    {
-     "key": "made:Full House",
-     "label": "Pat Full House",
-     "share": 0.012210915818686401,
-     "example": [
-      0,
-      4,
-      5,
-      8,
-      10
-     ]
-    },
-    {
-     "key": "made:Straight Flush",
-     "label": "Pat Straight Flush",
-     "share": 0.000596155822797821,
-     "example": [
-      0,
-      5,
-      9,
-      13,
-      17
-     ]
-    },
     {
      "key": "made:Wild Royal Flush",
      "label": "Pat Wild Royal Flush",
@@ -213,6 +194,42 @@
       5,
       6,
       7
+     ]
+    },
+    {
+     "key": "made:Straight Flush",
+     "label": "Pat Straight Flush",
+     "share": 0.000596155822797821,
+     "example": [
+      0,
+      5,
+      9,
+      13,
+      17
+     ]
+    },
+    {
+     "key": "d1:kind4",
+     "label": "Four of a Kind (1 deuce + 3 natural)",
+     "share": 0.010854147394387913,
+     "example": [
+      0,
+      4,
+      5,
+      6,
+      9
+     ]
+    },
+    {
+     "key": "made:Full House",
+     "label": "Pat Full House",
+     "share": 0.012210915818686401,
+     "example": [
+      0,
+      4,
+      5,
+      8,
+      10
      ]
     },
     {
@@ -273,18 +290,6 @@
       8,
       13,
       18
-     ]
-    },
-    {
-     "key": "d1:kind4",
-     "label": "Four of a Kind (1 deuce + 3 natural)",
-     "share": 0.010854147394387913,
-     "example": [
-      0,
-      4,
-      5,
-      6,
-      9
      ]
     },
     {
@@ -423,20 +428,9 @@
   },
   {
    "section": 0,
+   "title": "0 deuces dealt (65.88% of hands)",
    "share": 0.6588419983377967,
    "lines": [
-    {
-     "key": "made:Full House",
-     "label": "Pat Full House",
-     "share": 0.0018501387604070306,
-     "example": [
-      4,
-      5,
-      6,
-      8,
-      9
-     ]
-    },
     {
      "key": "made:Natural Royal Flush",
      "label": "Pat Natural Royal Flush",
@@ -462,15 +456,39 @@
      ]
     },
     {
-     "key": "made:Straight",
-     "label": "Pat Straight",
-     "share": 0.0047234603201300705,
+     "key": "made:Straight Flush",
+     "label": "Pat Straight Flush",
+     "share": 0.000014016202730356292,
      "example": [
       4,
       8,
       12,
-      17,
-      22
+      16,
+      20
+     ]
+    },
+    {
+     "key": "d0:kind4",
+     "label": "Four of a Kind",
+     "share": 0.0003083564600678384,
+     "example": [
+      4,
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    {
+     "key": "made:Full House",
+     "label": "Pat Full House",
+     "share": 0.0018501387604070306,
+     "example": [
+      4,
+      5,
+      6,
+      8,
+      9
      ]
     },
     {
@@ -486,15 +504,27 @@
      ]
     },
     {
-     "key": "made:Straight Flush",
-     "label": "Pat Straight Flush",
-     "share": 0.000014016202730356292,
+     "key": "made:Straight",
+     "label": "Pat Straight",
+     "share": 0.0047234603201300705,
      "example": [
       4,
       8,
       12,
-      16,
-      20
+      17,
+      22
+     ]
+    },
+    {
+     "key": "d0:kind3",
+     "label": "Three of a Kind",
+     "share": 0.024668516805427074,
+     "example": [
+      4,
+      5,
+      6,
+      8,
+      13
      ]
     },
     {
@@ -522,30 +552,6 @@
      ]
     },
     {
-     "key": "d0:kind4",
-     "label": "Four of a Kind",
-     "share": 0.0003083564600678384,
-     "example": [
-      4,
-      5,
-      6,
-      7,
-      8
-     ]
-    },
-    {
-     "key": "d0:kind3",
-     "label": "Three of a Kind",
-     "share": 0.024668516805427074,
-     "example": [
-      4,
-      5,
-      6,
-      8,
-      13
-     ]
-    },
-    {
      "key": "d0:royal3:T",
      "label": "3 to a Royal (with T)",
      "share": 0.005634513497603229,
@@ -570,18 +576,6 @@
      ]
     },
     {
-     "key": "d0:sf4low",
-     "label": "4 to a Straight Flush (needs the 2 slot)",
-     "share": 0.00008409721638213776,
-     "example": [
-      4,
-      5,
-      8,
-      12,
-      48
-     ]
-    },
-    {
      "key": "d0:royal3:A/T",
      "label": "3 to a Royal (with A/T)",
      "share": 0.006054999579513918,
@@ -603,6 +597,18 @@
       38,
       42,
       46
+     ]
+    },
+    {
+     "key": "d0:sf4low",
+     "label": "4 to a Straight Flush (needs the 2 slot)",
+     "share": 0.00008409721638213776,
+     "example": [
+      4,
+      5,
+      8,
+      12,
+      48
      ]
     },
     {

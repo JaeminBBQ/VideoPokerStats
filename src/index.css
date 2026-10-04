@@ -40,7 +40,68 @@ body {
   padding: 20px 16px 48px;
 }
 
-/* ---------------------------------------------------------------- header */
+/* ---------------------------------------------------------------- tabs & header */
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  margin: 2px 0 14px;
+}
+
+.tab {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  color: var(--muted);
+  border-radius: 8px 8px 2px 2px;
+  padding: 8px 22px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.tab.active {
+  color: var(--gold);
+  background: rgba(230, 193, 92, 0.12);
+  border-color: rgba(230, 193, 92, 0.35);
+}
+
+.header-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mode-switch {
+  display: inline-flex;
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mode-switch button {
+  background: none;
+  border: none;
+  color: var(--muted);
+  padding: 8px 18px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mode-switch button + button {
+  border-left: 1px solid var(--panel-border);
+}
+
+.mode-switch button.active {
+  background: rgba(230, 193, 92, 0.16);
+  color: var(--gold);
+}
 
 .header h1 {
   font-size: 26px;
@@ -397,6 +458,117 @@ select {
   border-radius: 999px;
 }
 
+.holds-table .line-cell {
+  color: var(--muted);
+  font-size: 12.5px;
+  font-variant-numeric: normal;
+}
+
+/* ---------------------------------------------------------------- drill */
+
+.drill-prompt {
+  text-align: center;
+  font-size: 15px;
+  margin: 14px 0 0;
+  line-height: 1.5;
+}
+
+.drill-prompt strong {
+  color: var(--gold);
+}
+
+.drill-prompt.empty {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.drill-note {
+  display: block;
+  margin-top: 3px;
+  font-size: 12.5px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.drill-counts {
+  color: var(--muted);
+  font-size: 13.5px;
+  margin-bottom: 8px;
+}
+
+.drill-list {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.drill-list li {
+  background: rgba(0, 0, 0, 0.22);
+  border-radius: 8px;
+  padding: 8px 10px;
+  line-height: 1.4;
+}
+
+.drill-session {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ---------------------------------------------------------------- chart tab */
+
+.chart-panel {
+  margin-top: 14px;
+}
+
+.chart-returns,
+.chart-rule {
+  font-size: 14.5px;
+  line-height: 1.5;
+  margin: 6px 0;
+}
+
+.chart-rule {
+  color: var(--gold);
+}
+
+.chart-section h3 {
+  font-size: 15px;
+  margin: 18px 0 6px;
+  color: var(--text);
+  letter-spacing: 0.3px;
+}
+
+.chart-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.chart-table th {
+  color: var(--muted);
+  text-align: left;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.chart-table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  vertical-align: top;
+}
+
+.chart-table td:not(:nth-child(2)) {
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-example {
+  color: var(--muted);
+}
+
 /* ---------------------------------------------------------------- stats */
 
 .stats-grid {
@@ -458,5 +630,17 @@ select {
 
   .game-picker select {
     width: 100%;
+  }
+
+  .holds-table,
+  .chart-table {
+    font-size: 12.5px;
+  }
+
+  .holds-table th,
+  .holds-table td,
+  .chart-table th,
+  .chart-table td {
+    padding: 4px 4px;
   }
 }

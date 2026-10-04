@@ -33,6 +33,7 @@ export const emptyTotalsEntry = (): TotalsEntry => ({ hands: 0, mistakes: 0, evL
 export function recordHand(state: TrainerState, record: HandRecord): TrainerState {
   const history = [...state.history, record];
   if (history.length > HISTORY_CAP) history.splice(0, history.length - HISTORY_CAP);
+  if (record.mode === 'drill') return { history, totals: state.totals }; // D7: drills don't count toward totals
   const lost = record.evBest - record.evHeld;
   const prev = state.totals[record.gameId] ?? emptyTotalsEntry();
   return {

@@ -16,6 +16,12 @@ All paytables are per coin at max bet. "Verified" = `npm run verify` reproduces 
 | 5 | Loose Deuces, 5K pays 15 (`loose-deuces`) | 1-2-2-3-4-10-15-25-500-800 | 100.9695% ✔ | Vegas Station Casinos (25¢) |
 | 6 | Full-Pay Deuces Wild (`fpdw`) | 1-2-2-3-5-9-15-25-200-800 | 100.7620% ✔ | None known since 2023 (kept as the classic reference) |
 | 7 | Full-Pay Joker Poker, Kings or Better (`joker-kings`) | 1-1-2-3-5-7-20-50-100-200-800 | 100.6463% ✔ | Plaza (Vegas), if still there |
+| 8 | Jacks or Better 8/5 (`job-8-5`) | 1-2-3-4-5-8-25-50-800 | 97.2984% ✔ | **Legends Bay** Game King #12139, 10¢ (photo) |
+| 9 | Bonus Poker 6/5 (`bonus-6-5`) | 1-2-3-4-5-6-25-40-80-50-800 | 96.8687% ✔ | Legends Bay #12139, 10¢ (photo) |
+| 10 | Deuces Wild 16/13 (`lb-deuces-16-13`) | 1-2-2-3-4-13-16-25-200-800 | 96.7651% ✔ | Legends Bay #12139, 10¢ (photo) |
+| 11 | Bonus Poker Deluxe 7/5 (`bpd-7-5`) | 1-1-3-4-5-7-80-50-800 | 96.2526% ✔ | Legends Bay #12139, 10¢ (photo) |
+
+Owner photos of the Legends Bay machine are in `context/` (2026-10-04). Game King paytables can differ by denomination, and only the 10¢ tables are photographed so far.
 
 No game at or above 100% exists in Reno-Tahoe (vpFREE2 region page, 2026-10). NSUD at GSR is the best the owner can play locally; with slot-club cashback/promos it can approach or pass break-even, but only with perfect strategy.
 

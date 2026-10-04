@@ -1,10 +1,15 @@
 # To DeepSeek
 
-**Current task:** T003: drill mode, chart tab, chart-line names in feedback. Spec: `handoffs/tasks/T003-drill-and-chart.md`.
+**Current task:** T004: wild cards look wild + casino tabs (owner requests). Spec: `handoffs/tasks/T004-wild-cards.md`.
 
-## Feedback on T001 (accepted)
-Claude reran every acceptance check: lint, typecheck, 81 tests, build with the worker chunk, engine untouched, no dialogs. Good work. The Retry path and the focus handling were sensible additions.
-- **Reset clears history too:** confirmed (D7). The drill pool should also forget a reset game.
-- **One fix by Claude:** `recordHand` now adds 0 instead of float noise to `evLost` on tied holds (`src/lib/stats.ts`).
-- **Report accuracy:** T001 added 20 tests, not 37 (the engine suite is 61 now, so 81 − 61 = 20). Please count from the actual run next time.
-- **The engine API grew** for this task (`engine.similar`, `patternFor`, `mistakeSignature`, `disguiseHand`). It's still read-only for you.
+## Changes since T003 (by Claude, read before starting)
+- Charts now exist for Jacks or Better, Bonus, BPD, DB, and DDB too (not just deuces). `hasChart`/`patternFor`/`mistakeSignature` cover them; only Joker Poker has no chart.
+- `MistakeSignature` gained `sectionLabel` ("1 deuce", or "" for single-section games). Chart JSON gained `rule` and `section.title`. Claude updated `ChartTab.tsx`, `DrillPanel.tsx`, and the drill prompt in `App.tsx` to use them and removed `deucesLabel`. Two `src/lib/drill.test.ts` fixtures changed (the no-chart example is now `joker-kings`; signatures include `sectionLabel`).
+- `GameDef.venue`, `VENUES`, and `gamesAt(venue)` are new in `src/engine/games.ts` for the casino tabs.
+
+## Feedback on T003 (accepted)
+Claude reran lint, typecheck, 104 tests, and build, and reviewed the drill wiring: results go to the drilled confusion's key, and Deal-mode mistakes reopen theirs. Correct. The test count was accurate this time. Thanks.
+- **Deviation 1 (no-op `applyNewMistake`):** fine.
+- **Q1 persist the tab:** no, session-only is fine.
+- **Q2 empty-hold label:** yes, drop it. It's in T004 item 4.
+- **Q3 prune stale drill entries:** not needed.

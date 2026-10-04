@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { parseHand } from './cards.ts';
 import { buildTables } from './ev.ts';
 import { GAMES } from './games.ts';
-import { canonicalHands, deucesPattern, deucesSection, generateChart, straightWays } from './strategy.ts';
+import { canonicalHands, chartKind, deucesPattern, generateChart, naturalPattern, straightWays } from './strategy.ts';
 
 const label = (held: string) => deucesPattern(GAMES.nsud, held ? parseHand(held) : []).label;
 
@@ -30,6 +30,40 @@ describe('deucesPattern', () => {
   });
 });
 
+const jobLabel = (held: string) => naturalPattern(GAMES['job-8-5'], held ? parseHand(held) : []).label;
+
+describe('naturalPattern', () => {
+  it.each([
+    ['', 'Discard everything'],
+    ['Jc Jd', 'High Pair (JJ–AA)'],
+    ['5c 5d', 'Low Pair (22–TT)'],
+    ['5c 5d 9h 9s', 'Two Pair'],
+    ['Th Jh Qh', '3 to a Royal'],
+    ['Jh Qh', 'Suited QJ'],
+    ['Th Jh', 'Suited JT'],
+    ['Jc Qh Kd', 'KQJ unsuited'],
+    ['Ah', 'A only'],
+    ['5h 6h 7h 9h', '4 to a Straight Flush'],
+    ['5h 6h 8h', '3 to a Straight Flush (0 high, 1 gap)'],
+    ['2c 3c Ac', '3 to a Straight Flush (1 high, no gaps)'],
+    ['5c 6d 7h 8s', '4 to an Open Straight'],
+    ['9c Jd Qh Ks', '4 to an Inside Straight (3 high)'],
+    ['2h 5h 8h Jh', '4 to a Flush (1 high)'],
+    ['5c 5d 9h', 'other (3 cards)'],
+  ])('%s → %s', (held, want) => expect(jobLabel(held)).toBe(want));
+
+  it('splits aces out in bonus games', () => {
+    expect(naturalPattern(GAMES['bonus-6-5'], parseHand('Ac Ad')).label).toBe('Pair of Aces');
+    expect(naturalPattern(GAMES['bonus-6-5'], parseHand('Kc Kd')).label).toBe('High Pair (JJ–KK)');
+  });
+
+  it('has chart kinds for deuces and Jacks-or-Better games, not Joker Poker', () => {
+    expect(chartKind(GAMES['job-8-5'])?.sectionLabel(0)).toBe('');
+    expect(chartKind(GAMES.nsud)?.sectionLabel(1)).toBe('1 deuce');
+    expect(chartKind(GAMES['joker-kings'])).toBeNull();
+  });
+});
+
 describe('canonicalHands', () => {
   it('covers every hand exactly once in 134,459 suit classes', { timeout: 60_000 }, () => {
     const hands = canonicalHands();
@@ -40,7 +74,7 @@ describe('canonicalHands', () => {
 
 describe('NSUD chart', () => {
   it('reproduces the verified return and stays within 0.02% of perfect play', { timeout: 180_000 }, () => {
-    const chart = generateChart(buildTables(GAMES.nsud), deucesPattern, deucesSection, canonicalHands());
+    const chart = generateChart(buildTables(GAMES.nsud), chartKind(GAMES.nsud)!, canonicalHands());
     expect(chart.perfectReturn).toBeCloseTo(0.997283, 6);
     expect(chart.perfectReturn - chart.chartReturn).toBeLessThan(0.0002);
     expect(chart.sections.map((s) => s.section)).toEqual([4, 3, 2, 1, 0]);

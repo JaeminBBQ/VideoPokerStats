@@ -55,6 +55,17 @@ describe('recordHand', () => {
     // Totals survive the cap untouched.
     expect(after.totals.nsud?.hands).toBe(HISTORY_CAP + 1);
   });
+
+  it('records drill hands in history but leaves totals alone (D7)', () => {
+    let state = recordHand(empty(), record({ evHeld: 0.5, evBest: 1 }));
+    state = recordHand(state, record({ ts: 1, mode: 'drill', evHeld: 0.5, evBest: 1 }));
+    expect(state.history).toHaveLength(2);
+    expect(state.totals.nsud).toEqual({ hands: 1, mistakes: 1, evLost: 0.5 });
+    // A drill-only session records no totals at all.
+    const only = recordHand(empty(), record({ mode: 'drill' }));
+    expect(only.history).toHaveLength(1);
+    expect(only.totals.nsud).toBeUndefined();
+  });
 });
 
 describe('errorRate', () => {

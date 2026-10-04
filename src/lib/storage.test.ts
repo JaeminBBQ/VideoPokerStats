@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createStorage, DEFAULT_SETTINGS, STORAGE_KEYS, type StorageLike } from './storage.ts';
+import type { DrillState } from './drill.ts';
 import type { HandRecord, Totals } from './stats.ts';
 
 class MemoryStorage implements StorageLike {
@@ -22,21 +23,25 @@ const history: HandRecord[] = [
 const totals: Totals = { nsud: { hands: 3, mistakes: 1, evLost: 0.25 } };
 
 describe('createStorage', () => {
-  it('round-trips history, totals, and settings', () => {
+  it('round-trips history, totals, drill state, and settings', () => {
     const store = new MemoryStorage();
     const s = createStorage(store);
+    const drill: DrillState = { nsud: { '1|d1:sf4w1|made:Straight': { streak: 2, cleared: false } } };
     s.saveHistory(history);
     s.saveTotals(totals);
-    s.saveSettings({ gameId: 'db-10-7', denomination: 1 });
+    s.saveDrill(drill);
+    s.saveSettings({ gameId: 'db-10-7', denomination: 1, mode: { 'db-10-7': 'drill' } });
     expect(s.loadHistory()).toEqual(history);
     expect(s.loadTotals()).toEqual(totals);
-    expect(s.loadSettings()).toEqual({ gameId: 'db-10-7', denomination: 1 });
+    expect(s.loadDrill()).toEqual(drill);
+    expect(s.loadSettings()).toEqual({ gameId: 'db-10-7', denomination: 1, mode: { 'db-10-7': 'drill' } });
   });
 
   it('returns defaults for missing keys', () => {
     const s = createStorage(new MemoryStorage());
     expect(s.loadHistory()).toEqual([]);
     expect(s.loadTotals()).toEqual({});
+    expect(s.loadDrill()).toEqual({});
     expect(s.loadSettings()).toEqual(DEFAULT_SETTINGS);
   });
 
@@ -44,9 +49,11 @@ describe('createStorage', () => {
     const store = new MemoryStorage();
     store.setRaw(STORAGE_KEYS.history, 'not json at all');
     store.setRaw(STORAGE_KEYS.totals, '{"v":1,"data":');
+    store.setRaw(STORAGE_KEYS.drill, '{"v":1,"data":{"nsud":{"k":{"streak":"x","cleared":true}}}}');
     const s = createStorage(store);
     expect(s.loadHistory()).toEqual([]);
     expect(s.loadTotals()).toEqual({});
+    expect(s.loadDrill()).toEqual({});
   });
 
   it('returns defaults for a wrong version or wrong shape', () => {

@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { deal, mulberry32, parseHand, type Card } from './cards.ts';
 import { analyzeHand, buildTables, holdEvs, BINOM, type Tables } from './ev.ts';
-import { GAMES, payout, type GameDef, type GameId } from './games.ts';
+import { GAMES, GAME_LIST, VENUES, gamesAt, payout, type GameDef, type GameId } from './games.ts';
 
 const rowKey = (game: GameDef, hand: string) => {
   const i = game.evaluate(parseHand(hand));
@@ -60,7 +60,17 @@ describe('bonus evaluators', () => {
     ['db-10-7', 'Jc Jd 3h 4s 5c', 'jacks-or-better'],
     ['db-10-7', 'Tc Td 3h 4s 5c', 'nothing'],
     ['db-10-7', '9h Th Jh Qh Kh', 'straight-flush'],
+    ['job-8-5', '9c 9d 9h 9s Kc', 'four-kind'],
+    ['job-8-5', '7c 7h 3d 3s Kc', 'two-pair'],
+    ['bonus-6-5', 'Ac Ad Ah As 3c', 'four-aces'],
+    ['bonus-6-5', '4c 4d 4h 4s 3c', 'four-2-4'],
+    ['bpd-7-5', '6c 6d 6h 6s 3c', 'four-kind'],
   ])('%s: %s → %s', (id, hand, key) => expect(rowKey(GAMES[id as GameId], hand)).toBe(key));
+
+  it('pays two pair as on the photographed Legends Bay machine', () => {
+    const twoPair = (id: GameId) => GAMES[id].rows.find((r) => r.key === 'two-pair')!.pays;
+    expect([twoPair('job-8-5'), twoPair('bonus-6-5'), twoPair('bpd-7-5'), twoPair('db-10-7')]).toEqual([2, 2, 1, 1]);
+  });
 });
 
 /** Brute force: enumerate every draw for every hold and evaluate directly. */
@@ -125,5 +135,15 @@ describe('analyzeHand (NSUD)', () => {
   it('discarding everything equals the average over all hands from the 47 left', () => {
     const hand = parseHand('3c 5d 7h 9s Jc');
     expect(analyzeHand(tables, hand).find((h) => h.mask === 0)!.ev).toBeCloseTo(bruteForceEvs(GAMES.nsud, hand)[0], 10);
+  });
+});
+
+describe('venues', () => {
+  it('lists every game under exactly one casino tab, best return first', () => {
+    const listed = VENUES.flatMap((v) => gamesAt(v).map((g) => g.id));
+    expect(listed.sort()).toEqual(GAME_LIST.map((g) => g.id).sort());
+    const lb = gamesAt('Legends Bay').map((g) => g.publishedReturn);
+    expect(lb).toEqual([...lb].sort((a, b) => b - a));
+    expect(gamesAt('GSR').map((g) => g.id)).toEqual(['nsud']);
   });
 });

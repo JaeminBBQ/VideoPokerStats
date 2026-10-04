@@ -6,7 +6,7 @@
  * first line that matches one of your hand's holds. Charts are derived from exact EVs, then
  * replayed over every starting hand to measure what they give up versus perfect play.
  */
-import { ACE, TEN, rankOf, suitOf, type Card } from './cards.ts';
+import { ACE, JACK, RANKS, TEN, rankOf, suitOf, type Card } from './cards.ts';
 import { holdEvs, EV_EPSILON, BINOM, type Tables } from './ev.ts';
 import type { GameDef } from './games.ts';
 
@@ -96,6 +96,115 @@ export type Classifier = (game: GameDef, held: readonly Card[]) => Pattern;
 /** Chart sections: deuces games split by deuces dealt. */
 export const deucesSection = (hand: readonly Card[]): number => hand.filter(isDeuce).length;
 
+// ---------------------------------------------------------------- natural games (Jacks or Better family)
+
+/** All straight windows including the wheel, for natural-card games. */
+const ALL_WINDOWS = [(1 << ACE) | 0b1111, ...Array.from({ length: 9 }, (_, lo) => 0b11111 << lo)];
+const isHigh = (r: number) => r >= JACK;
+const rankStr = (ranks: number[]) => [...ranks].sort((a, b) => b - a).map((r) => RANKS[r]).join('');
+
+/** Fewest missing ranks inside any straight window that holds these ranks (0 = consecutive). */
+function insideGaps(rankMask: number, n: number): number {
+  let best = Infinity;
+  for (const w of ALL_WINDOWS) {
+    if ((rankMask & ~w) !== 0) continue;
+    // Span of held ranks inside this window, ace low for the wheel.
+    const ranks: number[] = [];
+    for (let r = 0; r < 13; r++) if (rankMask & (1 << r)) ranks.push(w === ALL_WINDOWS[0] && r === ACE ? -1 : r);
+    best = Math.min(best, Math.max(...ranks) - Math.min(...ranks) + 1 - n);
+  }
+  return best;
+}
+
+/**
+ * Names a hold in a natural-card game (Jacks or Better, Bonus Poker, Bonus Poker Deluxe). High
+ * cards (J, Q, K, A) matter here, so draws are qualified by how many they contain; small royal
+ * draws and plain high-card holds are named by their exact ranks ("suited QJ", "KQJ").
+ */
+export function naturalPattern(game: GameDef, held: readonly Card[]): Pattern {
+  const n = held.length;
+  if (n === 5) {
+    const i = game.evaluate(held);
+    const label = i < 0 ? 'Nothing (hold 5)' : game.rows[i].label;
+    return { key: `made:${label}`, label: `Pat ${label}` };
+  }
+  if (n === 0) return { key: 'none', label: 'Discard everything' };
+  const counts = new Map<number, number>();
+  let rankMask = 0;
+  let suits = 0;
+  for (const c of held) {
+    counts.set(rankOf(c), (counts.get(rankOf(c)) ?? 0) + 1);
+    rankMask |= 1 << rankOf(c);
+    suits |= 1 << suitOf(c);
+  }
+  const ranks = [...counts.keys()];
+  const maxCount = Math.max(...counts.values());
+  const flush = (suits & (suits - 1)) === 0;
+  const high = ranks.filter(isHigh).length;
+  const acesMatter = game.rows.some((r) => r.key === 'four-aces');
+  if (counts.size === 1 && maxCount > 1) {
+    const r = ranks[0];
+    if (maxCount === 4) return { key: 'quads', label: 'Four of a Kind' };
+    if (maxCount === 3) return acesMatter && r === ACE ? { key: 'trips:A', label: 'Three Aces' } : { key: 'trips', label: 'Three of a Kind' };
+    if (acesMatter && r === ACE) return { key: 'pair:A', label: 'Pair of Aces' };
+    if (!isHigh(r)) return { key: 'pair:low', label: 'Low Pair (22–TT)' };
+    return { key: 'pair:high', label: acesMatter ? 'High Pair (JJ–KK)' : 'High Pair (JJ–AA)' };
+  }
+  if (n === 4 && counts.size === 2 && maxCount === 2) return { key: 'twopair', label: 'Two Pair' };
+  if (maxCount > 1) return { key: `other${n}`, label: `other (${n} cards)` };
+  const fits = ALL_WINDOWS.filter((w) => (rankMask & ~w) === 0).length;
+  const hc = (k: number) => `${k} high`;
+  if (flush && (rankMask & ~(0b11111 << TEN)) === 0) {
+    if (n >= 3) return { key: `royal${n}`, label: `${n} to a Royal` };
+    if (n === 2) return { key: `royal2:${rankStr(ranks)}`, label: `Suited ${rankStr(ranks)}` };
+  }
+  if (flush && n >= 3 && fits > 0) {
+    const gaps = insideGaps(rankMask, n);
+    if (n === 4) return { key: `sf4`, label: '4 to a Straight Flush' };
+    return { key: `sf3:h${high}g${gaps}`, label: `3 to a Straight Flush (${hc(high)}, ${gaps === 0 ? 'no gaps' : `${gaps} gap${gaps > 1 ? 's' : ''}`})` };
+  }
+  if (flush && n >= 3) return { key: `flush${n}:h${high}`, label: `${n} to a Flush (${hc(high)})` };
+  if (n === 4 && fits > 0) {
+    const open = fits === 2 && !(rankMask & (1 << ACE));
+    return open ? { key: 'str4:open', label: '4 to an Open Straight' } : { key: `str4:in:h${high}`, label: `4 to an Inside Straight (${hc(high)})` };
+  }
+  if (high === n) return { key: `hc:${rankStr(ranks)}`, label: n === 1 ? `${rankStr(ranks)} only` : `${rankStr(ranks)} unsuited` };
+  if (n === 3 && fits > 0) return { key: `str3:h${high}`, label: `3 to a Straight (${hc(high)})` };
+  return { key: `other${n}`, label: `other (${n} cards)` };
+}
+
+/** The chart vocabulary for a game, or null if there's no classifier for it yet. */
+export interface ChartKind {
+  classify: Classifier;
+  sectionOf: (hand: readonly Card[]) => number;
+  sectionTitle: (section: number, share: number) => string;
+  rule: string;
+  /** Short context for a mistake, e.g. "1 deuce"; empty when the game has one section. */
+  sectionLabel: (section: number) => string;
+}
+
+const pct = (x: number) => `${(x * 100).toFixed(2)}% of hands`;
+
+export function chartKind(game: GameDef): ChartKind | null {
+  if (game.rows.some((r) => r.key === 'four-deuces'))
+    return {
+      classify: deucesPattern,
+      sectionOf: deucesSection,
+      sectionTitle: (s, share) => `${s === 1 ? '1 deuce' : `${s} deuces`} dealt (${pct(share)})`,
+      rule: 'Always hold every deuce. Find the section for the number of deuces you were dealt, then play the first line you can make.',
+      sectionLabel: (s) => (s === 1 ? '1 deuce' : `${s} deuces`),
+    };
+  if (game.deckSize === 52 && game.rows.some((r) => r.key === 'jacks-or-better'))
+    return {
+      classify: naturalPattern,
+      sectionOf: () => 0,
+      sectionTitle: () => 'All hands',
+      rule: 'Play the first line you can make. "High" cards are J, Q, K, A.',
+      sectionLabel: () => '',
+    };
+  return null;
+}
+
 // ---------------------------------------------------------------- suit-canonical starting hands
 
 const SUIT_PERMS: number[][] = (() => {
@@ -148,6 +257,7 @@ export interface ChartLine {
 
 export interface ChartSection {
   section: number;
+  title: string;
   /** Share of all starting hands in this section. */
   share: number;
   lines: ChartLine[];
@@ -163,6 +273,8 @@ export interface ChartError {
 
 export interface Chart {
   gameId: string;
+  /** How to read the chart, shown above it. */
+  rule: string;
   sections: ChartSection[];
   perfectReturn: number;
   chartReturn: number;
@@ -263,16 +375,28 @@ function orderPatterns(hands: Analyzed[]): string[] {
       }
     }
   }
-  // Readability: float pat (made) hands as high as they go without changing the chart's EV.
-  for (let i = 0; i < order.length; i++) {
-    if (!live[order[i]].startsWith('made:')) continue;
-    for (let to = 0; to < i; to++) {
-      const cand = [...order];
-      const [item] = cand.splice(i, 1);
-      cand.splice(to, 0, item);
-      if (score(cand) >= best - 1e-9) {
-        order = cand;
-        break;
+  // Readability: lines that never appear in the same hand can be swapped freely (the chart plays
+  // identically), so bubble them into natural order: higher typical EV when optimal comes first.
+  const together = Array.from({ length: P }, () => new Uint8Array(P));
+  const evSum = new Float64Array(P);
+  const evW = new Float64Array(P);
+  hands.forEach((a, h) => {
+    const { idx, evs, w } = hp[h];
+    for (const x of idx) for (const y of idx) together[x][y] = 1;
+    for (let x = 0; x < idx.length; x++)
+      if (a.best - evs[x] <= EV_EPSILON) {
+        evSum[idx[x]] += w * evs[x];
+        evW[idx[x]] += w;
+      }
+  });
+  const typical = (p: number) => evSum[p] / evW[p];
+  for (let swapped = true; swapped; ) {
+    swapped = false;
+    for (let i = 0; i + 1 < order.length; i++) {
+      const [a, b] = [order[i], order[i + 1]];
+      if (!together[a][b] && typical(b) > typical(a) + 1e-12) {
+        [order[i], order[i + 1]] = [b, a];
+        swapped = true;
       }
     }
   }
@@ -280,12 +404,8 @@ function orderPatterns(hands: Analyzed[]): string[] {
   return [...order.map((i) => live[i]), ...tail];
 }
 
-export function generateChart(
-  tables: Tables,
-  classify: Classifier,
-  sectionOf: (hand: readonly Card[]) => number,
-  hands: { hand: Card[]; weight: number }[],
-): Chart {
+export function generateChart(tables: Tables, kind: ChartKind, hands: { hand: Card[]; weight: number }[]): Chart {
+  const { classify, sectionOf } = kind;
   const game = tables.game;
   const labels = new Map<string, string>();
   const analyzed: Analyzed[] = hands.map(({ hand, weight }) => {
@@ -335,6 +455,7 @@ export function generateChart(
     }
     return {
       section,
+      title: kind.sectionTitle(section, sectionWeight / total),
       share: sectionWeight / total,
       lines: order
         .filter((k) => used.has(k))
@@ -352,6 +473,7 @@ export function generateChart(
   }
   return {
     gameId: game.id,
+    rule: kind.rule,
     sections,
     perfectReturn: perfect / total,
     chartReturn: chartTotal / total,

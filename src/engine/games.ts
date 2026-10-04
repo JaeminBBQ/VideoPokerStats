@@ -7,11 +7,27 @@ export interface PayRow {
   pays: number;
 }
 
-export type GameId = 'nsud' | 'illinois-deuces' | 'fpdw' | 'loose-deuces' | 'db-10-7' | 'ddb-10-6' | 'joker-kings';
+export type GameId =
+  | 'nsud'
+  | 'illinois-deuces'
+  | 'fpdw'
+  | 'loose-deuces'
+  | 'db-10-7'
+  | 'ddb-10-6'
+  | 'joker-kings'
+  | 'lb-deuces-16-13'
+  | 'job-8-5'
+  | 'bonus-6-5'
+  | 'bpd-7-5';
+
+export type Venue = 'Legends Bay' | 'GSR' | 'Las Vegas' | 'Reference';
+export const VENUES: Venue[] = ['Legends Bay', 'GSR', 'Las Vegas', 'Reference'];
 
 export interface GameDef {
   id: GameId;
   name: string;
+  /** Casino tab the game is listed under in the UI. */
+  venue: Venue;
   /** Where the user can find it; shown in the UI. */
   where: string;
   deckSize: 52 | 53;
@@ -166,7 +182,13 @@ const isAce = (r: number) => r === ACE;
 const isLow = (r: number) => r <= 2; // 2, 3, 4
 const isAceOrLow = (r: number) => r === ACE || r <= 2;
 
-function bonusGame(quadRules: QuadRule[], fullHouse: number, flush: number, straight: number): { rows: PayRow[]; evaluate: GameDef['evaluate'] } {
+function bonusGame(
+  quadRules: QuadRule[],
+  fullHouse: number,
+  flush: number,
+  straight: number,
+  twoPair = 1,
+): { rows: PayRow[]; evaluate: GameDef['evaluate'] } {
   const rows: PayRow[] = [
     { key: 'royal', label: 'Royal Flush', pays: 800 },
     { key: 'straight-flush', label: 'Straight Flush', pays: 50 },
@@ -175,7 +197,7 @@ function bonusGame(quadRules: QuadRule[], fullHouse: number, flush: number, stra
     { key: 'flush', label: 'Flush', pays: flush },
     { key: 'straight', label: 'Straight', pays: straight },
     { key: 'three-kind', label: 'Three of a Kind', pays: 3 },
-    { key: 'two-pair', label: 'Two Pair', pays: 1 },
+    { key: 'two-pair', label: 'Two Pair', pays: twoPair },
     { key: 'jacks-or-better', label: 'Jacks or Better', pays: 1 },
   ];
   const q = quadRules.length;
@@ -208,6 +230,11 @@ const quads = (aces: number, low: number, rest: number): QuadRule[] => [
   { key: 'four-5-k', label: 'Four 5s–Ks', pays: rest, quad: () => true },
 ];
 
+// Legends Bay Game King #12139, 10¢ (owner photos, context/1-4.webp, 2026-10-04).
+const job85 = bonusGame([{ key: 'four-kind', label: 'Four of a Kind', pays: 25, quad: () => true }], 8, 5, 4, 2);
+const bonus65 = bonusGame(quads(80, 40, 25), 6, 5, 4, 2);
+const bpd75 = bonusGame([{ key: 'four-kind', label: 'Four of a Kind', pays: 80, quad: () => true }], 7, 5, 4, 1);
+
 const db107 = bonusGame(quads(160, 80, 50), 10, 7, 5);
 const ddb106 = bonusGame(
   [
@@ -225,6 +252,7 @@ const ddb106 = bonusGame(
 export const GAMES: Record<GameId, GameDef> = {
   nsud: {
     id: 'nsud',
+    venue: 'GSR',
     name: 'Deuces Wild — NSUD ("Deuces Wild 44")',
     where: 'GSR slant-tops near LEX (25¢–$1), Peppermill, Western Village',
     deckSize: 52,
@@ -236,8 +264,9 @@ export const GAMES: Record<GameId, GameDef> = {
   },
   'illinois-deuces': {
     id: 'illinois-deuces',
-    name: 'Deuces Wild — Illinois ("Deuces Wild 44", Legends Bay)',
-    where: 'Legends Bay multi-game ($1–$25)',
+    venue: 'Legends Bay',
+    name: 'Deuces Wild — Illinois ("Deuces Wild 44", $1+)',
+    where: 'Legends Bay $1–$25 multi-game per vpFREE2 (not yet photographed)',
     deckSize: 52,
     rows: deucesRows([800, 200, 25, 15, 9, 4, 4, 3, 2, 1]),
     evaluate: deucesEvaluate,
@@ -247,6 +276,7 @@ export const GAMES: Record<GameId, GameDef> = {
   },
   fpdw: {
     id: 'fpdw',
+    venue: 'Reference',
     name: 'Deuces Wild — Full Pay',
     where: 'No known US casino since 2023',
     deckSize: 52,
@@ -258,6 +288,7 @@ export const GAMES: Record<GameId, GameDef> = {
   },
   'loose-deuces': {
     id: 'loose-deuces',
+    venue: 'Las Vegas',
     name: 'Loose Deuces (5K pays 15)',
     where: 'Las Vegas Station Casinos (25¢); the 101.60% version (5K pays 17) was removed in 2015',
     deckSize: 52,
@@ -269,6 +300,7 @@ export const GAMES: Record<GameId, GameDef> = {
   },
   'db-10-7': {
     id: 'db-10-7',
+    venue: 'Las Vegas',
     name: 'Double Bonus — 10/7',
     where: 'Las Vegas Station Casinos (GVR, Red Rock, Boulder, Santa Fe, Palace, Sunset)',
     deckSize: 52,
@@ -279,6 +311,7 @@ export const GAMES: Record<GameId, GameDef> = {
   },
   'ddb-10-6': {
     id: 'ddb-10-6',
+    venue: 'Las Vegas',
     name: 'Double Double Bonus — 10/6',
     where: 'Las Vegas Station Casinos',
     deckSize: 52,
@@ -287,8 +320,54 @@ export const GAMES: Record<GameId, GameDef> = {
     publishedDecimals: 2,
     source: 'https://wizardofodds.com/games/video-poker/tables/double-double-bonus/',
   },
+  'lb-deuces-16-13': {
+    id: 'lb-deuces-16-13',
+    venue: 'Legends Bay',
+    name: 'Deuces Wild — Legends Bay 10¢ (5K 16, SF 13)',
+    where: 'Legends Bay Game King #12139, 10¢ (photographed 2026-10-04)',
+    deckSize: 52,
+    rows: deucesRows([800, 200, 25, 16, 13, 4, 3, 2, 2, 1]),
+    evaluate: deucesEvaluate,
+    publishedReturn: 0.967651,
+    publishedDecimals: 4,
+    source: 'https://wizardofodds.com/games/video-poker/tables/deuces-wild/ (0.967651); paytable from owner photo context/4.webp',
+  },
+  'job-8-5': {
+    id: 'job-8-5',
+    venue: 'Legends Bay',
+    name: 'Jacks or Better — 8/5',
+    where: 'Legends Bay Game King #12139, 10¢ (photographed 2026-10-04)',
+    deckSize: 52,
+    ...job85,
+    publishedReturn: 0.9730,
+    publishedDecimals: 2,
+    source: 'https://wizardofodds.com/games/video-poker/tables/jacks-or-better/',
+  },
+  'bonus-6-5': {
+    id: 'bonus-6-5',
+    venue: 'Legends Bay',
+    name: 'Bonus Poker — 6/5',
+    where: 'Legends Bay Game King #12139, 10¢ (photographed 2026-10-04)',
+    deckSize: 52,
+    ...bonus65,
+    publishedReturn: 0.9687,
+    publishedDecimals: 2,
+    source: 'https://wizardofodds.com/games/video-poker/tables/bonus-poker/',
+  },
+  'bpd-7-5': {
+    id: 'bpd-7-5',
+    venue: 'Legends Bay',
+    name: 'Bonus Poker Deluxe — 7/5',
+    where: 'Legends Bay Game King #12139, 10¢ (photographed 2026-10-04)',
+    deckSize: 52,
+    ...bpd75,
+    publishedReturn: 0.9625,
+    publishedDecimals: 2,
+    source: 'https://wizardofodds.com/games/video-poker/tables/bonus-poker-deluxe/',
+  },
   'joker-kings': {
     id: 'joker-kings',
+    venue: 'Las Vegas',
     name: 'Joker Poker — Kings or Better, Full Pay',
     where: 'Plaza (Las Vegas), if still there',
     deckSize: 53,
@@ -301,6 +380,9 @@ export const GAMES: Record<GameId, GameDef> = {
 };
 
 export const GAME_LIST: GameDef[] = Object.values(GAMES);
+
+/** Games for a casino tab, best return first. */
+export const gamesAt = (venue: Venue): GameDef[] => GAME_LIST.filter((g) => g.venue === venue).sort((a, b) => b.publishedReturn - a.publishedReturn);
 
 /** Payout per coin for a final 5-card hand. */
 export function payout(game: GameDef, hand: readonly Card[]): number {

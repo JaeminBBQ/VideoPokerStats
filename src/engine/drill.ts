@@ -6,18 +6,20 @@
 import { deal, rankOf, type Card, type Rng } from './cards.ts';
 import { holdEvs, EV_EPSILON, type Tables } from './ev.ts';
 import type { GameDef } from './games.ts';
-import { deucesPattern, deucesSection, type Pattern } from './strategy.ts';
+import { chartKind, deucesPattern, type Pattern } from './strategy.ts';
 
-export const hasChart = (game: GameDef): boolean => game.rows.some((r) => r.key === 'four-deuces');
+export const hasChart = (game: GameDef): boolean => chartKind(game) !== null;
 
 /** Chart-line name for a hold, or null for games without a classifier yet. */
 export function patternFor(game: GameDef, held: readonly Card[]): Pattern | null {
-  return hasChart(game) ? deucesPattern(game, held) : null;
+  return chartKind(game)?.classify(game, held) ?? null;
 }
 
-/** What a mistake was about. `chosenKey` null = not classifiable; drills then reuse the same hand shape. */
+/** What a mistake was about, in chart vocabulary. */
 export interface MistakeSignature {
   section: number;
+  /** Short section context for prompts ("1 deuce"); empty for single-section games. */
+  sectionLabel: string;
   bestKey: string;
   chosenKey: string;
   bestLabel: string;
@@ -25,11 +27,13 @@ export interface MistakeSignature {
 }
 
 export function mistakeSignature(game: GameDef, hand: readonly Card[], bestMask: number, heldMask: number): MistakeSignature | null {
-  if (!hasChart(game)) return null;
+  const kind = chartKind(game);
+  if (!kind) return null;
   const pick = (m: number) => hand.filter((_, i) => m & (1 << i));
-  const best = deucesPattern(game, pick(bestMask));
-  const chosen = deucesPattern(game, pick(heldMask));
-  return { section: deucesSection(hand), bestKey: best.key, chosenKey: chosen.key, bestLabel: best.label, chosenLabel: chosen.label };
+  const best = kind.classify(game, pick(bestMask));
+  const chosen = kind.classify(game, pick(heldMask));
+  const section = kind.sectionOf(hand);
+  return { section, sectionLabel: kind.sectionLabel(section), bestKey: best.key, chosenKey: chosen.key, bestLabel: best.label, chosenLabel: chosen.label };
 }
 
 export type SimilarMatch = 'exact' | 'best-line' | 'section';
@@ -38,7 +42,6 @@ export type SimilarMatch = 'exact' | 'best-line' | 'section';
 function dealWithDeuces(deuces: number, rng: Rng): Card[] {
   const deuceCards = deal(4, rng, deuces); // 0..3 are the four deuces
   const rest = deal(52, rng, 9).filter((c) => rankOf(c) !== 0).slice(0, 5 - deuces);
-  if (rest.length < 5 - deuces) return dealWithDeuces(deuces, rng);
   const hand = [...deuceCards, ...rest];
   // Shuffle positions so deuces aren't always on the left.
   for (let i = hand.length - 1; i > 0; i--) {
@@ -55,19 +58,22 @@ function dealWithDeuces(deuces: number, rng: Rng): Card[] {
  */
 export function findSimilarHand(t: Tables, sig: MistakeSignature, rng: Rng = Math.random, maxTries = 30_000): { hand: Card[]; match: SimilarMatch } {
   const game = t.game;
+  const kind = chartKind(game);
+  if (!kind) throw new Error(`no chart classifier for ${game.id}`);
+  const deuces = kind.classify === deucesPattern;
   let fallbackBest: Card[] | null = null;
   let fallbackSection: Card[] | null = null;
   for (let i = 0; i < maxTries; i++) {
-    const hand = dealWithDeuces(sig.section, rng);
+    const hand = deuces ? dealWithDeuces(sig.section, rng) : deal(game.deckSize, rng);
     fallbackSection ??= hand;
     const evs = holdEvs(t, hand);
     let best = 0;
     for (let m = 1; m < 32; m++) if (evs[m] > evs[best]) best = m;
     const pick = (m: number) => hand.filter((_, k) => m & (1 << k));
-    if (deucesPattern(game, pick(best)).key !== sig.bestKey) continue;
+    if (kind.classify(game, pick(best)).key !== sig.bestKey) continue;
     fallbackBest ??= hand;
     for (let m = 0; m < 32; m++) {
-      if (evs[best] - evs[m] > EV_EPSILON && deucesPattern(game, pick(m)).key === sig.chosenKey) return { hand, match: 'exact' };
+      if (evs[best] - evs[m] > EV_EPSILON && kind.classify(game, pick(m)).key === sig.chosenKey) return { hand, match: 'exact' };
     }
   }
   if (fallbackBest) return { hand: fallbackBest, match: 'best-line' };

@@ -31,7 +31,10 @@ src/charts/<id>.json        generated charts (never hand-edited)
 ## Strategy charts (D5)
 - `deucesPattern(game, held)` names a hold ("1 deuce + 3 to a Royal (with T)", "4 to a Straight (2 ways)"). "Ways" counts clean straight windows 3-7 … T-A; windows needing the 2 slot are flagged separately ("needs the 2 slot") because only deuces fill them.
 - `generateChart` analyzes the 134,459 suit classes (weighted to all 2,598,960 hands), orders patterns per section (deuces dealt) by local search that maximizes the chart's total EV, floats pat hands up when that's free, then replays the chart on every hand and reports chart return, error rate, and grouped mistakes.
-- Current: NSUD chart 99.7139% vs 99.7283% perfect (0.92% of hands non-optimal); Illinois 98.9036% vs 98.9131%; FPDW 100.7414% vs 100.7620%. Bonus/joker games need their own classifier (high cards, kickers).
+- `naturalPattern` covers Jacks-or-Better-family games (JoB, Bonus, BPD, DB, DDB): pairs split high/low (aces separate in bonus games), small royal draws and high-card holds named by exact ranks ("Suited QJ", "KQJ unsuited"), straight-flush draws by high cards + gaps, inside straights by high cards. `chartKind(game)` picks the classifier, sections, titles, and rule text; charts carry `rule` and `section.title` so the UI has no game-specific wording.
+- A readability pass swaps adjacent lines that never occur in the same hand into natural (typical-EV) order; it can't change the chart's EV.
+- Chart cost vs perfect play: JoB 8/5 0.0022%, Bonus 6/5 0.0026%, BPD 7/5 0.0024%, DDB 10/6 0.0072%, NSUD 0.0144%, Illinois 0.0095%, LB deuces 0.0304%, FPDW 0.0206%, Loose 0.0168%, DB 10/7 0.0267%. Joker Poker has no classifier yet.
+- Games carry a `venue` (`Legends Bay | GSR | Las Vegas | Reference`); `gamesAt(venue)` drives the casino tabs.
 
 ## Data model (localStorage, versioned keys)
 - `vp.v1.history`: array of `HandRecord { ts, gameId, hand: Card[], heldMask, bestMask, evHeld, evBest, mode: 'deal' | 'drill' }`, newest last, capped (see task spec).

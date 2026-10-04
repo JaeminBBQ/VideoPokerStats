@@ -1,5 +1,5 @@
 {
- "gameId": "nsud",
+ "gameId": "lb-deuces-16-13",
  "rule": "Always hold every deuce. Find the section for the number of deuces you were dealt, then play the first line you can make.",
  "sections": [
   {
@@ -154,9 +154,21 @@
      ]
     },
     {
+     "key": "d2:sf4w2",
+     "label": "2 deuces + 4 to a Straight Flush (2 ways)",
+     "share": 0.06267345050878816,
+     "example": [
+      0,
+      1,
+      4,
+      10,
+      14
+     ]
+    },
+    {
      "key": "d2",
      "label": "2 deuces only",
-     "share": 0.6389916743755781,
+     "share": 0.57631822386679,
      "example": [
       0,
       1,
@@ -221,18 +233,6 @@
      ]
     },
     {
-     "key": "made:Full House",
-     "label": "Pat Full House",
-     "share": 0.012210915818686401,
-     "example": [
-      0,
-      4,
-      5,
-      8,
-      10
-     ]
-    },
-    {
      "key": "d1:royal4",
      "label": "1 deuce + 4 to a Royal",
      "share": 0.008736766368588755,
@@ -245,21 +245,21 @@
      ]
     },
     {
-     "key": "made:Flush",
-     "label": "Pat Flush",
-     "share": 0.008140610545790935,
+     "key": "made:Full House",
+     "label": "Pat Full House",
+     "share": 0.012210915818686401,
      "example": [
       0,
+      4,
       5,
-      9,
-      13,
-      25
+      8,
+      10
      ]
     },
     {
      "key": "d1:sf4w3",
      "label": "1 deuce + 4 to a Straight Flush (3 ways)",
-     "share": 0.0037002775208140612,
+     "share": 0.004193647856922602,
      "example": [
       0,
       5,
@@ -271,7 +271,7 @@
     {
      "key": "d1:sf4w2",
      "label": "1 deuce + 4 to a Straight Flush (2 ways)",
-     "share": 0.009620721554116559,
+     "share": 0.011059718367766471,
      "example": [
       0,
       5,
@@ -281,9 +281,21 @@
      ]
     },
     {
+     "key": "d1:sf4w1",
+     "label": "1 deuce + 4 to a Straight Flush (1 way)",
+     "share": 0.020043169904409498,
+     "example": [
+      0,
+      5,
+      6,
+      9,
+      13
+     ]
+    },
+    {
      "key": "made:Straight",
      "label": "Pat Straight",
-     "share": 0.03885291396854764,
+     "share": 0.03583102065988283,
      "example": [
       0,
       4,
@@ -293,15 +305,15 @@
      ]
     },
     {
-     "key": "d1:sf4w1",
-     "label": "1 deuce + 4 to a Straight Flush (1 way)",
-     "share": 0.014739438791242676,
+     "key": "made:Flush",
+     "label": "Pat Flush",
+     "share": 0.003926405591530476,
      "example": [
       0,
       5,
-      6,
       9,
-      13
+      25,
+      29
      ]
     },
     {
@@ -341,21 +353,9 @@
      ]
     },
     {
-     "key": "d1:royal3:none",
-     "label": "1 deuce + 3 to a Royal (no T or A)",
-     "share": 0.03126734505087882,
-     "example": [
-      0,
-      4,
-      9,
-      38,
-      42
-     ]
-    },
-    {
      "key": "d1:sf3w4",
      "label": "1 deuce + 3 to a Straight Flush (4 ways)",
-     "share": 0.03465926611162504,
+     "share": 0.03515263644773358,
      "example": [
       0,
       4,
@@ -365,21 +365,33 @@
      ]
     },
     {
-     "key": "d1:royal3:A",
-     "label": "1 deuce + 3 to a Royal (with A)",
-     "share": 0.034227567067530065,
+     "key": "d1:royal3:none",
+     "label": "1 deuce + 3 to a Royal (no T or A)",
+     "share": 0.030773974714770273,
      "example": [
       0,
       4,
       9,
       38,
-      50
+      42
+     ]
+    },
+    {
+     "key": "d1:sf3w3",
+     "label": "1 deuce + 3 to a Straight Flush (3 ways)",
+     "share": 0.05624421831637373,
+     "example": [
+      0,
+      4,
+      9,
+      18,
+      26
      ]
     },
     {
      "key": "d1:royal3:A/T",
      "label": "1 deuce + 3 to a Royal (with A/T)",
-     "share": 0.01091581868640148,
+     "share": 0.010052420598211532,
      "example": [
       0,
       4,
@@ -389,15 +401,15 @@
      ]
     },
     {
-     "key": "d1:sf3w3",
-     "label": "1 deuce + 3 to a Straight Flush (3 ways)",
-     "share": 0.05377736663583102,
+     "key": "d1:royal3:A",
+     "label": "1 deuce + 3 to a Royal (with A)",
+     "share": 0.032624113475177303,
      "example": [
       0,
       4,
       9,
-      18,
-      26
+      38,
+      50
      ]
     },
     {
@@ -492,21 +504,21 @@
      ]
     },
     {
-     "key": "made:Flush",
-     "label": "Pat Flush",
-     "share": 0.0017520253412945364,
+     "key": "d0:sf4w2",
+     "label": "4 to a Straight Flush (2 ways)",
+     "share": 0.0005863444808865716,
      "example": [
       4,
-      8,
-      12,
-      16,
-      24
+      9,
+      13,
+      17,
+      21
      ]
     },
     {
      "key": "made:Straight",
      "label": "Pat Straight",
-     "share": 0.0047234603201300705,
+     "share": 0.004639363103747933,
      "example": [
       4,
       8,
@@ -516,15 +528,15 @@
      ]
     },
     {
-     "key": "d0:sf4w2",
-     "label": "4 to a Straight Flush (2 ways)",
-     "share": 0.00042048608191068876,
+     "key": "made:Flush",
+     "label": "Pat Flush",
+     "share": 0.0016702641587007915,
      "example": [
       4,
-      13,
-      17,
-      21,
-      25
+      8,
+      12,
+      16,
+      24
      ]
     },
     {
@@ -552,18 +564,6 @@
      ]
     },
     {
-     "key": "d0:royal3:T",
-     "label": "3 to a Royal (with T)",
-     "share": 0.005634513497603229,
-     "example": [
-      4,
-      9,
-      34,
-      38,
-      42
-     ]
-    },
-    {
      "key": "d0:sf4low",
      "label": "4 to a Straight Flush (needs the 2 slot)",
      "share": 0.00008409721638213776,
@@ -576,27 +576,15 @@
      ]
     },
     {
-     "key": "d0:royal3:A",
-     "label": "3 to a Royal (with A)",
-     "share": 0.006054999579513918,
-     "example": [
-      4,
-      9,
-      38,
-      42,
-      50
-     ]
-    },
-    {
-     "key": "d0:royal3:A/T",
-     "label": "3 to a Royal (with A/T)",
-     "share": 0.006054999579513918,
+     "key": "d0:royal3:T",
+     "label": "3 to a Royal (with T)",
+     "share": 0.005634513497603229,
      "example": [
       4,
       9,
       34,
       38,
-      50
+      42
      ]
     },
     {
@@ -612,33 +600,21 @@
      ]
     },
     {
-     "key": "d0:flush4",
-     "label": "4 to a Flush",
-     "share": 0.03330249768732655,
+     "key": "d0:royal3:A/T",
+     "label": "3 to a Royal (with A/T)",
+     "share": 0.006054999579513918,
      "example": [
       4,
-      5,
-      8,
-      12,
-      24
-     ]
-    },
-    {
-     "key": "twopair",
-     "label": "Two Pair",
-     "share": 0.054873433689344886,
-     "example": [
-      4,
-      5,
-      8,
-      10,
-      12
+      9,
+      34,
+      38,
+      50
      ]
     },
     {
      "key": "d0:sf3w3",
      "label": "3 to a Straight Flush (3 ways)",
-     "share": 0.006622655790093348,
+     "share": 0.008956353544697671,
      "example": [
       4,
       9,
@@ -648,27 +624,51 @@
      ]
     },
     {
+     "key": "d0:royal3:A",
+     "label": "3 to a Royal (with A)",
+     "share": 0.006054999579513918,
+     "example": [
+      4,
+      9,
+      38,
+      42,
+      50
+     ]
+    },
+    {
      "key": "d0:kind2",
      "label": "Pair",
-     "share": 0.4206963249516441,
+     "share": 0.48568244891094103,
      "example": [
       4,
       5,
       8,
-      12,
-      18
+      10,
+      12
      ]
     },
     {
      "key": "d0:str4w2",
      "label": "4 to a Straight (2 ways)",
-     "share": 0.021549911697922797,
+     "share": 0.02206851119894598,
      "example": [
       4,
       12,
       16,
       21,
       26
+     ]
+    },
+    {
+     "key": "d0:flush4",
+     "label": "4 to a Flush",
+     "share": 0.02033751016174698,
+     "example": [
+      4,
+      8,
+      12,
+      17,
+      24
      ]
     },
     {
@@ -732,21 +732,9 @@
      ]
     },
     {
-     "key": "d0:sf3low",
-     "label": "3 to a Straight Flush (needs the 2 slot)",
-     "share": 0.0019132116726936338,
-     "example": [
-      4,
-      8,
-      13,
-      26,
-      48
-     ]
-    },
-    {
      "key": "none",
      "label": "Discard everything",
-     "share": 0.2646609480559527,
+     "share": 0.26657415972864634,
      "example": [
       4,
       8,
@@ -758,282 +746,490 @@
    ]
   }
  ],
- "perfectReturn": 0.9972829465166235,
- "chartReturn": 0.9971391847880066,
- "errorRate": 0.009225228552959645,
+ "perfectReturn": 0.9676505066565885,
+ "chartReturn": 0.9673466320071366,
+ "errorRate": 0.0170837565795549,
  "worstErrors": [
   {
    "hand": [
     0,
-    5,
-    9,
-    13,
-    18
-   ],
-   "weight": 24,
-   "chartLabel": "Pat Straight",
-   "bestLabel": "1 deuce + 4 to a Straight Flush (1 way)",
-   "cost": 0.1914893617021276
-  },
-  {
-   "hand": [
-    0,
-    5,
-    9,
-    13,
-    22
-   ],
-   "weight": 24,
-   "chartLabel": "Pat Straight",
-   "bestLabel": "1 deuce + 4 to a Straight Flush (1 way)",
-   "cost": 0.1914893617021276
-  },
-  {
-   "hand": [
-    0,
-    5,
-    9,
-    13,
-    50
-   ],
-   "weight": 24,
-   "chartLabel": "Pat Straight",
-   "bestLabel": "1 deuce + 4 to a Straight Flush (1 way)",
-   "cost": 0.1914893617021276
-  },
-  {
-   "hand": [
-    0,
     1,
-    8,
+    4,
     12,
     34
    ],
    "weight": 24,
    "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.19056429232192418
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.1942028985507247
   },
   {
    "hand": [
     0,
     1,
-    10,
+    6,
     14,
     32
    ],
    "weight": 24,
    "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.19056429232192418
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.1942028985507247
   },
   {
    "hand": [
     0,
     1,
+    4,
     8,
+    34
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.18828245451742243
+  },
+  {
+   "hand": [
+    0,
+    1,
+    4,
     12,
     38
    ],
    "weight": 24,
    "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.18575393154486575
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.18828245451742243
   },
   {
    "hand": [
     0,
     1,
+    6,
     10,
+    32
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.18828245451742243
+  },
+  {
+   "hand": [
+    0,
+    1,
+    6,
     14,
     36
    ],
    "weight": 24,
    "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.18575393154486575
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.18828245451742243
   },
   {
    "hand": [
     0,
     1,
-    8,
-    12,
-    42
-   ],
-   "weight": 24,
-   "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.18094357076780732
-  },
-  {
-   "hand": [
-    0,
-    1,
-    10,
-    14,
-    40
-   ],
-   "weight": 24,
-   "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.18094357076780732
-  },
-  {
-   "hand": [
-    0,
-    1,
-    8,
+    4,
     12,
     30
    ],
    "weight": 24,
    "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.1768732654949119
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.18310206598828271
   },
   {
    "hand": [
     0,
     1,
-    10,
+    6,
     14,
     28
    ],
    "weight": 24,
    "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.1768732654949119
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.18310206598828271
   },
   {
    "hand": [
     0,
     1,
-    8,
-    12,
-    46
-   ],
-   "weight": 24,
-   "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.17613320999074933
-  },
-  {
-   "hand": [
-    0,
-    1,
-    10,
-    14,
-    44
-   ],
-   "weight": 24,
-   "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.17613320999074933
-  },
-  {
-   "hand": [
-    0,
-    1,
-    8,
-    12,
-    50
-   ],
-   "weight": 24,
-   "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.15541165587419048
-  },
-  {
-   "hand": [
-    0,
-    1,
-    10,
-    14,
-    48
-   ],
-   "weight": 24,
-   "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.15541165587419048
-  },
-  {
-   "hand": [
-    0,
-    1,
-    8,
+    4,
     12,
     26
    ],
    "weight": 24,
    "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.15467160037002747
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.18285538082022823
   },
   {
    "hand": [
     0,
     1,
-    10,
+    6,
     14,
     24
    ],
    "weight": 24,
    "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.15467160037002747
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.18285538082022823
   },
   {
    "hand": [
     0,
     1,
+    4,
     8,
+    38
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.1823620104841197
+  },
+  {
+   "hand": [
+    0,
+    1,
+    4,
+    12,
+    42
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.1823620104841197
+  },
+  {
+   "hand": [
+    0,
+    1,
+    6,
+    10,
+    36
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.1823620104841197
+  },
+  {
+   "hand": [
+    0,
+    1,
+    6,
+    14,
+    40
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.1823620104841197
+  },
+  {
+   "hand": [
+    0,
+    1,
+    4,
+    8,
+    30
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.177921677459143
+  },
+  {
+   "hand": [
+    0,
+    1,
+    6,
+    10,
+    28
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.177921677459143
+  },
+  {
+   "hand": [
+    0,
+    1,
+    4,
+    8,
+    26
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.17718162195498
+  },
+  {
+   "hand": [
+    0,
+    1,
+    6,
+    10,
+    24
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.17718162195498
+  },
+  {
+   "hand": [
+    0,
+    1,
+    4,
+    8,
+    42
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.17644156645081743
+  },
+  {
+   "hand": [
+    0,
+    1,
+    4,
+    12,
+    46
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.17644156645081743
+  },
+  {
+   "hand": [
+    0,
+    1,
+    6,
+    10,
+    40
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.17644156645081743
+  },
+  {
+   "hand": [
+    0,
+    1,
+    6,
+    14,
+    44
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.17644156645081743
+  },
+  {
+   "hand": [
+    0,
+    1,
+    4,
+    8,
+    46
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.17052112241751471
+  },
+  {
+   "hand": [
+    0,
+    1,
+    6,
+    10,
+    44
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.17052112241751471
+  },
+  {
+   "hand": [
+    0,
+    1,
+    4,
     12,
     22
    ],
    "weight": 24,
    "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.15417823003391895
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.1606537156953438
   },
   {
    "hand": [
     0,
     1,
-    10,
+    6,
     14,
     20
    ],
    "weight": 24,
    "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.15417823003391895
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.1606537156953438
   },
   {
    "hand": [
     0,
     1,
+    4,
+    12,
+    50
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.15646006783842115
+  },
+  {
+   "hand": [
+    0,
+    1,
+    6,
+    14,
+    48
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.15646006783842115
+  },
+  {
+   "hand": [
+    0,
+    1,
+    4,
     8,
+    22
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.15497995683009558
+  },
+  {
+   "hand": [
+    0,
+    1,
+    6,
+    10,
+    20
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.15497995683009558
+  },
+  {
+   "hand": [
+    0,
+    1,
+    4,
     12,
     18
    ],
    "weight": 24,
    "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.14936786925686052
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.15473327166204154
   },
   {
    "hand": [
     0,
     1,
-    10,
+    6,
     14,
     16
    ],
    "weight": 24,
    "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.14936786925686052
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.15473327166204154
+  },
+  {
+   "hand": [
+    0,
+    1,
+    4,
+    8,
+    50
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.15053962380511887
+  },
+  {
+   "hand": [
+    0,
+    1,
+    6,
+    10,
+    48
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.15053962380511887
+  },
+  {
+   "hand": [
+    0,
+    1,
+    4,
+    8,
+    18
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.1490595127967933
+  },
+  {
+   "hand": [
+    0,
+    1,
+    6,
+    10,
+    16
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.1490595127967933
+  },
+  {
+   "hand": [
+    0,
+    1,
+    4,
+    8,
+    14
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.14696268886833197
   },
   {
    "hand": [
@@ -1041,12 +1237,12 @@
     1,
     4,
     10,
-    14
+    12
    ],
    "weight": 24,
    "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.1386370644464998
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.14696268886833197
   },
   {
    "hand": [
@@ -1054,325 +1250,117 @@
     1,
     6,
     8,
+    14
+   ],
+   "weight": 24,
+   "chartLabel": "2 deuces only",
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.14696268886833197
+  },
+  {
+   "hand": [
+    0,
+    1,
+    6,
+    10,
     12
    ],
    "weight": 24,
    "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.1386370644464998
-  },
-  {
-   "hand": [
-    0,
-    4,
-    8,
-    12,
-    17
-   ],
-   "weight": 12,
-   "chartLabel": "Pat Straight",
-   "bestLabel": "1 deuce + 4 to a Straight Flush (1 way)",
-   "cost": 0.1914893617021276
-  },
-  {
-   "hand": [
-    0,
-    4,
-    8,
-    12,
-    21
-   ],
-   "weight": 12,
-   "chartLabel": "Pat Straight",
-   "bestLabel": "1 deuce + 4 to a Straight Flush (1 way)",
-   "cost": 0.1914893617021276
-  },
-  {
-   "hand": [
-    0,
-    4,
-    8,
-    12,
-    49
-   ],
-   "weight": 12,
-   "chartLabel": "Pat Straight",
-   "bestLabel": "1 deuce + 4 to a Straight Flush (1 way)",
-   "cost": 0.1914893617021276
-  },
-  {
-   "hand": [
-    0,
-    5,
-    9,
-    13,
-    16
-   ],
-   "weight": 12,
-   "chartLabel": "Pat Straight",
-   "bestLabel": "1 deuce + 4 to a Straight Flush (1 way)",
-   "cost": 0.1914893617021276
-  },
-  {
-   "hand": [
-    0,
-    5,
-    9,
-    13,
-    20
-   ],
-   "weight": 12,
-   "chartLabel": "Pat Straight",
-   "bestLabel": "1 deuce + 4 to a Straight Flush (1 way)",
-   "cost": 0.1914893617021276
-  },
-  {
-   "hand": [
-    0,
-    5,
-    9,
-    13,
-    48
-   ],
-   "weight": 12,
-   "chartLabel": "Pat Straight",
-   "bestLabel": "1 deuce + 4 to a Straight Flush (1 way)",
-   "cost": 0.1914893617021276
-  },
-  {
-   "hand": [
-    0,
-    1,
-    8,
-    12,
-    33
-   ],
-   "weight": 12,
-   "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.19056429232192418
-  },
-  {
-   "hand": [
-    0,
-    1,
-    10,
-    14,
-    35
-   ],
-   "weight": 12,
-   "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.19056429232192418
-  },
-  {
-   "hand": [
-    0,
-    1,
-    8,
-    12,
-    37
-   ],
-   "weight": 12,
-   "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.18575393154486575
-  },
-  {
-   "hand": [
-    0,
-    1,
-    10,
-    14,
-    39
-   ],
-   "weight": 12,
-   "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.18575393154486575
-  },
-  {
-   "hand": [
-    0,
-    1,
-    8,
-    12,
-    41
-   ],
-   "weight": 12,
-   "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.18094357076780732
-  },
-  {
-   "hand": [
-    0,
-    1,
-    10,
-    14,
-    43
-   ],
-   "weight": 12,
-   "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.18094357076780732
-  },
-  {
-   "hand": [
-    0,
-    1,
-    8,
-    12,
-    29
-   ],
-   "weight": 12,
-   "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.1768732654949119
-  },
-  {
-   "hand": [
-    0,
-    1,
-    10,
-    14,
-    31
-   ],
-   "weight": 12,
-   "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.1768732654949119
-  },
-  {
-   "hand": [
-    0,
-    1,
-    8,
-    12,
-    45
-   ],
-   "weight": 12,
-   "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.17613320999074933
-  },
-  {
-   "hand": [
-    0,
-    1,
-    10,
-    14,
-    47
-   ],
-   "weight": 12,
-   "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.17613320999074933
-  },
-  {
-   "hand": [
-    0,
-    1,
-    8,
-    12,
-    49
-   ],
-   "weight": 12,
-   "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "cost": 0.15541165587419048
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "cost": 0.14696268886833197
   }
  ],
  "errorGroups": [
   {
    "chartLabel": "2 deuces only",
-   "bestLabel": "2 deuces + 4 to a Straight Flush (2 ways)",
-   "share": 0.0003232062055591465,
-   "evLost": 0.000052373614357149654
+   "bestLabel": "2 deuces + 4 to a Straight Flush (1 way)",
+   "share": 0.0006556468741342704,
+   "evLost": 0.00011030726956690318
   },
   {
    "chartLabel": "1 deuce only",
    "bestLabel": "1 deuce + 3 to a Straight Flush (2 ways)",
-   "share": 0.0018284236771631804,
-   "evLost": 0.000027277764511418358
-  },
-  {
-   "chartLabel": "4 to a Straight (1 way)",
-   "bestLabel": "2 to a Royal (no T or A)",
-   "share": 0.001606796564779763,
-   "evLost": 0.000024517598970136723
+   "share": 0.0026225874965370914,
+   "evLost": 0.00007691870470654518
   },
   {
    "chartLabel": "2 to a Royal (with T)",
    "bestLabel": "4 to a Straight (1 way)",
-   "share": 0.001509834703112018,
-   "evLost": 0.000017742527168129124
+   "share": 0.002160864345738306,
+   "evLost": 0.00005009817205185643
   },
   {
-   "chartLabel": "Pat Straight",
-   "bestLabel": "1 deuce + 4 to a Straight Flush (1 way)",
-   "share": 0.00005540677809585372,
-   "evLost": 0.000010609808571546455
+   "chartLabel": "1 deuce + 3 to a Royal (with A)",
+   "bestLabel": "1 deuce only",
+   "share": 0.0020500507895466,
+   "evLost": 0.00001882874728590255
+  },
+  {
+   "chartLabel": "2 to a Royal (no T or A)",
+   "bestLabel": "Discard everything",
+   "share": 0.003776895373534056,
+   "evLost": 0.000016617379291037712
   },
   {
    "chartLabel": "Discard everything",
    "bestLabel": "2 to a Straight Flush (4 ways)",
-   "share": 0.0016160310277957388,
-   "evLost": 0.000004873674436071612
+   "share": 0.002701080432172885,
+   "evLost": 0.00000908062904524247
   },
   {
-   "chartLabel": "1 deuce + 4 to a Straight (3 ways)",
-   "bestLabel": "1 deuce only",
-   "share": 0.001255886970172686,
-   "evLost": 0.000004302116103358321
-  },
-  {
-   "chartLabel": "2 to a Royal (no T or A)",
+   "chartLabel": "2 to a Royal (with T)",
    "bestLabel": "Discard everything",
-   "share": 0.000720288115246099,
-   "evLost": 0.0000013634865646362667
+   "share": 0.0015006002400960448,
+   "evLost": 0.000005629618134560314
+  },
+  {
+   "chartLabel": "Four of a Kind (2 deuces + 2 natural)",
+   "bestLabel": "2 deuces + 4 to a Royal",
+   "share": 0.00005540677809585372,
+   "evLost": 0.000004715470476242903
   },
   {
    "chartLabel": "4 to a Straight (1 way)",
-   "bestLabel": "3 to a Straight Flush (needs the 2 slot)",
-   "share": 0.00005540677809585372,
-   "evLost": 2.562755693610251e-7
-  },
-  {
-   "chartLabel": "2 to a Royal (with T)",
-   "bestLabel": "Discard everything",
-   "share": 0.0001662203342875612,
-   "evLost": 2.2074133925272198e-7
-  },
-  {
-   "chartLabel": "2 to a Royal (no T or A)",
-   "bestLabel": "3 to a Straight Flush (needs the 2 slot)",
-   "share": 0.00002770338904792686,
-   "evLost": 1.0251022774440945e-7
-  },
-  {
-   "chartLabel": "2 to a Royal (with T)",
-   "bestLabel": "3 to a Straight Flush (needs the 2 slot)",
-   "share": 0.000013851694523963431,
-   "evLost": 5.125511387220472e-8
+   "bestLabel": "2 to a Royal (no T or A)",
+   "share": 0.0010157909317573177,
+   "evLost": 0.000003276910280229646
   },
   {
    "chartLabel": "1 deuce + 3 to a Royal (with A/T)",
-   "bestLabel": "1 deuce + 3 to a Straight Flush (3 ways)",
-   "share": 0.00001846892603195124,
-   "evLost": 3.417007591480417e-8
+   "bestLabel": "1 deuce only",
+   "share": 0.00031397174254317085,
+   "evLost": 0.000002848541783079508
+  },
+  {
+   "chartLabel": "1 deuce + 3 to a Royal (with T)",
+   "bestLabel": "1 deuce + 3 to a Straight Flush (4 ways)",
+   "share": 0.00005540677809585372,
+   "evLost": 0.0000024260753899510426
+  },
+  {
+   "chartLabel": "1 deuce + 3 to a Straight Flush (4 ways)",
+   "bestLabel": "1 deuce + 3 to a Royal (no T or A)",
+   "share": 0.000036937852063902476,
+   "evLost": 0.0000019135242512289928
   },
   {
    "chartLabel": "1 deuce + 3 to a Royal (with A)",
-   "bestLabel": "1 deuce + 3 to a Straight Flush (3 ways)",
-   "share": 0.00001846892603195124,
-   "evLost": 3.417007591480417e-8
+   "bestLabel": "1 deuce + 3 to a Straight Flush (2 ways)",
+   "share": 0.00005540677809585372,
+   "evLost": 8.200818219552756e-7
   },
   {
-   "chartLabel": "Discard everything",
-   "bestLabel": "2 to a Royal (with A/T)",
-   "share": 0.00000923446301597562,
-   "evLost": 2.015528790746692e-9
+   "chartLabel": "1 deuce + 3 to a Royal (with A/T)",
+   "bestLabel": "1 deuce + 3 to a Straight Flush (2 ways)",
+   "share": 0.00001846892603195124,
+   "evLost": 2.733606073184252e-7
+  },
+  {
+   "chartLabel": "2 to a Royal (no T or A)",
+   "bestLabel": "2 to a Straight Flush (4 ways)",
+   "share": 0.00006464124111182933,
+   "evLost": 1.2016476696705716e-7
   }
  ]
 }

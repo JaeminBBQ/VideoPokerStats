@@ -1,9 +1,11 @@
 import type { GameId } from '../engine/index.ts';
+import type { DrillState } from './drill.ts';
 import type { HandRecord, Totals } from './stats.ts';
 
 export const STORAGE_KEYS = {
   history: 'vp.v1.history',
   totals: 'vp.v1.totals',
+  drill: 'vp.v1.drill',
   settings: 'vp.v1.settings',
 } as const;
 
@@ -15,13 +17,17 @@ export interface StorageLike {
   setItem(key: string, value: string): void;
 }
 
+export type Mode = 'deal' | 'drill';
+
 export interface Settings {
   gameId: GameId;
   /** Dollars per coin (the bet is always 5 coins). */
   denomination: number;
+  /** Last mode per game; missing games default to deal. */
+  mode: Partial<Record<GameId, Mode>>;
 }
 
-export const DEFAULT_SETTINGS: Settings = { gameId: 'nsud', denomination: 0.25 };
+export const DEFAULT_SETTINGS: Settings = { gameId: 'nsud', denomination: 0.25, mode: {} };
 
 /** Denominations offered in the settings selector. */
 export const DENOMINATIONS = [0.05, 0.25, 1] as const;
@@ -33,11 +39,20 @@ export interface TrainerStorage {
   saveHistory(history: HandRecord[]): void;
   loadTotals(): Totals;
   saveTotals(totals: Totals): void;
+  loadDrill(): DrillState;
+  saveDrill(drill: DrillState): void;
   loadSettings(): Settings;
   saveSettings(settings: Settings): void;
 }
 
 const isRecord = (x: unknown): x is Record<string, unknown> => typeof x === 'object' && x !== null && !Array.isArray(x);
+
+const isDrillEntry = (x: unknown): x is { streak: number; cleared: boolean } =>
+  isRecord(x) && typeof x.streak === 'number' && typeof x.cleared === 'boolean';
+
+/** Drill state is one level of game → key → entry; anything else loads as empty. */
+const isDrillState = (x: unknown): x is DrillState =>
+  isRecord(x) && Object.values(x).every((g) => isRecord(g) && Object.values(g).every(isDrillEntry));
 
 /** Versioned JSON persistence. Corrupt, missing, or wrong-version data loads as defaults and never throws. */
 export function createStorage(store: StorageLike): TrainerStorage {
@@ -64,6 +79,8 @@ export function createStorage(store: StorageLike): TrainerStorage {
     saveHistory: (history) => save(STORAGE_KEYS.history, history),
     loadTotals: () => load(STORAGE_KEYS.totals, isRecord, {} as Totals),
     saveTotals: (totals) => save(STORAGE_KEYS.totals, totals),
+    loadDrill: () => load(STORAGE_KEYS.drill, isDrillState, {} as DrillState),
+    saveDrill: (drill) => save(STORAGE_KEYS.drill, drill),
     loadSettings: () => load(STORAGE_KEYS.settings, isRecord, { ...DEFAULT_SETTINGS }),
     saveSettings: (settings) => save(STORAGE_KEYS.settings, settings),
   };

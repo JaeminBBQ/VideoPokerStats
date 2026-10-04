@@ -3,14 +3,17 @@
 Items Claude needs from the user. Claude adds items; the user answers inline or in chat.
 
 ## Open
-- [ ] **Commit T001 + drill engine** (verified by Claude: 85 tests, lint, typecheck, build):
-  `git add -A && git commit -m "T001: trainer UI, grading, per-game stats; drill engine (similar hands), Loose Deuces chart; T003 spec" && git push`
-- [ ] **Try the trainer:** `npm run dev`, open http://localhost:5173. Deal ~20 NSUD hands, make a mistake on purpose, check the feedback, top holds, stats, the paytable toggle, and phone width (DevTools ~375px). Reply with anything that feels off.
-- [ ] **Hand T003 to DeepSeek:** tell it `read handoffs/TO_DEEPSEEK.md`.
+- [ ] **Commit** (verified by Claude: 129 tests, all 11 returns match, charts for 10 games, lint, typecheck, build):
+  `git add -A && git commit -m "T003: drill mode, chart tab; Legends Bay 10¢ paytables; Jacks or Better family charts; venues; T004 spec" && git push`
+- [ ] **Try it:** `npm run dev` → http://localhost:5173. Make a few deliberate NSUD mistakes in Deal, switch to **Drill**, and check that the drill hands feel like the same decision. Open the **Chart** tab. Phone width (~375px). Reply with anything off.
+- [ ] **Hand T004 to DeepSeek** (wild cards + casino tabs): tell it `read handoffs/TO_DEEPSEEK.md`.
 - [ ] **Read your chart:** `docs/charts/nsud.md` (GSR) and `docs/charts/illinois-deuces.md` (Legends Bay). Tell me if any line wording is confusing; that wording becomes the drill-mode vocabulary.
-- [ ] *(next casino visit)* Photograph the pay column on the GSR "Deuces Wild 44" machine (and any Legends Bay deuces/DDB) so we can confirm the exact paytables. GSR should read 1-2-3-4-4-10-16-25-200-800 (3oak → royal, per coin).
+- [ ] *(next casino visit)* **Legends Bay #12139:** photograph the pay tables of the games you didn't shoot yet (Joker Poker, Double Bonus, Double Double Bonus, Deuces Wild Bonus Poker, Super Bonus Deuces Wild, Double Joker, Aces & Faces, Triple Double, Super Aces) and the same games at **25¢ and $1**, since Game King tables often improve with denomination.
+- [ ] *(next GSR visit)* Photograph the "Deuces Wild 44" pay column. It should read 1-2-3-4-4-10-16-25-200-800 (3oak → royal, per coin).
 
 ## Done
+- [x] Legends Bay 10¢ photos (JoB 8/5, Bonus 6/5, BPD 7/5, Deuces 16/13) added as games, all verified (2026-10-04).
+- [x] T001 + drill engine committed; T003 handed off and verified (2026-10-04).
 - [x] First commit pushed to `JaeminBBQ/VideoPokerStats` (2026-10-04).
 - [x] T001 handed off and verified (2026-10-04).
 - [x] GitHub repo created: `JaeminBBQ/VideoPokerStats`; local `origin` repointed (2026-10-04).
