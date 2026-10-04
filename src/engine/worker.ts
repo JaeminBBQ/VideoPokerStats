@@ -2,6 +2,7 @@
 /** Engine worker: builds tables once per game (~1s, ~12MB each) and answers hold-EV queries. */
 import { analyzeHand, buildTables, type Tables } from './ev.ts';
 import { GAMES } from './games.ts';
+import { findSimilarHand } from './drill.ts';
 import type { EngineRequest, EngineResponse } from './client.ts';
 
 const tables = new Map<string, Tables>();
@@ -20,7 +21,9 @@ self.onmessage = (e: MessageEvent<EngineRequest>) => {
   let res: EngineResponse;
   try {
     const t = tablesFor(req.gameId);
-    res = req.type === 'prepare' ? { id: req.id, ok: true, holds: [] } : { id: req.id, ok: true, holds: analyzeHand(t, req.hand) };
+    if (req.type === 'prepare') res = { id: req.id, ok: true, holds: [] };
+    else if (req.type === 'analyze') res = { id: req.id, ok: true, holds: analyzeHand(t, req.hand) };
+    else res = { id: req.id, ok: true, holds: [], similar: findSimilarHand(t, req.signature) };
   } catch (err) {
     res = { id: req.id, ok: false, error: String(err) };
   }

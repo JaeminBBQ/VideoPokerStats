@@ -5,6 +5,6 @@
 **M2: Trainer.**
 - T001 (DeepSeek): trainer UI, game picker, feedback, top holds, per-game stats, localStorage.
 - T002 (Claude, done): hold-pattern classifier + generated charts for NSUD, Illinois, FPDW (`docs/charts/`).
-- T003 (DeepSeek, spec by Claude after T002): drill mode using classifier confusions; chart page.
+- T001 (done). T003 (DeepSeek, ready): drill mode (engine side built: `findSimilarHand`), chart tab, chart-line names in feedback.
 
 **M3: Polish.** Phone layout pass at the casino, denomination presets, mistake review list, more paytables the owner photographs (each verified before it ships).

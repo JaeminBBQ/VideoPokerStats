@@ -11,3 +11,5 @@
 **D5 (2026-10-03): Charts are generated, never typed.** A hold-pattern classifier names every hold (e.g. "2 deuces + 3 to a royal"); the chart is the pattern order that best reproduces perfect play over all starting hands, and the generator reports its error vs perfect play.
 
 **D6 (2026-10-03): Chart lines are ordered by direct EV maximization, not pairwise votes.** The first draft (greedy pairwise ordering) gave up 2.15%; local search on the chart's total EV, plus deuce-aware straight "ways" and A/T qualifiers on small royal draws, brought NSUD to 0.014% given up. The chart is also the drill-mode vocabulary: "similar hands" = same (correct line, chosen line) confusion.
+
+**D7 (2026-10-04): Drill hands don't count toward per-game totals.** Drills are deliberately the user's weak spots, so mixing them in would make the error rate measure the drill mix instead of real play. Drill accuracy is shown separately. A confusion clears after 3 correct drills in a row. Games without a chart classifier drill the same misplayed hand with suits/order disguised. Resetting a game's stats clears its history too (accepted from T001).

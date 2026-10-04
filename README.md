@@ -1,32 +1,24 @@
-# React + TypeScript + Vite
+# Video Poker Trainer
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A video poker strategy trainer: pick a game, deal, choose holds, and get told exactly whether that was the best play and what a mistake cost. Every answer comes from exact enumeration of all 32 holds over every possible draw in `src/engine/` — no sampling, no hand-typed strategy charts.
 
-Currently, two official plugins are available:
+Seven verified paytables (NSUD Deuces, Illinois Deuces, Full-Pay Deuces, Loose Deuces, 10/7 Double Bonus, 10/6 Double Double Bonus, Full-Pay Joker Poker), all reproducing their published returns under perfect play. Per-game stats (hands, mistakes, error rate, EV lost) persist in `localStorage`.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Getting started
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```sh
+npm install
+npm run dev        # local dev server
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Scripts
+
+| Script | What it does |
+|---|---|
+| `npm run dev` | Vite dev server with HMR |
+| `npm run build` | Type-check and production build to `dist/` |
+| `npm test` | Vitest: engine tests + app logic tests |
+| `npm run verify` | Reproduce every game's published return under perfect play |
+| `npm run chart` | Regenerate the deuces strategy charts (`scripts/gen-chart.ts`) |
+| `npm run lint` | oxlint |
+| `npm run typecheck` | `tsc -b` |

@@ -10,6 +10,7 @@ src/engine/        EV engine (Claude-owned, verified). Pure TS, runs in Node and
   games.ts         paytables + hand evaluators (deuces, joker, bonus families) → GAMES / GAME_LIST
   ev.ts            subset-sum tables, holdEvs/analyzeHand, perfectPlayReturn
   strategy.ts      hold-pattern classifier (deuces), suit-canonical hands, chart generator
+  drill.ts         patternFor, mistakeSignature, findSimilarHand (worker), disguiseHand
   worker.ts        Web Worker: one table set per game, answers analyze requests
   client.ts        EngineClient: promise API over the worker (the UI's only entry point)
   engine.test.ts   evaluator cases + brute-force cross-check of hold EVs
@@ -34,5 +35,6 @@ src/charts/<id>.json        generated charts (never hand-edited)
 
 ## Data model (localStorage, versioned keys)
 - `vp.v1.history`: array of `HandRecord { ts, gameId, hand: Card[], heldMask, bestMask, evHeld, evBest, mode: 'deal' | 'drill' }`, newest last, capped (see task spec).
-- `vp.v1.totals`: `Record<GameId, { hands, mistakes, evLost }>`, kept separately so caps on history never change totals.
+- `vp.v1.totals`: `Record<GameId, { hands, mistakes, evLost }>`, kept separately so caps on history never change totals. Deal-mode hands only (D7).
+- `vp.v1.drill`: `Record<GameId, Record<confusionKey, { streak, cleared }>>`; a confusion is cleared after 3 correct drills in a row and reopens on a new mistake.
 - `vp.v1.settings`: `{ gameId, denomination }`.
