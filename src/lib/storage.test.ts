@@ -17,24 +17,24 @@ class MemoryStorage implements StorageLike {
 }
 
 const history: HandRecord[] = [
-  { ts: 1700000000000, gameId: 'nsud', hand: [0, 4, 8, 12, 16], heldMask: 1, bestMask: 1, evHeld: 1.2, evBest: 1.2, mode: 'deal' },
+  { ts: 1700000000000, gameId: 'lb-deuces-16-13', hand: [0, 4, 8, 12, 16], heldMask: 1, bestMask: 1, evHeld: 1.2, evBest: 1.2, mode: 'deal' },
 ];
 
-const totals: Totals = { nsud: { hands: 3, mistakes: 1, evLost: 0.25 } };
+const totals: Totals = { 'lb-deuces-16-13': { hands: 3, mistakes: 1, evLost: 0.25 } };
 
 describe('createStorage', () => {
   it('round-trips history, totals, drill state, and settings', () => {
     const store = new MemoryStorage();
     const s = createStorage(store);
-    const drill: DrillState = { nsud: { '1|d1:sf4w1|made:Straight': { streak: 2, cleared: false } } };
+    const drill: DrillState = { 'lb-deuces-16-13': { '1|d1:sf4w1|made:Straight': { streak: 2, cleared: false } } };
     s.saveHistory(history);
     s.saveTotals(totals);
     s.saveDrill(drill);
-    s.saveSettings({ gameId: 'db-10-7', denomination: 1, mode: { 'db-10-7': 'drill' } });
+    s.saveSettings({ gameId: 'job-8-5', denomination: 1, mode: { 'job-8-5': 'drill' } });
     expect(s.loadHistory()).toEqual(history);
     expect(s.loadTotals()).toEqual(totals);
     expect(s.loadDrill()).toEqual(drill);
-    expect(s.loadSettings()).toEqual({ gameId: 'db-10-7', denomination: 1, mode: { 'db-10-7': 'drill' } });
+    expect(s.loadSettings()).toEqual({ gameId: 'job-8-5', denomination: 1, mode: { 'job-8-5': 'drill' } });
   });
 
   it('returns defaults for missing keys', () => {
@@ -58,7 +58,7 @@ describe('createStorage', () => {
 
   it('returns defaults for a wrong version or wrong shape', () => {
     const store = new MemoryStorage();
-    store.setRaw(STORAGE_KEYS.settings, JSON.stringify({ v: 2, data: { gameId: 'nsud', denomination: 0.25 } }));
+    store.setRaw(STORAGE_KEYS.settings, JSON.stringify({ v: 2, data: { gameId: 'lb-deuces-16-13', denomination: 0.25 } }));
     store.setRaw(STORAGE_KEYS.history, JSON.stringify({ v: 1, data: 'not an array' }));
     const s = createStorage(store);
     expect(s.loadSettings()).toEqual(DEFAULT_SETTINGS);

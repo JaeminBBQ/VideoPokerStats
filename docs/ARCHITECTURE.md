@@ -33,8 +33,8 @@ src/charts/<id>.json        generated charts (never hand-edited)
 - `generateChart` analyzes the 134,459 suit classes (weighted to all 2,598,960 hands), orders patterns per section (deuces dealt) by local search that maximizes the chart's total EV, floats pat hands up when that's free, then replays the chart on every hand and reports chart return, error rate, and grouped mistakes.
 - `naturalPattern` covers Jacks-or-Better-family games (JoB, Bonus, BPD, DB, DDB): pairs split high/low (aces separate in bonus games), small royal draws and high-card holds named by exact ranks ("Suited QJ", "KQJ unsuited"), straight-flush draws by high cards + gaps, inside straights by high cards. `chartKind(game)` picks the classifier, sections, titles, and rule text; charts carry `rule` and `section.title` so the UI has no game-specific wording.
 - A readability pass swaps adjacent lines that never occur in the same hand into natural (typical-EV) order; it can't change the chart's EV.
-- Chart cost vs perfect play: JoB 8/5 0.0022%, Bonus 6/5 0.0026%, BPD 7/5 0.0024%, DDB 10/6 0.0072%, NSUD 0.0144%, Illinois 0.0095%, LB deuces 0.0304%, FPDW 0.0206%, Loose 0.0168%, DB 10/7 0.0267%. Joker Poker has no classifier yet.
-- Games carry a `venue` (`Legends Bay | GSR | Las Vegas | Reference`); `gamesAt(venue)` drives the casino tabs.
+- Chart cost vs perfect play: JoB 8/5 0.0022%, Bonus 6/5 0.0026%, BPD 7/5 0.0024%, Deuces 16/13 0.0304%. The classifiers are general (deuces family, Jacks-or-Better family); new photographed paytables in those families get charts with `npm run chart -- <id>`.
+- Games carry a `venue` (only `Legends Bay` so far; a venue is added when its first photo arrives) and a `proof` photo path; `gamesAt(venue)` drives the casino tabs.
 
 ## Data model (localStorage, versioned keys)
 - `vp.v1.history`: array of `HandRecord { ts, gameId, hand: Card[], heldMask, bestMask, evHeld, evBest, mode: 'deal' | 'drill' }`, newest last, capped (see task spec).

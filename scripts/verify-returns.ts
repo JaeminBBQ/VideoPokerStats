@@ -3,7 +3,7 @@
  * overall return against the published figure (to the precision it is published at).
  *
  *   npm run verify                 # all games
- *   npm run verify -- nsud fpdw    # some games
+ *   npm run verify -- job-8-5 bpd-7-5    # some games
  */
 import { buildTables, perfectPlayReturn } from '../src/engine/ev.ts';
 import { GAMES, GAME_LIST, type GameDef } from '../src/engine/games.ts';

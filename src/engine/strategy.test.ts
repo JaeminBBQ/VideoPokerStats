@@ -4,7 +4,7 @@ import { buildTables } from './ev.ts';
 import { GAMES } from './games.ts';
 import { canonicalHands, chartKind, deucesPattern, generateChart, naturalPattern, straightWays } from './strategy.ts';
 
-const label = (held: string) => deucesPattern(GAMES.nsud, held ? parseHand(held) : []).label;
+const label = (held: string) => deucesPattern(GAMES['lb-deuces-16-13'], held ? parseHand(held) : []).label;
 
 describe('deucesPattern', () => {
   it.each([
@@ -57,10 +57,10 @@ describe('naturalPattern', () => {
     expect(naturalPattern(GAMES['bonus-6-5'], parseHand('Kc Kd')).label).toBe('High Pair (JJ–KK)');
   });
 
-  it('has chart kinds for deuces and Jacks-or-Better games, not Joker Poker', () => {
+  it('has chart kinds for deuces and Jacks-or-Better games only', () => {
     expect(chartKind(GAMES['job-8-5'])?.sectionLabel(0)).toBe('');
-    expect(chartKind(GAMES.nsud)?.sectionLabel(1)).toBe('1 deuce');
-    expect(chartKind(GAMES['joker-kings'])).toBeNull();
+    expect(chartKind(GAMES['lb-deuces-16-13'])?.sectionLabel(1)).toBe('1 deuce');
+    expect(chartKind({ ...GAMES['job-8-5'], rows: GAMES['job-8-5'].rows.filter((r) => r.key !== 'jacks-or-better') })).toBeNull();
   });
 });
 
@@ -72,11 +72,11 @@ describe('canonicalHands', () => {
   });
 });
 
-describe('NSUD chart', () => {
-  it('reproduces the verified return and stays within 0.02% of perfect play', { timeout: 180_000 }, () => {
-    const chart = generateChart(buildTables(GAMES.nsud), chartKind(GAMES.nsud)!, canonicalHands());
-    expect(chart.perfectReturn).toBeCloseTo(0.997283, 6);
-    expect(chart.perfectReturn - chart.chartReturn).toBeLessThan(0.0002);
+describe('Legends Bay deuces chart', () => {
+  it('reproduces the verified return and stays within 0.04% of perfect play', { timeout: 180_000 }, () => {
+    const chart = generateChart(buildTables(GAMES['lb-deuces-16-13']), chartKind(GAMES['lb-deuces-16-13'])!, canonicalHands());
+    expect(chart.perfectReturn).toBeCloseTo(0.967651, 6);
+    expect(chart.perfectReturn - chart.chartReturn).toBeLessThan(0.0004);
     expect(chart.sections.map((s) => s.section)).toEqual([4, 3, 2, 1, 0]);
   });
 });

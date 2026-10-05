@@ -1,7 +1,7 @@
 /**
  * Generates a strategy chart from exact EVs and measures it against perfect play.
  *
- *   npm run chart -- nsud
+ *   npm run chart -- job-8-5
  *
  * Writes src/charts/<id>.json (for the app) and docs/charts/<id>.md (readable chart).
  */
@@ -11,7 +11,7 @@ import { buildTables } from '../src/engine/ev.ts';
 import { GAMES, type GameId } from '../src/engine/games.ts';
 import { canonicalHands, chartKind, generateChart } from '../src/engine/strategy.ts';
 
-const id = (process.argv[2] ?? 'nsud') as GameId;
+const id = (process.argv[2] ?? 'job-8-5') as GameId;
 const game = GAMES[id];
 if (!game) throw new Error(`unknown game ${id}`);
 const kind = chartKind(game);

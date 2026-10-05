@@ -19,7 +19,7 @@ export default function CardView({ card, held, emphasis, isWild, disabled, onTog
       <div className="hold-tag">{held ? 'HELD' : ''}</div>
       <button
         type="button"
-        className={`card ${red ? 'red' : 'black'}`}
+        className={`card ${red ? 'red' : 'black'}${isWild ? ' wild' : ''}`}
         onClick={onToggle}
         disabled={disabled}
         onMouseDown={(e) => e.preventDefault()}
@@ -29,7 +29,11 @@ export default function CardView({ card, held, emphasis, isWild, disabled, onTog
         <span className="card-suit" aria-hidden>
           {joker ? '★' : SUIT_SYMBOLS[suitOf(card)]}
         </span>
-        {isWild && <span className="wild-tag">WILD</span>}
+        {isWild && (
+          <span className="wild-banner" aria-hidden>
+            WILD
+          </span>
+        )}
       </button>
     </div>
   );

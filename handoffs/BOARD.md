@@ -8,6 +8,7 @@
 | T002a | Drill engine: patternFor, mistakeSignature, findSimilarHand in worker (`engine.similar`), disguiseHand; Loose Deuces chart | Claude | done | T002 |
 | T003 | Drill mode, chart tab, chart-line names in feedback | DeepSeek | done | T001, T002a |
 | T002b | Jacks-or-Better-family classifier; charts for 10 games (JoB 8/5 gives up 0.002%); `venue` + `gamesAt`; generic chart/drill wording in UI | Claude | done | T003 |
-| T004 | Wild cards look wild + casino tabs (Legends Bay / GSR / Las Vegas / Reference) + empty-hold copy fix | DeepSeek | ready | T003, T002b |
+| T004 | Wild cards look wild + casino tabs (Legends Bay / GSR / Las Vegas / Reference) + empty-hold copy fix | DeepSeek | done | T003, T002b |
+| T005 | Proof-only catalog: remove every game without an owner photo (NSUD/GSR, Illinois, Vegas, FPDW, Joker), their charts and docs claims; `proof` field; 10¢ default (D10) | Claude | done | T004 |
 
 Only `ready` tasks have full specs in `tasks/`. Claude writes the next spec after reviewing the previous task. See `docs/ROADMAP.md`.

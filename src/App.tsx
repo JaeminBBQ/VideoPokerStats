@@ -2,12 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import {
   EngineClient,
   GAMES,
-  GAME_LIST,
   cardToString,
   deal,
   disguiseHand,
   patternFor,
-  rankOf,
   type Card,
   type GameId,
   type HoldEv,
@@ -33,9 +31,11 @@ import {
   pickConfusion,
   type DrillState,
 } from './lib/drill.ts';
+import { isWildCard } from './lib/wild.ts';
 import CardView, { type CardEmphasis } from './components/CardView.tsx';
 import ChartTab from './components/ChartTab.tsx';
 import DrillPanel from './components/DrillPanel.tsx';
+import GamePicker from './components/GamePicker.tsx';
 import Paytable from './components/Paytable.tsx';
 import StatsPanel from './components/StatsPanel.tsx';
 import TopHolds from './components/TopHolds.tsx';
@@ -103,7 +103,6 @@ export default function App() {
   const gameId = settings.gameId;
   const game = GAMES[gameId];
   const mode = settings.mode[gameId] ?? 'deal';
-  const isDeuces = game.rows.some((row) => row.key === 'four-deuces');
 
   const confusions = groupConfusions(history, game);
   const toDrill = confusions.filter((c) => !drillState[gameId]?.[c.key]?.cleared);
@@ -355,20 +354,6 @@ export default function App() {
       <header className="header">
         <h1>Video Poker Trainer</h1>
         <div className="header-row">
-          <div className="game-picker">
-            <label htmlFor="game-select">Game</label>
-            <select
-              id="game-select"
-              value={gameId}
-              onChange={(e) => switchGame(e.target.value as GameId)}
-            >
-              {GAME_LIST.map((g) => (
-                <option key={g.id} value={g.id}>
-                  {g.name} ({(g.publishedReturn * 100).toFixed(2)}%)
-                </option>
-              ))}
-            </select>
-          </div>
           <div className="mode-switch" role="group" aria-label="Mode">
             <button type="button" className={mode === 'deal' ? 'active' : ''} onClick={() => switchMode('deal')}>
               Deal
@@ -378,6 +363,7 @@ export default function App() {
             </button>
           </div>
         </div>
+        <GamePicker gameId={gameId} onSelect={switchGame} />
         <p className="where">{game.where}</p>
         <Paytable game={game} open={paytableOpen} onToggle={() => setPaytableOpen((o) => !o)} />
       </header>
@@ -436,7 +422,7 @@ export default function App() {
                     card={card}
                     held={(heldMask & (1 << i)) !== 0}
                     emphasis={emphases[i] ?? 'normal'}
-                    isWild={isDeuces && rankOf(card) === 0}
+                    isWild={isWildCard(game, card)}
                     disabled={phase !== 'dealt' || busy}
                     onToggle={() => toggleHold(i)}
                   />
@@ -492,12 +478,12 @@ export default function App() {
                       <div className="compare">
                         <div>
                           Best: <strong>{holdLabel(result.grade.bestMask)}</strong>
-                          {feedbackBestLine ? <>: {feedbackBestLine.label}</> : null} (EV{' '}
+                          {result.grade.bestMask !== 0 && feedbackBestLine ? <>: {feedbackBestLine.label}</> : null} (EV{' '}
                           {result.grade.evBest.toFixed(4)})
                         </div>
                         <div>
                           Yours: <strong>{holdLabel(heldMask)}</strong>
-                          {feedbackHeldLine ? <>: {feedbackHeldLine.label}</> : null} (EV{' '}
+                          {heldMask !== 0 && feedbackHeldLine ? <>: {feedbackHeldLine.label}</> : null} (EV{' '}
                           {result.grade.evHeld.toFixed(4)})
                         </div>
                         <div>

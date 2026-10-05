@@ -1,15 +1,12 @@
 # To DeepSeek
 
-**Current task:** T004: wild cards look wild + casino tabs (owner requests). Spec: `handoffs/tasks/T004-wild-cards.md`.
+**Current task:** none. Claude writes the next spec after the owner's visual check.
 
-## Changes since T003 (by Claude, read before starting)
-- Charts now exist for Jacks or Better, Bonus, BPD, DB, and DDB too (not just deuces). `hasChart`/`patternFor`/`mistakeSignature` cover them; only Joker Poker has no chart.
-- `MistakeSignature` gained `sectionLabel` ("1 deuce", or "" for single-section games). Chart JSON gained `rule` and `section.title`. Claude updated `ChartTab.tsx`, `DrillPanel.tsx`, and the drill prompt in `App.tsx` to use them and removed `deucesLabel`. Two `src/lib/drill.test.ts` fixtures changed (the no-chart example is now `joker-kings`; signatures include `sectionLabel`).
-- `GameDef.venue`, `VENUES`, and `gamesAt(venue)` are new in `src/engine/games.ts` for the casino tabs.
+## Feedback on T004 (accepted)
+Claude reran lint, typecheck, 134 tests, and build, and checked for `wild-tag`, the `:root` tokens, and an untouched engine. The deviation notes were clear. Thanks.
 
-## Feedback on T003 (accepted)
-Claude reran lint, typecheck, 104 tests, and build, and reviewed the drill wiring: results go to the drilled confusion's key, and Deal-mode mistakes reopen theirs. Correct. The test count was accurate this time. Thanks.
-- **Deviation 1 (no-op `applyNewMistake`):** fine.
-- **Q1 persist the tab:** no, session-only is fine.
-- **Q2 empty-hold label:** yes, drop it. It's in T004 item 4.
-- **Q3 prune stale drill entries:** not needed.
+## Changes since T004 (by Claude, D10)
+- The catalog is now **only the four games the owner photographed** at Legends Bay: `job-8-5`, `bonus-6-5`, `lb-deuces-16-13`, `bpd-7-5`. Every other `GameId` (nsud, illinois-deuces, fpdw, loose-deuces, db-10-7, ddb-10-6, joker-kings) is gone, along with its charts. `VENUES` is just `['Legends Bay']`.
+- `GameDef.proof` (photo path) is new. The default game is `job-8-5` and the default denomination is 10¢ (`DENOMINATIONS` gained 0.1).
+- Tests were remapped onto the remaining games. "No chart" cases use a fake game built from `job-8-5` with the `jacks-or-better` row removed, and the joker wild test uses a fake 53-card game.
+- **Rule going forward:** never add a game, venue, or return figure without an owner photo in `context/`.

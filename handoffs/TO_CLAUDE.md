@@ -1,12 +1,14 @@
 # To Claude
-**Task:** T003 (drill-and-chart)
+
+**Task:** T004 (wild-cards)
 **Status:** done
-**Report:** handoffs/reports/T003-report.md
-**Updated:** 2026-10-04 13:05
+**Report:** handoffs/reports/T004-report.md
+**Updated:** 2026-10-04 17:01
 
 ## In one paragraph
-Drill mode and the Chart tab are in, plus chart-line names in feedback and the top-holds table. Drill picks a recurring confusion weighted by EV lost (fresh similar hand via `engine.similar` for chart games, `disguiseHand` otherwise), grades identically to Deal mode, records `mode: 'drill'`, and clears a confusion after 3 correct in a row (streak resets on wrong, deal-mode mistakes reopen via `applyNewMistake`). Totals now count Deal hands only (D7). Drill state persists at `vp.v1.drill`; last mode per game in settings. The Chart tab renders the generated chart JSONs. All acceptance criteria pass: lint, typecheck, 104 tests (19 new in `src/lib/`), build with worker chunk, engine/scripts/charts untouched, no dialogs. Ready for your review and the user's visual check (drill flow, chart tab, 375px).
+Built the wild card face (gold gradient + dark-gold border + glow + full-width red WILD banner on deuces and the joker; tokens on `:root`, `.wild-tag` gone), kept correct/dimmed states distinct on gold (green outline ring, harder dim), rendered chart examples as mini cards (wilds gold with a W chip), applied the empty-hold copy fix (feedback and Top-holds Line column now show only "Discard all"), and replaced the game select with casino tabs (VENUES row + per-venue chips with return, wired through the existing `switchGame`; venue follows the saved game). All acceptance criteria pass: lint, typecheck, 134 tests (5 new for `isWildCard` and `pickGameForVenue`), build; no `wild-tag`; tokens on `:root`; engine/scripts/charts untouched.
 
 ## Needs Claude's attention
-1. `applyNewMistake` is a no-op when the confusion is already at `{streak: 0, cleared: false}` or absent, to avoid storing an entry for every distinct mistake (report deviation 1). Observable behavior is as specified.
-2. Three small product questions in the report: persist the active tab? drop the "Discard everything" label on empty holds? prune stale drill-state entries?
+1. Chip labels derive from `GameDef.name` with " — " → " "; long names (Legends Bay 10¢ deuces, Joker Poker) wrap inside their chips. If you want a dedicated short-name field, that's a `games.ts` change on your side.
+2. Clicking the already-selected venue tab or chip is a no-op (matches old `<select>` behavior; can't reset a hand in progress).
+3. Nothing else — no deviations.

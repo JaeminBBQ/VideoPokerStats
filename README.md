@@ -2,7 +2,7 @@
 
 A video poker strategy trainer: pick a game, deal, choose holds, and get told exactly whether that was the best play and what a mistake cost. Every answer comes from exact enumeration of all 32 holds over every possible draw in `src/engine/` — no sampling, no hand-typed strategy charts.
 
-Seven verified paytables (NSUD Deuces, Illinois Deuces, Full-Pay Deuces, Loose Deuces, 10/7 Double Bonus, 10/6 Double Double Bonus, Full-Pay Joker Poker), all reproducing their published returns under perfect play. Per-game stats (hands, mistakes, error rate, EV lost) persist in `localStorage`.
+Four paytables photographed on a Legends Bay Game King (10¢): Jacks or Better 8/5, Bonus Poker 6/5, Deuces Wild 16/13, Bonus Poker Deluxe 7/5. Each one's perfect-play return is reproduced by the engine (`npm run verify`). Games are added only from photos of real machines.
 
 ## Getting started
 

@@ -29,7 +29,7 @@ Use `--kind done` for milestones and `--kind blocked` for blockers. The webhook 
 
 ## Hard rules
 - **Engine truth:** every EV, "correct hold", and chart line comes from exact enumeration in `src/engine/`. No sampling, no hand-typed strategy charts, no strategy copied from websites. Charts are *generated* from the engine.
-- **Every paytable is verified:** a game ships only if `npm run verify -- <id>` reproduces its published return. A new paytable from a real machine gets its return computed by the engine and cross-checked against vpFREE2/Wizard of Odds when listed.
+- **Every paytable is proven and verified:** a game ships only if the owner photographed it (`context/`) and `npm run verify -- <id>` reproduces its published return. A new paytable from a real machine gets its return computed by the engine and cross-checked against vpFREE2/Wizard of Odds when listed.
 - **Ties are ties:** holds within `EV_EPSILON` of the best are all correct. Never mark a tied hold as a mistake.
 - Pays are per coin at max bet (royal = 800). The UI always assumes max bet.
 - Never print, log, or commit secrets. `.env` is gitignored.
@@ -38,5 +38,5 @@ Use `--kind done` for milestones and `--kind blocked` for blockers. The webhook 
 - Node 24 / npm 11. Vite 8 + React 19 + TypeScript 6 (strict), Vitest, oxlint. Node runs `.ts` scripts directly (type stripping), so engine code must use erasable syntax only (no enums/namespaces/parameter properties) and `.ts` import extensions.
 - Git branch `main`. `origin` = `git@github.com:JaeminBBQ/VideoPokerStats.git` via repo-local `core.sshCommand` with `~/.ssh/id_ed25519_github`. Identity `JaeminBBQ <jaeminl@unr.edu>`. No `gh` CLI. The user commits **and pushes**.
 - DeepSeek runs inside Claude Code, so it also loads this file; that's why the redirect at the top matters.
-- Owner plays in Reno (GSR, Legends Bay). No game over 100% exists in Reno-Tahoe per vpFREE2 (2026-10); primary game is NSUD at GSR. See D2.
+- Owner plays in Reno/Sparks (Legends Bay; GSR next). **Only photographed paytables ship (D10):** photos live in `context/`; each `GameDef` names its `proof`. Don't add games, venues, or availability claims from websites.
 - Sibling projects `~/Projects/ChessCoach` and `~/Projects/LeagueApp` use the same protocol.

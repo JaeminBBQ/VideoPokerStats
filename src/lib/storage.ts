@@ -27,12 +27,12 @@ export interface Settings {
   mode: Partial<Record<GameId, Mode>>;
 }
 
-export const DEFAULT_SETTINGS: Settings = { gameId: 'nsud', denomination: 0.25, mode: {} };
+export const DEFAULT_SETTINGS: Settings = { gameId: 'job-8-5', denomination: 0.1, mode: {} };
 
 /** Denominations offered in the settings selector. */
-export const DENOMINATIONS = [0.05, 0.25, 1] as const;
+export const DENOMINATIONS = [0.05, 0.1, 0.25, 1] as const;
 
-export const DENOM_LABELS: Record<number, string> = { 0.05: '5¢', 0.25: '25¢', 1: '$1' };
+export const DENOM_LABELS: Record<number, string> = { 0.05: '5¢', 0.1: '10¢', 0.25: '25¢', 1: '$1' };
 
 export interface TrainerStorage {
   loadHistory(): HandRecord[];

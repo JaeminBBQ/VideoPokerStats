@@ -13,6 +13,10 @@
   --card-bg: #faf7ee;
   --card-ink: #20241f;
   --red-suit: #c22f27;
+  --wild-bg: linear-gradient(165deg, #f9dd85, #eec14e 55%, #dda32c);
+  --wild-border: #7a4f12;
+  --wild-banner-bg: #c62828;
+  --wild-banner-ink: #ffe082;
 }
 
 * {
@@ -112,10 +116,73 @@ body {
 }
 
 .game-picker {
-  display: flex;
-  align-items: center;
+  display: grid;
   gap: 8px;
-  font-size: 15px;
+  margin: 8px 0 2px;
+}
+
+.venue-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.venue-tab {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.venue-tab:hover {
+  color: var(--text);
+}
+
+.venue-tab.active {
+  color: var(--gold);
+  background: rgba(230, 193, 92, 0.12);
+  border-color: rgba(230, 193, 92, 0.35);
+}
+
+.game-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.game-chip {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.game-chip:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.game-chip.active {
+  background: rgba(230, 193, 92, 0.16);
+  border-color: rgba(230, 193, 92, 0.45);
+  color: var(--gold);
+}
+
+.chip-return {
+  margin-left: 4px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.game-chip.active .chip-return {
+  color: var(--gold);
 }
 
 select {
@@ -262,14 +329,41 @@ select {
   color: var(--red-suit);
 }
 
-.wild-tag {
+.card.wild {
+  background: var(--wild-bg);
+  border-color: var(--wild-border);
+  box-shadow:
+    0 0 10px rgba(230, 193, 92, 0.5),
+    0 3px 10px rgba(0, 0, 0, 0.4);
+}
+
+.card.wild .card-rank {
+  color: var(--card-ink);
+}
+
+/* Wild cards keep the suit, small, and carry a full-width WILD banner across the middle. */
+.card.wild .card-suit {
+  flex: 0 0 auto;
+  margin-top: auto;
+  align-self: center;
+  font-size: clamp(14px, 3.8vw, 19px);
+}
+
+.wild-banner {
   position: absolute;
-  right: 4px;
-  bottom: 4px;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  color: #b45309;
+  left: 0;
+  right: 0;
+  top: 46%;
+  transform: translateY(-50%);
+  text-align: center;
+  background: var(--wild-banner-bg);
+  color: var(--wild-banner-ink);
+  font-size: clamp(12px, 3.4vw, 15px);
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  line-height: 1.15;
+  padding: 2px 0;
 }
 
 .card-slot.held .card {
@@ -289,6 +383,18 @@ select {
 
 .card-slot.emphasis-dimmed .card {
   opacity: 0.38;
+}
+
+/* A gold card would still read as "on" at that opacity, so wild cards dim harder. */
+.card-slot.emphasis-dimmed .card.wild {
+  opacity: 0.3;
+  filter: saturate(0.55) brightness(0.6);
+}
+
+/* Green ring outside the gold glow, so "correct" stays obvious on a wild card. */
+.card-slot.emphasis-correct .card.wild {
+  outline: 3px solid var(--green-dim);
+  outline-offset: 1px;
 }
 
 /* ---------------------------------------------------------------- controls */
@@ -569,6 +675,70 @@ select {
   color: var(--muted);
 }
 
+.mini-hand {
+  display: inline-flex;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+.mini-card {
+  flex: 1 1 0;
+  min-width: 20px;
+  max-width: 30px;
+  aspect-ratio: 0.68;
+  border-radius: 4px;
+  background: var(--card-bg);
+  color: var(--card-ink);
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  position: relative;
+}
+
+.mini-card.red {
+  color: var(--red-suit);
+}
+
+.mini-rank {
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.mini-suit {
+  position: absolute;
+  bottom: 1px;
+  right: 2px;
+  font-size: 9px;
+  line-height: 1.2;
+}
+
+.mini-card.wild {
+  background: var(--wild-bg);
+  border-color: var(--wild-border);
+}
+
+.mini-card.wild .mini-rank,
+.mini-card.wild .mini-suit {
+  color: var(--card-ink);
+}
+
+.mini-wild {
+  position: absolute;
+  inset: 34% 26%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--wild-banner-bg);
+  color: var(--wild-banner-ink);
+  border-radius: 2px;
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1;
+}
+
 /* ---------------------------------------------------------------- stats */
 
 .stats-grid {
@@ -621,15 +791,6 @@ select {
 @media (max-width: 640px) {
   .row {
     grid-template-columns: 1fr;
-  }
-
-  .game-picker {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .game-picker select {
-    width: 100%;
   }
 
   .holds-table,

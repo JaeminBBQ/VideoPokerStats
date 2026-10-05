@@ -3,7 +3,7 @@ import { errorRate, HISTORY_CAP, recordHand, resetGame, type HandRecord, type Tr
 
 const record = (over: Partial<HandRecord>): HandRecord => ({
   ts: 0,
-  gameId: 'nsud',
+  gameId: 'lb-deuces-16-13',
   hand: [0, 4, 8, 12, 16],
   heldMask: 1,
   bestMask: 1,
@@ -26,21 +26,21 @@ describe('recordHand', () => {
 
   it('counts an optimal hand without mistakes or EV lost', () => {
     const after = recordHand(empty(), record({ evHeld: 1.2345, evBest: 1.2345 }));
-    expect(after.totals.nsud).toEqual({ hands: 1, mistakes: 0, evLost: 0 });
+    expect(after.totals['lb-deuces-16-13']).toEqual({ hands: 1, mistakes: 0, evLost: 0 });
   });
 
   it('counts a mistake and the exact EV lost', () => {
     const after = recordHand(empty(), record({ evHeld: 0.9876, evBest: 1.2345 }));
-    expect(after.totals.nsud).toMatchObject({ hands: 1, mistakes: 1 });
-    expect(after.totals.nsud?.evLost).toBeCloseTo(0.2469, 12);
+    expect(after.totals['lb-deuces-16-13']).toMatchObject({ hands: 1, mistakes: 1 });
+    expect(after.totals['lb-deuces-16-13']?.evLost).toBeCloseTo(0.2469, 12);
   });
 
   it('accumulates totals across hands and games separately', () => {
     const one = recordHand(empty(), record({ evHeld: 0.5, evBest: 1 }));
     const two = recordHand(one, record({ evHeld: 1, evBest: 1 }));
-    const three = recordHand(two, record({ gameId: 'fpdw', evHeld: 2, evBest: 3 }));
-    expect(three.totals.nsud).toEqual({ hands: 2, mistakes: 1, evLost: 0.5 });
-    expect(three.totals.fpdw).toEqual({ hands: 1, mistakes: 1, evLost: 1 });
+    const three = recordHand(two, record({ gameId: 'bonus-6-5', evHeld: 2, evBest: 3 }));
+    expect(three.totals['lb-deuces-16-13']).toEqual({ hands: 2, mistakes: 1, evLost: 0.5 });
+    expect(three.totals['bonus-6-5']).toEqual({ hands: 1, mistakes: 1, evLost: 1 });
   });
 
   it('caps history at 5000 records, dropping the oldest', () => {
@@ -53,18 +53,18 @@ describe('recordHand', () => {
     expect(after.history[0].ts).toBe(1);
     expect(after.history[HISTORY_CAP - 1].ts).toBe(HISTORY_CAP);
     // Totals survive the cap untouched.
-    expect(after.totals.nsud?.hands).toBe(HISTORY_CAP + 1);
+    expect(after.totals['lb-deuces-16-13']?.hands).toBe(HISTORY_CAP + 1);
   });
 
   it('records drill hands in history but leaves totals alone (D7)', () => {
     let state = recordHand(empty(), record({ evHeld: 0.5, evBest: 1 }));
     state = recordHand(state, record({ ts: 1, mode: 'drill', evHeld: 0.5, evBest: 1 }));
     expect(state.history).toHaveLength(2);
-    expect(state.totals.nsud).toEqual({ hands: 1, mistakes: 1, evLost: 0.5 });
+    expect(state.totals['lb-deuces-16-13']).toEqual({ hands: 1, mistakes: 1, evLost: 0.5 });
     // A drill-only session records no totals at all.
     const only = recordHand(empty(), record({ mode: 'drill' }));
     expect(only.history).toHaveLength(1);
-    expect(only.totals.nsud).toBeUndefined();
+    expect(only.totals['lb-deuces-16-13']).toBeUndefined();
   });
 });
 
@@ -82,14 +82,14 @@ describe('errorRate', () => {
 describe('resetGame', () => {
   it('clears one game and leaves the others alone', () => {
     const state: TrainerState = {
-      history: [record({ gameId: 'nsud' }), record({ gameId: 'fpdw' }), record({ gameId: 'nsud' })],
-      totals: { nsud: { hands: 2, mistakes: 1, evLost: 0.5 }, fpdw: { hands: 1, mistakes: 0, evLost: 0 } },
+      history: [record({ gameId: 'lb-deuces-16-13' }), record({ gameId: 'bonus-6-5' }), record({ gameId: 'lb-deuces-16-13' })],
+      totals: { 'lb-deuces-16-13': { hands: 2, mistakes: 1, evLost: 0.5 }, 'bonus-6-5': { hands: 1, mistakes: 0, evLost: 0 } },
     };
-    const after = resetGame(state, 'nsud');
-    expect(after.history.map((r) => r.gameId)).toEqual(['fpdw']);
-    expect(after.totals.nsud).toBeUndefined();
-    expect(after.totals.fpdw).toEqual({ hands: 1, mistakes: 0, evLost: 0 });
+    const after = resetGame(state, 'lb-deuces-16-13');
+    expect(after.history.map((r) => r.gameId)).toEqual(['bonus-6-5']);
+    expect(after.totals['lb-deuces-16-13']).toBeUndefined();
+    expect(after.totals['bonus-6-5']).toEqual({ hands: 1, mistakes: 0, evLost: 0 });
     expect(state.history).toHaveLength(3);
-    expect(state.totals.nsud).toBeDefined();
+    expect(state.totals['lb-deuces-16-13']).toBeDefined();
   });
 });

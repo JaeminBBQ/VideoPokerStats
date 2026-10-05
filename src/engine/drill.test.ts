@@ -7,27 +7,28 @@ import { disguiseHand, findSimilarHand, mistakeSignature, patternFor } from './d
 describe('drill', () => {
   let t: Tables;
   beforeAll(() => {
-    t = buildTables(GAMES.nsud);
+    t = buildTables(GAMES['lb-deuces-16-13']);
   });
 
   it('names holds only for games with a chart', () => {
-    expect(patternFor(GAMES.nsud, parseHand('3c 3d'))?.label).toBe('Pair');
-    expect(patternFor(GAMES['joker-kings'], parseHand('3c 3d'))).toBeNull();
+    expect(patternFor(GAMES['lb-deuces-16-13'], parseHand('3c 3d'))?.label).toBe('Pair');
+    expect(patternFor({ ...GAMES['job-8-5'], rows: GAMES['job-8-5'].rows.filter((r) => r.key !== 'jacks-or-better') }, parseHand('3c 3d'))).toBeNull();
   });
 
   it('finds fresh hands posing the same decision', { timeout: 60_000 }, () => {
-    // Pair vs 4 to a Flush, 0 deuces: best is the flush draw, the player held the pair.
+    // Pair vs 4 to a Flush, 0 deuces. On this machine a flush pays only 2, so the pair is right
+    // and the player wrongly drew to the flush.
     const hand = parseHand('5h 5c 8h Jh Kh');
     const best = analyzeHand(t, hand)[0];
-    const sig = mistakeSignature(GAMES.nsud, hand, best.mask, 0b00011)!;
-    expect(sig).toMatchObject({ section: 0, bestLabel: '4 to a Flush', chosenLabel: 'Pair' });
+    const sig = mistakeSignature(GAMES['lb-deuces-16-13'], hand, best.mask, 0b11101)!;
+    expect(sig).toMatchObject({ section: 0, sectionLabel: '0 deuces', bestLabel: 'Pair', chosenLabel: '4 to a Flush' });
     const rng = mulberry32(42);
     for (let i = 0; i < 5; i++) {
       const { hand: h, match } = findSimilarHand(t, sig, rng);
       expect(match).toBe('exact');
       expect(h.filter((c) => rankOf(c) === 0)).toHaveLength(0);
       const holds = analyzeHand(t, h);
-      expect(patternFor(GAMES.nsud, holds[0].held)!.key).toBe(sig.bestKey);
+      expect(patternFor(GAMES['lb-deuces-16-13'], holds[0].held)!.key).toBe(sig.bestKey);
     }
   });
 

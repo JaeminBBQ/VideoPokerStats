@@ -9,7 +9,7 @@ const rowKey = (game: GameDef, hand: string) => {
 };
 
 describe('deuces evaluator', () => {
-  const g = GAMES.nsud;
+  const g = GAMES['lb-deuces-16-13'];
   it.each([
     ['As Ks Qs Js Ts', 'natural-royal'],
     ['2c 2d 2h 2s 9c', 'four-deuces'],
@@ -31,35 +31,15 @@ describe('deuces evaluator', () => {
   ])('%s → %s', (hand, key) => expect(rowKey(g, hand)).toBe(key));
 });
 
-describe('joker evaluator', () => {
-  const g = GAMES['joker-kings'];
-  it.each([
-    ['As Ks Qs Js Ts', 'natural-royal'],
-    ['Jk As Ks Qs Ts', 'joker-royal'],
-    ['Jk 9h 9d 9s 9c', 'five-kind'],
-    ['Jk 8h 8d Ks Kc', 'full-house'],
-    ['Jk 7h 7d 3s 4c', 'three-kind'],
-    ['7c 7h 3d 3s Kc', 'two-pair'],
-    ['Jk Ah 7d 3s 4c', 'kings-or-better'],
-    ['Kc Kh 7d 3s 4c', 'kings-or-better'],
-    ['Qc Qh 7d 3s 4c', 'nothing'],
-    ['Jk Qh 7d 3s 9c', 'nothing'],
-  ])('%s → %s', (hand, key) => expect(rowKey(g, hand)).toBe(key));
-});
-
 describe('bonus evaluators', () => {
   it.each([
-    ['db-10-7', 'Ac Ad Ah As 3c', 'four-aces'],
-    ['db-10-7', '3c 3d 3h 3s Kc', 'four-2-4'],
-    ['db-10-7', '9c 9d 9h 9s Kc', 'four-5-k'],
-    ['ddb-10-6', 'Ac Ad Ah As 3c', 'four-aces-kicker'],
-    ['ddb-10-6', 'Ac Ad Ah As 5c', 'four-aces'],
-    ['ddb-10-6', '3c 3d 3h 3s Ac', 'four-2-4-kicker'],
-    ['ddb-10-6', '3c 3d 3h 3s 5c', 'four-2-4'],
-    ['db-10-7', 'Ac 2d 3h 4s 5c', 'straight'],
-    ['db-10-7', 'Jc Jd 3h 4s 5c', 'jacks-or-better'],
-    ['db-10-7', 'Tc Td 3h 4s 5c', 'nothing'],
-    ['db-10-7', '9h Th Jh Qh Kh', 'straight-flush'],
+    ['bonus-6-5', 'Ac Ad Ah As 3c', 'four-aces'],
+    ['bonus-6-5', '3c 3d 3h 3s Kc', 'four-2-4'],
+    ['bonus-6-5', '9c 9d 9h 9s Kc', 'four-5-k'],
+    ['job-8-5', 'Ac 2d 3h 4s 5c', 'straight'],
+    ['job-8-5', 'Jc Jd 3h 4s 5c', 'jacks-or-better'],
+    ['job-8-5', 'Tc Td 3h 4s 5c', 'nothing'],
+    ['job-8-5', '9h Th Jh Qh Kh', 'straight-flush'],
     ['job-8-5', '9c 9d 9h 9s Kc', 'four-kind'],
     ['job-8-5', '7c 7h 3d 3s Kc', 'two-pair'],
     ['bonus-6-5', 'Ac Ad Ah As 3c', 'four-aces'],
@@ -69,7 +49,7 @@ describe('bonus evaluators', () => {
 
   it('pays two pair as on the photographed Legends Bay machine', () => {
     const twoPair = (id: GameId) => GAMES[id].rows.find((r) => r.key === 'two-pair')!.pays;
-    expect([twoPair('job-8-5'), twoPair('bonus-6-5'), twoPair('bpd-7-5'), twoPair('db-10-7')]).toEqual([2, 2, 1, 1]);
+    expect([twoPair('job-8-5'), twoPair('bonus-6-5'), twoPair('bpd-7-5')]).toEqual([2, 2, 1]);
   });
 });
 
@@ -102,7 +82,7 @@ function bruteForceEvs(game: GameDef, hand: Card[]): number[] {
   return evs;
 }
 
-describe.each(['nsud', 'db-10-7', 'joker-kings'] as GameId[])('%s hold EVs match brute force', (id) => {
+describe.each(['lb-deuces-16-13', 'job-8-5', 'bonus-6-5'] as GameId[])('%s hold EVs match brute force', (id) => {
   let tables: Tables;
   beforeAll(() => {
     tables = buildTables(GAMES[id]);
@@ -118,10 +98,10 @@ describe.each(['nsud', 'db-10-7', 'joker-kings'] as GameId[])('%s hold EVs match
   });
 });
 
-describe('analyzeHand (NSUD)', () => {
+describe('analyzeHand (Legends Bay deuces)', () => {
   let tables: Tables;
   beforeAll(() => {
-    tables = buildTables(GAMES.nsud);
+    tables = buildTables(GAMES['lb-deuces-16-13']);
   });
   it('holds a dealt natural royal and four deuces', () => {
     expect(analyzeHand(tables, parseHand('Ts Js Qs Ks As'))[0].mask).toBe(31);
@@ -134,7 +114,7 @@ describe('analyzeHand (NSUD)', () => {
   });
   it('discarding everything equals the average over all hands from the 47 left', () => {
     const hand = parseHand('3c 5d 7h 9s Jc');
-    expect(analyzeHand(tables, hand).find((h) => h.mask === 0)!.ev).toBeCloseTo(bruteForceEvs(GAMES.nsud, hand)[0], 10);
+    expect(analyzeHand(tables, hand).find((h) => h.mask === 0)!.ev).toBeCloseTo(bruteForceEvs(GAMES['lb-deuces-16-13'], hand)[0], 10);
   });
 });
 
@@ -144,6 +124,6 @@ describe('venues', () => {
     expect(listed.sort()).toEqual(GAME_LIST.map((g) => g.id).sort());
     const lb = gamesAt('Legends Bay').map((g) => g.publishedReturn);
     expect(lb).toEqual([...lb].sort((a, b) => b - a));
-    expect(gamesAt('GSR').map((g) => g.id)).toEqual(['nsud']);
+    expect(GAME_LIST.every((g) => g.proof.startsWith('context/'))).toBe(true);
   });
 });

@@ -1,5 +1,7 @@
-import { cardToString, type GameDef, type GameId } from '../engine/index.ts';
+import { type GameDef, type GameId } from '../engine/index.ts';
 import { CHART_BY_GAME } from '../lib/charts.ts';
+import { isWildCard } from '../lib/wild.ts';
+import MiniCard from './MiniCard.tsx';
 
 interface Props {
   game: GameDef;
@@ -44,7 +46,13 @@ export default function ChartTab({ game, gameId }: Props) {
                   <td>{i + 1}</td>
                   <td>{line.label}</td>
                   <td>{(line.share * 100).toFixed(1)}%</td>
-                  <td className="chart-example">{line.example.map(cardToString).join(' ')}</td>
+                  <td className="chart-example">
+                    <span className="mini-hand">
+                      {line.example.map((c, i) => (
+                        <MiniCard key={i} card={c} wild={isWildCard(game, c)} />
+                      ))}
+                    </span>
+                  </td>
                 </tr>
               ))}
             </tbody>

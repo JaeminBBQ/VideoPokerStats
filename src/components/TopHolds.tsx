@@ -36,7 +36,8 @@ export default function TopHolds({ holds, hand, game, userMask, userRank, evBest
   const showLine = hasChart(game);
   const label = (mask: number) =>
     mask === 0 ? 'Discard all' : hand.filter((_, i) => mask & (1 << i)).map(cardToString).join(' ');
-  const line = (mask: number) => patternFor(game, hand.filter((_, i) => mask & (1 << i)))?.label ?? '';
+  const line = (mask: number) =>
+    mask === 0 ? '' : (patternFor(game, hand.filter((_, i) => mask & (1 << i)))?.label ?? '');
   return (
     <section className="panel" aria-label="Top holds">
       <h2>Top holds</h2>
