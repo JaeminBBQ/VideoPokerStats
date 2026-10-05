@@ -101,13 +101,13 @@ describe('bankroll', () => {
     expect(() => startSession(12.5, 0)).toThrow();
   });
 
-  it('earns 1 tier point per $1 of coin-in', () => {
+  it('earns 1 tier point per $2 of coin-in', () => {
     expect(tierPoints(0)).toBe(0);
-    expect(tierPoints(75)).toBe(0); // three 5¢ max-bet hands
-    expect(tierPoints(100)).toBe(1); // four 5¢ hands
-    expect(tierPoints(125 * 9)).toBe(11); // nine 25¢ hands = $11.25
-    expect(centsToNextPoint(75)).toBe(25);
-    expect(centsToNextPoint(100)).toBe(100);
+    expect(tierPoints(175)).toBe(0); // seven 5¢ max-bet hands
+    expect(tierPoints(200)).toBe(1); // eight 5¢ hands
+    expect(tierPoints(125 * 9)).toBe(5); // nine 25¢ hands = $11.25
+    expect(centsToNextPoint(75)).toBe(125);
+    expect(centsToNextPoint(200)).toBe(200);
   });
 
   it('formats cents', () => {

@@ -40,7 +40,7 @@ describe('closeSession', () => {
       hands: 4,
       coinInCents: 100,
       wonCents: 75,
-      points: 1, // $1 of coin-in
+      points: 0, // $1 of coin-in: a point needs $2 (D13)
       denomination: 0.05,
       gameIds: ['job-8-5', 'lb-deuces-16-13'],
     });

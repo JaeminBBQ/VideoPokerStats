@@ -3,8 +3,8 @@ import { payout, type Card, type GameDef } from '../engine/index.ts';
 /** Coins per hand: the trainer always plays max bet. */
 export const MAX_COINS = 5;
 
-/** Tier credit rate: 1 point per $1 of coin-in (owner's casino rule). */
-export const CENTS_PER_POINT = 100;
+/** Tier credit rate: 1 point per $2 of coin-in (owner's casino rule, D13). */
+export const CENTS_PER_POINT = 200;
 
 /**
  * A bankroll session. All money is integer cents so long sessions never drift.
