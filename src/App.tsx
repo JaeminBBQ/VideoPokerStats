@@ -5,6 +5,7 @@ import {
   cardToString,
   deal,
   disguiseHand,
+  draw,
   patternFor,
   type Card,
   type GameId,
@@ -12,6 +13,15 @@ import {
   type MistakeSignature,
   type SimilarMatch,
 } from './engine/index.ts';
+import {
+  applyHand,
+  canAfford,
+  formatCents,
+  settleHand,
+  startSession,
+  type HandOutcome,
+  type Session,
+} from './lib/bankroll.ts';
 import { grade, type Grade } from './lib/grade.ts';
 import { recordHand, resetGame, type HandRecord, type Totals, type TotalsEntry } from './lib/stats.ts';
 import {
@@ -22,6 +32,7 @@ import {
   type Mode,
   type Settings,
 } from './lib/storage.ts';
+import { closeSession, type Lifetime, type SessionLogEntry } from './lib/session.ts';
 import {
   applyDrillResult,
   applyNewMistake,
@@ -32,11 +43,15 @@ import {
   type DrillState,
 } from './lib/drill.ts';
 import { isWildCard } from './lib/wild.ts';
+import BankrollBar from './components/BankrollBar.tsx';
+import BankrollSetup from './components/BankrollSetup.tsx';
 import CardView, { type CardEmphasis } from './components/CardView.tsx';
 import ChartTab from './components/ChartTab.tsx';
 import DrillPanel from './components/DrillPanel.tsx';
 import GamePicker from './components/GamePicker.tsx';
+import MiniCard from './components/MiniCard.tsx';
 import Paytable from './components/Paytable.tsx';
+import SessionLog from './components/SessionLog.tsx';
 import StatsPanel from './components/StatsPanel.tsx';
 import TopHolds from './components/TopHolds.tsx';
 
@@ -79,6 +94,15 @@ interface DrillCtx {
   streak: number;
 }
 
+/** One graded hand: the holds/grade plus, in Deal mode, the drawn hand and what it paid. */
+interface SubmitResult {
+  holds: HoldEv[];
+  grade: Grade;
+  /** The hand as dealt, before the draw; grading emphasis and labels point at these cards. */
+  originalHand?: Card[];
+  outcome?: HandOutcome;
+}
+
 export default function App() {
   const [tab, setTab] = useState<Tab>('trainer');
   const [settings, setSettings] = useState<Settings>(() => sanitizeSettings(storage.loadSettings()));
@@ -88,10 +112,14 @@ export default function App() {
   const [hand, setHand] = useState<Card[] | null>(null);
   const [heldMask, setHeldMask] = useState(0);
   const [busy, setBusy] = useState(false);
-  const [result, setResult] = useState<{ holds: HoldEv[]; grade: Grade } | null>(null);
+  const [result, setResult] = useState<SubmitResult | null>(null);
   const [history, setHistory] = useState<HandRecord[]>(() => storage.loadHistory());
   const [totals, setTotals] = useState<Totals>(() => storage.loadTotals());
   const [drillState, setDrillState] = useState<DrillState>(() => storage.loadDrill());
+  const [session, setSession] = useState<Session | null>(() => storage.loadSession());
+  const [lifetime, setLifetime] = useState<Lifetime>(() => storage.loadLifetime());
+  const [sessionLog, setSessionLog] = useState<SessionLogEntry[]>(() => storage.loadSessionLog());
+  const [sessionGames, setSessionGames] = useState<GameId[]>([]);
   const [drillCtx, setDrillCtx] = useState<DrillCtx | null>(null);
   const [drillPreparing, setDrillPreparing] = useState(false);
   const [lastDrill, setLastDrill] = useState<{ gameId: GameId; key: string } | null>(null);
@@ -141,6 +169,15 @@ export default function App() {
   useEffect(() => {
     storage.saveSettings(settings);
   }, [settings]);
+  useEffect(() => {
+    storage.saveSession(session);
+  }, [session]);
+  useEffect(() => {
+    storage.saveLifetime(lifetime);
+  }, [lifetime]);
+  useEffect(() => {
+    storage.saveSessionLog(sessionLog);
+  }, [sessionLog]);
 
   // Keep keyboard focus on the primary action: submit while a hand is out, deal after grading.
   useEffect(() => {
@@ -149,6 +186,8 @@ export default function App() {
   }, [phase]);
 
   const dealNew = () => {
+    // Deal mode needs an active session that can cover the bet (drill plays for free).
+    if (mode === 'deal' && (session === null || !canAfford(session, settings.denomination))) return;
     setHand(deal(game.deckSize, secureRng()));
     setHeldMask(0);
     setResult(null);
@@ -222,7 +261,17 @@ export default function App() {
       } else if (!g.optimal) {
         setDrillState((s) => applyNewMistake(s, gameId, confusionKey(rec, game)));
       }
-      setResult({ holds, grade: g });
+      if (mode === 'deal' && session) {
+        // The machine's second deal: held cards stay, the rest are drawn, and the paytable settles.
+        const finalHand = draw(hand, heldMask, game.deckSize, secureRng());
+        const outcome = settleHand(game, finalHand, settings.denomination);
+        setSession((s) => (s ? applyHand(s, game, outcome) : s));
+        setHand(finalHand);
+        setSessionGames((games) => (games.includes(gameId) ? games : [...games, gameId]));
+        setResult({ holds, grade: g, originalHand: hand, outcome });
+      } else {
+        setResult({ holds, grade: g });
+      }
       setPhase('graded');
     } catch (err) {
       setEngineError(String(err));
@@ -301,16 +350,22 @@ export default function App() {
   });
 
   const holdLabel = (mask: number) =>
-    mask === 0 ? 'Discard all' : (hand ?? []).filter((_, i) => mask & (1 << i)).map(cardToString).join(' ');
+    mask === 0
+      ? 'Discard all'
+      : (result?.originalHand ?? hand ?? []).filter((_, i) => mask & (1 << i)).map(cardToString).join(' ');
   const money = (bets: number) => '$' + (bets * settings.denomination * 5).toFixed(2);
 
+  /** Grading emphasis for the dealt hand, by position. */
+  const gradeEmphasis = (i: number): CardEmphasis => {
+    if (!result) return 'normal';
+    if (result.grade.optimal) return heldMask & (1 << i) ? 'correct' : 'normal';
+    return result.grade.bestMask & (1 << i) ? 'correct' : 'dimmed';
+  };
+
+  // After the draw (Deal mode) the main row shows the final hand; the grading emphasis then
+  // lives on the dealt hand's MiniCards in the feedback panel.
   const emphases: CardEmphasis[] = hand
-    ? hand.map((_, i) => {
-        if (!result) return 'normal';
-        const m = 1 << i;
-        if (result.grade.optimal) return heldMask & m ? 'correct' : 'normal';
-        return result.grade.bestMask & m ? 'correct' : 'dimmed';
-      })
+    ? hand.map((_, i) => (result?.outcome ? 'normal' : gradeEmphasis(i)))
     : [];
 
   const totalsEntry: TotalsEntry = totals[gameId] ?? { hands: 0, mistakes: 0, evLost: 0 };
@@ -328,13 +383,43 @@ export default function App() {
     });
   };
 
+  /** Start a bankroll session with `cents` and clear any hand in progress. */
+  const startBankroll = (cents: number) => {
+    setSession(startSession(cents, Date.now()));
+    setSessionGames([]);
+    setHand(null);
+    setHeldMask(0);
+    setResult(null);
+    setPhase((p) => (p === 'preparing' || p === 'error' ? p : 'ready'));
+  };
+
+  /** End the session: coin-in joins the lifetime total, a summary goes to the log. */
+  const finishSession = () => {
+    if (!session) return;
+    const ended = closeSession(session, settings.denomination, sessionGames, lifetime, sessionLog, Date.now());
+    setLifetime(ended.lifetime);
+    setSessionLog(ended.log);
+    setSession(null);
+    setSessionGames([]);
+    setHand(null);
+    setHeldMask(0);
+    setResult(null);
+    setPhase((p) => (p === 'preparing' || p === 'error' ? p : 'ready'));
+  };
+
   const canDeal =
     !busy &&
     (phase === 'ready' || phase === 'graded' || phase === 'error') &&
-    !(mode === 'drill' && toDrill.length === 0);
+    !(mode === 'drill' && toDrill.length === 0) &&
+    !(mode === 'deal' && (session === null || !canAfford(session, settings.denomination)));
+  const outOfCredits = mode === 'deal' && session !== null && !canAfford(session, settings.denomination);
 
-  const feedbackBestLine = result ? patternFor(game, (hand ?? []).filter((_, i) => result.grade.bestMask & (1 << i))) : null;
-  const feedbackHeldLine = result ? patternFor(game, (hand ?? []).filter((_, i) => heldMask & (1 << i))) : null;
+  const feedbackBestLine = result
+    ? patternFor(game, (result.originalHand ?? hand ?? []).filter((_, i) => result.grade.bestMask & (1 << i)))
+    : null;
+  const feedbackHeldLine = result
+    ? patternFor(game, (result.originalHand ?? hand ?? []).filter((_, i) => heldMask & (1 << i)))
+    : null;
 
   return (
     <div className="app">
@@ -414,7 +499,23 @@ export default function App() {
                 </div>
               ) : null)}
 
-            <div className="hand">
+            {mode === 'deal' && session === null ? (
+              <BankrollSetup
+                denomination={settings.denomination}
+                onDenominationChange={(d) => setSettings((s) => ({ ...s, denomination: d }))}
+                onStart={startBankroll}
+              />
+            ) : (
+              <>
+                {mode === 'deal' && session !== null && (
+                  <BankrollBar
+                    session={session}
+                    lifetime={lifetime}
+                    denomination={settings.denomination}
+                    onEnd={finishSession}
+                  />
+                )}
+                <div className="hand">
               {hand ? (
                 hand.map((card, i) => (
                   <CardView
@@ -435,36 +536,68 @@ export default function App() {
                   </div>
                 ))
               )}
-            </div>
+                </div>
 
-            <div className="controls">
-              <button
-                ref={dealBtnRef}
-                type="button"
-                className="btn primary"
-                onClick={() => {
-                  if (mode === 'drill') void startDrill();
-                  else dealNew();
-                }}
-                disabled={!canDeal}
-              >
-                {mode === 'drill' ? 'Next drill' : 'Deal'}
-              </button>
-              <button
-                ref={submitBtnRef}
-                type="button"
-                className="btn"
-                onClick={() => void submit()}
-                disabled={busy || phase !== 'dealt'}
-              >
-                Submit
-              </button>
-            </div>
+                {result?.outcome && (
+                  <div className={`hand-result${result.outcome.winCents > 0 ? ' win' : ''}`} aria-live="polite">
+                    {result.outcome.winCents > 0
+                      ? `${game.rows[result.outcome.rowIndex].label} · won ${formatCents(result.outcome.winCents)}`
+                      : 'No win'}
+                  </div>
+                )}
+
+                {outOfCredits ? (
+                  <div className="controls">
+                    <span className="out-credits">Out of credits</span>
+                    <button type="button" className="btn primary" onClick={finishSession}>
+                      New session
+                    </button>
+                  </div>
+                ) : (
+                  <div className="controls">
+                    <button
+                      ref={dealBtnRef}
+                      type="button"
+                      className="btn primary"
+                      onClick={() => {
+                        if (mode === 'drill') void startDrill();
+                        else dealNew();
+                      }}
+                      disabled={!canDeal}
+                    >
+                      {mode === 'drill' ? 'Next drill' : 'Deal'}
+                    </button>
+                    <button
+                      ref={submitBtnRef}
+                      type="button"
+                      className="btn"
+                      onClick={() => void submit()}
+                      disabled={busy || phase !== 'dealt'}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                )}
             <p className="hint">Click a card or press 1–5 to hold · Enter/Space deals and submits</p>
 
             {result && (
               <div className="row">
                 <section className="panel feedback" aria-live="polite">
+                  {result.originalHand && (
+                    <div className="dealt">
+                      <span className="dealt-label">You were dealt</span>
+                      <span className="mini-hand">
+                        {result.originalHand.map((c, i) => (
+                          <span key={i} className="mini-slot">
+                            <MiniCard card={c} wild={isWildCard(game, c)} emphasis={gradeEmphasis(i)} />
+                            <span className={`mini-held${heldMask & (1 << i) ? ' on' : ''}`}>
+                              {heldMask & (1 << i) ? 'HELD' : ''}
+                            </span>
+                          </span>
+                        ))}
+                      </span>
+                    </div>
+                  )}
                   {result.grade.optimal ? (
                     <div className="banner optimal">
                       ✔ Optimal
@@ -496,7 +629,7 @@ export default function App() {
                 </section>
                 <TopHolds
                   holds={result.holds}
-                  hand={hand ?? []}
+                  hand={result.originalHand ?? hand ?? []}
                   game={game}
                   userMask={heldMask}
                   userRank={result.grade.rank}
@@ -504,14 +637,17 @@ export default function App() {
                 />
               </div>
             )}
+              </>
+            )}
 
             <StatsPanel
               gameName={game.name}
               totals={totalsEntry}
               denomination={settings.denomination}
-              onDenominationChange={(d) => setSettings((s) => ({ ...s, denomination: d }))}
               onReset={resetStats}
             />
+
+            {sessionLog.length > 0 && <SessionLog log={sessionLog} />}
 
             {mode === 'drill' && (
               <DrillPanel

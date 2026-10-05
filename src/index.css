@@ -786,6 +786,227 @@ select {
   align-items: center;
 }
 
+/* ---------------------------------------------------------------- bankroll */
+
+.bankroll-bar {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+}
+
+.bankroll-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
+  gap: 8px;
+}
+
+.bankroll-grid .stat {
+  padding: 8px 10px;
+}
+
+.bankroll-grid .stat-value {
+  font-size: 17px;
+}
+
+.stat-value.net-up {
+  color: var(--green);
+}
+
+.stat-value.net-down {
+  color: var(--red);
+}
+
+.bankroll-sub {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+/* ---------------------------------------------------------------- bankroll setup */
+
+.bankroll-setup {
+  max-width: 520px;
+  margin: 14px auto;
+}
+
+.setup-denoms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.denom-chip {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.denom-chip:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.denom-chip.active {
+  background: rgba(230, 193, 92, 0.16);
+  border-color: rgba(230, 193, 92, 0.45);
+  color: var(--gold);
+}
+
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.setup-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.setup-amount {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+}
+
+.setup-amount input {
+  width: 110px;
+  padding: 7px 8px;
+  font-size: 15px;
+  background: #12301f;
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 6px;
+}
+
+.setup-error {
+  margin: 8px 0 0;
+  color: var(--red);
+  font-size: 13px;
+}
+
+/* ---------------------------------------------------------------- draw result */
+
+.hand-result {
+  text-align: center;
+  font-size: 15px;
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.hand-result.win {
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.out-credits {
+  color: var(--red);
+  font-weight: 700;
+  font-size: 15px;
+  align-self: center;
+}
+
+/* The dealt hand inside the feedback panel: minis carry the grading emphasis. */
+.dealt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 2px 8px;
+  margin-bottom: 10px;
+}
+
+.dealt-label {
+  color: var(--muted);
+  font-size: 13px;
+  margin-right: 2px;
+  align-self: center;
+}
+
+.mini-slot {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.mini-held {
+  min-height: 10px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+}
+
+.mini-held.on {
+  color: var(--gold);
+}
+
+.mini-card.emphasis-correct {
+  border-color: var(--green-dim);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.35);
+}
+
+.mini-card.emphasis-dimmed {
+  opacity: 0.4;
+}
+
+/* ---------------------------------------------------------------- session log */
+
+.session-log {
+  margin-top: 14px;
+}
+
+.session-log summary {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.session-log-empty {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 8px 0 0;
+}
+
+.session-log-scroll {
+  overflow-x: auto;
+}
+
+.session-log-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.session-log-table th,
+.session-log-table td {
+  padding: 4px 8px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-variant-numeric: tabular-nums;
+}
+
+.session-log-table th {
+  color: var(--muted);
+  font-weight: 600;
+}
+
 /* ---------------------------------------------------------------- layout */
 
 @media (max-width: 640px) {

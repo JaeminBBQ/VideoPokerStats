@@ -1,16 +1,14 @@
 import { useState } from 'react';
 import { errorRate, type TotalsEntry } from '../lib/stats.ts';
-import { DENOM_LABELS, DENOMINATIONS } from '../lib/storage.ts';
 
 interface Props {
   gameName: string;
   totals: TotalsEntry;
   denomination: number;
-  onDenominationChange: (d: number) => void;
   onReset: () => void;
 }
 
-export default function StatsPanel({ gameName, totals, denomination, onDenominationChange, onReset }: Props) {
+export default function StatsPanel({ gameName, totals, denomination, onReset }: Props) {
   const [confirming, setConfirming] = useState(false);
   const money = (bets: number) => '$' + (bets * denomination * 5).toFixed(2);
   const avg = totals.hands === 0 ? 0 : totals.evLost / totals.hands;
@@ -40,20 +38,6 @@ export default function StatsPanel({ gameName, totals, denomination, onDenominat
         </div>
       </div>
       <div className="stats-controls">
-        <label className="denom-picker">
-          Denomination{' '}
-          <select
-            value={denomination}
-            onChange={(e) => onDenominationChange(Number(e.target.value))}
-            aria-label="Denomination"
-          >
-            {DENOMINATIONS.map((d) => (
-              <option key={d} value={d}>
-                {DENOM_LABELS[d]}
-              </option>
-            ))}
-          </select>
-        </label>
         {confirming ? (
           <span className="reset-confirm">
             Reset all stats for this game?

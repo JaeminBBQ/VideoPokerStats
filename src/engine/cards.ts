@@ -65,3 +65,19 @@ export function deal(deckSize: number, rng: Rng = Math.random, n = 5): Card[] {
   }
   return deck.slice(0, n);
 }
+
+/**
+ * The draw: keeps the held cards in place and replaces each unheld card with a distinct card
+ * from the rest of the deck (never one already dealt), like the machine's second deal.
+ */
+export function draw(hand: readonly Card[], heldMask: number, deckSize: number, rng: Rng = Math.random): Card[] {
+  const dealt = new Set(hand);
+  const stub = Array.from({ length: deckSize }, (_, i) => i).filter((c) => !dealt.has(c));
+  let next = 0;
+  return hand.map((c, i) => {
+    if (heldMask & (1 << i)) return c;
+    const j = next + Math.floor(rng() * (stub.length - next));
+    [stub[next], stub[j]] = [stub[j], stub[next]];
+    return stub[next++];
+  });
+}
