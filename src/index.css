@@ -854,6 +854,17 @@ select {
   background: rgba(255, 255, 255, 0.06);
 }
 
+.denom-unconfirmed {
+  margin-left: 2px;
+  color: var(--muted);
+}
+
+.setup-note {
+  margin: -4px 0 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
 .denom-chip.active {
   background: rgba(230, 193, 92, 0.16);
   border-color: rgba(230, 193, 92, 0.45);

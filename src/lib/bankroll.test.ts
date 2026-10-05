@@ -13,6 +13,7 @@ import {
   theoLossCents,
   tierPoints,
 } from './bankroll.ts';
+import { DENOMINATIONS, DENOM_LABELS } from './storage.ts';
 
 const job = GAMES['job-8-5'];
 const deuces = GAMES['lb-deuces-16-13'];
@@ -59,6 +60,8 @@ describe('bankroll', () => {
     expect(denomCents(0.25)).toBe(25);
     expect(betCents(0.05)).toBe(25);
     expect(betCents(0.25)).toBe(125);
+    expect(DENOMINATIONS.map(denomCents)).toEqual([1, 5, 10, 25, 50, 100, 200, 500]);
+    for (const d of DENOMINATIONS) expect(DENOM_LABELS[d]).toBeTruthy();
   });
 
   it('settles at max bet: royal at 5¢ pays $200, jacks pay the bet back, nothing pays 0', () => {

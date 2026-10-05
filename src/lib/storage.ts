@@ -34,10 +34,22 @@ export interface Settings {
 
 export const DEFAULT_SETTINGS: Settings = { gameId: 'job-8-5', denomination: 0.05, mode: {} };
 
-/** Denominations offered in the session setup. */
-export const DENOMINATIONS = [0.05, 0.1, 0.25] as const;
+/** Denominations offered in the session setup. Every one plays the photographed (10¢) paytables. */
+export const DENOMINATIONS = [0.01, 0.05, 0.1, 0.25, 0.5, 1, 2, 5] as const;
 
-export const DENOM_LABELS: Record<number, string> = { 0.05: '5¢', 0.1: '10¢', 0.25: '25¢' };
+/** Denominations the owner confirmed use the same paytables as the 10¢ photos (D12). */
+export const CONFIRMED_DENOMINATIONS: readonly number[] = [0.05, 0.1, 0.25];
+
+export const DENOM_LABELS: Record<number, string> = {
+  0.01: '1¢',
+  0.05: '5¢',
+  0.1: '10¢',
+  0.25: '25¢',
+  0.5: '50¢',
+  1: '$1',
+  2: '$2',
+  5: '$5',
+};
 
 const isRecord = (x: unknown): x is Record<string, unknown> => typeof x === 'object' && x !== null && !Array.isArray(x);
 

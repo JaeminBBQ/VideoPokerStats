@@ -3,9 +3,9 @@
 Items Claude needs from the user. Claude adds items; the user answers inline or in chat.
 
 ## Open
-- [ ] **Commit T006:** `git add -A && git commit -m "T006: bankroll sessions (5¢/10¢/25¢ max bet, real draws, tier points 1/\$1, session log) (D11)" && git push`
+- [ ] **Commit T006:** `git add -A && git commit -m "T006: bankroll sessions (1¢–\$5 max bet, real draws, tier points 1/\$1, session log) (D11)" && git push`
 - [ ] **Try it:** `npm run dev` → start $20 at 5¢, play ~20 hands (1 point per 4 hands), reload mid-session (balance should resume), end the session, open the log, check 375px width.
-- [ ] *(next Legends Bay visit)* Check whether the 5¢ and 25¢ machines show the **same** paytables as the 10¢ photos (photograph them if they differ). The bankroll mode assumes they match.
+- [ ] *(next Legends Bay visit)* 5¢–25¢ confirmed to match the 10¢ paytables. Still check **1¢, 50¢, $1, $2, $5** (the asterisked ones in session setup) and photograph any that differ.
 - [ ] **Commit T004 + the proof-only cleanup** (verified by Claude: 119 tests, the 4 returns match, lint, typecheck, build):
   `git add -A && git commit -m "T004: wild cards, casino tabs; only photographed Legends Bay games remain (D10)" && git push`
 - [ ] **Try it:** `npm run dev` → http://localhost:5173. Jacks or Better 8/5 at 10¢ is the default. Deal until a deuce shows up in Deuces 16/13 (does it scream WILD?), make a few deliberate mistakes, try **Drill** and the **Chart** tab, and check phone width (~375px). Reply with anything off.

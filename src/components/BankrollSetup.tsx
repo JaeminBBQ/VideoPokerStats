@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { betCents, formatCents } from '../lib/bankroll.ts';
-import { DENOMINATIONS, DENOM_LABELS } from '../lib/storage.ts';
+import { CONFIRMED_DENOMINATIONS, DENOMINATIONS, DENOM_LABELS } from '../lib/storage.ts';
 
 const PRESETS = [20, 50, 100, 200];
 
@@ -39,9 +39,16 @@ export default function BankrollSetup({ denomination, onDenominationChange, onSt
             onClick={() => onDenominationChange(d)}
           >
             {DENOM_LABELS[d]} · {formatCents(betCents(d))}/hand
+            {!CONFIRMED_DENOMINATIONS.includes(d) && <span className="denom-unconfirmed">*</span>}
           </button>
         ))}
       </div>
+      {!CONFIRMED_DENOMINATIONS.includes(denomination) && (
+        <p className="setup-note">
+          * Paytable not yet confirmed at {DENOM_LABELS[denomination]}. Plays the 10¢ machine's paytable, which matches at
+          5¢–25¢.
+        </p>
+      )}
       <div className="presets">
         {PRESETS.map((p) => (
           <button key={p} type="button" className="btn subtle" onClick={() => setText(String(p))}>
