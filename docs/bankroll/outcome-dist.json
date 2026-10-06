@@ -1,0 +1,362 @@
+{
+  "generatedBy": "scripts/outcome-dist.ts",
+  "games": [
+    {
+      "gameId": "lb-deuces-16-13",
+      "name": "Deuces Wild — 16/13",
+      "publishedReturn": 0.967651,
+      "rows": [
+        {
+          "key": "natural-royal",
+          "label": "Natural Royal Flush",
+          "pays": 800
+        },
+        {
+          "key": "four-deuces",
+          "label": "Four Deuces",
+          "pays": 200
+        },
+        {
+          "key": "wild-royal",
+          "label": "Wild Royal Flush",
+          "pays": 25
+        },
+        {
+          "key": "five-kind",
+          "label": "Five of a Kind",
+          "pays": 16
+        },
+        {
+          "key": "straight-flush",
+          "label": "Straight Flush",
+          "pays": 13
+        },
+        {
+          "key": "four-kind",
+          "label": "Four of a Kind",
+          "pays": 4
+        },
+        {
+          "key": "full-house",
+          "label": "Full House",
+          "pays": 3
+        },
+        {
+          "key": "flush",
+          "label": "Flush",
+          "pays": 2
+        },
+        {
+          "key": "straight",
+          "label": "Straight",
+          "pays": 2
+        },
+        {
+          "key": "three-kind",
+          "label": "Three of a Kind",
+          "pays": 1
+        },
+        {
+          "key": "nothing",
+          "label": "No win",
+          "pays": 0
+        }
+      ],
+      "best": [
+        0.000022668706490405468,
+        0.00017904824674155903,
+        0.0018366109694266711,
+        0.003129560726755834,
+        0.005762861941764972,
+        0.06228383473540418,
+        0.020972495681082556,
+        0.017702938244932725,
+        0.05796768750188063,
+        0.27940636352999637,
+        0.550735929715524
+      ],
+      "second": [
+        0.000006229374004020813,
+        0.00010461890109586376,
+        0.0008003280440786734,
+        0.0007081506229419164,
+        0.0035245635787624846,
+        0.04753928798697854,
+        0.02125668465181221,
+        0.013914257839775382,
+        0.04472728051475103,
+        0.2672153217896064,
+        0.6002032766961934
+      ],
+      "returnBest": 0.9676505066558284,
+      "returnSecond": 0.7414908214173492,
+      "mistakeCostPerHand": 0.22615968523847918
+    },
+    {
+      "gameId": "job-8-5",
+      "name": "Jacks or Better — 8/5",
+      "publishedReturn": 0.973,
+      "rows": [
+        {
+          "key": "royal",
+          "label": "Royal Flush",
+          "pays": 800
+        },
+        {
+          "key": "straight-flush",
+          "label": "Straight Flush",
+          "pays": 50
+        },
+        {
+          "key": "four-kind",
+          "label": "Four of a Kind",
+          "pays": 25
+        },
+        {
+          "key": "full-house",
+          "label": "Full House",
+          "pays": 8
+        },
+        {
+          "key": "flush",
+          "label": "Flush",
+          "pays": 5
+        },
+        {
+          "key": "straight",
+          "label": "Straight",
+          "pays": 4
+        },
+        {
+          "key": "three-kind",
+          "label": "Three of a Kind",
+          "pays": 3
+        },
+        {
+          "key": "two-pair",
+          "label": "Two Pair",
+          "pays": 2
+        },
+        {
+          "key": "jacks-or-better",
+          "label": "Jacks or Better",
+          "pays": 1
+        },
+        {
+          "key": "nothing",
+          "label": "No win",
+          "pays": 0
+        }
+      ],
+      "best": [
+        0.000024894352953567522,
+        0.00010766426717175495,
+        0.0023628886291842317,
+        0.011513676960187902,
+        0.010901562377482825,
+        0.011235124666157644,
+        0.07446274573402643,
+        0.12929840971056183,
+        0.21507064319778899,
+        0.5450223901044848
+      ],
+      "second": [
+        0.000003963469941905719,
+        0.00004531701327692706,
+        0.0009961334048119547,
+        0.0054710980642047515,
+        0.004966482578254262,
+        0.006987462829560699,
+        0.06205271719085841,
+        0.13913284205362073,
+        0.19858695216514474,
+        0.5817570312303256
+      ],
+      "returnBest": 0.9729843375055874,
+      "returnSecond": 0.7899017983057833,
+      "mistakeCostPerHand": 0.1830825391998041
+    },
+    {
+      "gameId": "bonus-6-5",
+      "name": "Bonus Poker — 6/5",
+      "publishedReturn": 0.9687,
+      "rows": [
+        {
+          "key": "royal",
+          "label": "Royal Flush",
+          "pays": 800
+        },
+        {
+          "key": "straight-flush",
+          "label": "Straight Flush",
+          "pays": 50
+        },
+        {
+          "key": "four-aces",
+          "label": "Four Aces",
+          "pays": 80
+        },
+        {
+          "key": "four-2-4",
+          "label": "Four 2s–4s",
+          "pays": 40
+        },
+        {
+          "key": "four-5-k",
+          "label": "Four 5s–Ks",
+          "pays": 25
+        },
+        {
+          "key": "full-house",
+          "label": "Full House",
+          "pays": 6
+        },
+        {
+          "key": "flush",
+          "label": "Flush",
+          "pays": 5
+        },
+        {
+          "key": "straight",
+          "label": "Straight",
+          "pays": 4
+        },
+        {
+          "key": "three-kind",
+          "label": "Three of a Kind",
+          "pays": 3
+        },
+        {
+          "key": "two-pair",
+          "label": "Two Pair",
+          "pays": 2
+        },
+        {
+          "key": "jacks-or-better",
+          "label": "Jacks or Better",
+          "pays": 1
+        },
+        {
+          "key": "nothing",
+          "label": "No win",
+          "pays": 0
+        }
+      ],
+      "best": [
+        0.000024853348862469753,
+        0.00010763726763449803,
+        0.00020050469875173115,
+        0.0005272518302003917,
+        0.0016390998155470825,
+        0.011406914266495894,
+        0.010899558820258844,
+        0.011274926565970893,
+        0.07453068751972101,
+        0.12925389720691954,
+        0.21517582552546993,
+        0.5449588431341678
+      ],
+      "second": [
+        0.0000040463721086455305,
+        0.00004469578612614912,
+        0.00008765675460845667,
+        0.00021731989665509048,
+        0.0006872980200664651,
+        0.005577474032825108,
+        0.004947056017784505,
+        0.006876342836537554,
+        0.061981786152621544,
+        0.13916119399865604,
+        0.19857470064696814,
+        0.5818404294850423
+      ],
+      "returnBest": 0.9686871554311571,
+      "returnSecond": 0.7869076164639338,
+      "mistakeCostPerHand": 0.18177953896722332
+    },
+    {
+      "gameId": "bpd-7-5",
+      "name": "Bonus Poker Deluxe — 7/5",
+      "publishedReturn": 0.9625,
+      "rows": [
+        {
+          "key": "royal",
+          "label": "Royal Flush",
+          "pays": 800
+        },
+        {
+          "key": "straight-flush",
+          "label": "Straight Flush",
+          "pays": 50
+        },
+        {
+          "key": "four-kind",
+          "label": "Four of a Kind",
+          "pays": 80
+        },
+        {
+          "key": "full-house",
+          "label": "Full House",
+          "pays": 7
+        },
+        {
+          "key": "flush",
+          "label": "Flush",
+          "pays": 5
+        },
+        {
+          "key": "straight",
+          "label": "Straight",
+          "pays": 4
+        },
+        {
+          "key": "three-kind",
+          "label": "Three of a Kind",
+          "pays": 3
+        },
+        {
+          "key": "two-pair",
+          "label": "Two Pair",
+          "pays": 1
+        },
+        {
+          "key": "jacks-or-better",
+          "label": "Jacks or Better",
+          "pays": 1
+        },
+        {
+          "key": "nothing",
+          "label": "No win",
+          "pays": 0
+        }
+      ],
+      "best": [
+        0.000024675108210663005,
+        0.00010808424666242389,
+        0.002358159387131938,
+        0.011482848565991096,
+        0.010861285850739843,
+        0.01305665234701548,
+        0.07400913996589979,
+        0.12824972238163326,
+        0.21153920400978282,
+        0.5483102281369326
+      ],
+      "second": [
+        0.000006764258502085488,
+        0.00005561843631133262,
+        0.0010545461141314655,
+        0.005616347753335758,
+        0.0053532670038568915,
+        0.006749862345087634,
+        0.06403774665258352,
+        0.11570264241623628,
+        0.21995282655226464,
+        0.5814703784676905
+      ],
+      "returnBest": 0.9625263747650208,
+      "returnSecond": 0.7134049453469891,
+      "mistakeCostPerHand": 0.24912142941803173
+    }
+  ]
+}

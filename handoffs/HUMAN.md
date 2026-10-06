@@ -3,7 +3,7 @@
 Items Claude needs from the user. Claude adds items; the user answers inline or in chat.
 
 ## Open
-- [ ] **Commit T006:** `git add -A && git commit -m "T006: bankroll sessions (1¢–\$5 max bet, real draws, tier points 1/\$2, session log) (D11–D13)" && git push`
+- [ ] **Commit T006 + T007:** `git add -A && git commit -m "T006: bankroll sessions (1¢–\$5, real draws, tier points 1/\$2); T007: exact bankroll survival analysis (D11–D14)" && git push`
 - [ ] **Try it:** `npm run dev` → start $20 at 5¢, play ~20 hands (1 point per 8 hands at 5¢), reload mid-session (balance should resume), end the session, open the log, check 375px width.
 - [ ] *(next Legends Bay visit)* 5¢–25¢ confirmed to match the 10¢ paytables. Still check **1¢, 50¢, $1, $2, $5** (the asterisked ones in session setup) and photograph any that differ.
 - [ ] **Commit T004 + the proof-only cleanup** (verified by Claude: 119 tests, the 4 returns match, lint, typecheck, build):

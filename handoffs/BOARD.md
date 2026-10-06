@@ -12,5 +12,6 @@
 | T005 | Proof-only catalog: remove every game without an owner photo (NSUD/GSR, Illinois, Vegas, FPDW, Joker), their charts and docs claims; `proof` field; 10¢ default (D10) | Claude | done | T004 |
 | T006a | `draw()` + `lib/bankroll.ts` (integer cents, max bet, tier points 1/$1, theo loss) + tests | Claude | done | T005 |
 | T006 | Bankroll session UI: start $, 5¢/10¢/25¢ (default 5¢), draw + payout, bankroll bar, tier points, session log | DeepSeek | done | T006a |
+| T007 | Bankroll survival analysis: exact outcome distributions, exact risk-of-ruin DP, simulation cross-check (`docs/bankroll/`) | Claude (3 subagents) | done | T006a |
 
 Only `ready` tasks have full specs in `tasks/`. Claude writes the next spec after reviewing the previous task. See `docs/ROADMAP.md`.
