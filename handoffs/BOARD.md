@@ -13,5 +13,6 @@
 | T006a | `draw()` + `lib/bankroll.ts` (integer cents, max bet, tier points 1/$1, theo loss) + tests | Claude | done | T005 |
 | T006 | Bankroll session UI: start $, 5¢/10¢/25¢ (default 5¢), draw + payout, bankroll bar, tier points, session log | DeepSeek | done | T006a |
 | T007 | Bankroll survival analysis: exact outcome distributions, exact risk-of-ruin DP, simulation cross-check (`docs/bankroll/`) | Claude (3 subagents) | done | T006a |
+| T008 | Bankroll tab: calculator (game, denom, length, safety, error rate incl. "mine"), compare table, start-session button | DeepSeek | done | T007 |
 
 Only `ready` tasks have full specs in `tasks/`. Claude writes the next spec after reviewing the previous task. See `docs/ROADMAP.md`.

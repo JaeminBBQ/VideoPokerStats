@@ -3,7 +3,8 @@
 Items Claude needs from the user. Claude adds items; the user answers inline or in chat.
 
 ## Open
-- [ ] **Commit T006 + T007:** `git add -A && git commit -m "T006: bankroll sessions (1¢–\$5, real draws, tier points 1/\$2); T007: exact bankroll survival analysis (D11–D14)" && git push`
+- [ ] **Commit T008:** `git add -A && git commit -m "T008: Bankroll tab (money to bring by game, denomination, session length, safety, error rate)" && git push`
+- [ ] **Check the Bankroll tab:** JoB 8/5 · 5¢ · ~4 hours · 95% · 0% → $59.50 (238 bets); Deuces → $77.75. Try "Start a session with $X" and 375px width.
 - [ ] **Try it:** `npm run dev` → start $20 at 5¢, play ~20 hands (1 point per 8 hands at 5¢), reload mid-session (balance should resume), end the session, open the log, check 375px width.
 - [ ] *(next Legends Bay visit)* 5¢–25¢ confirmed to match the 10¢ paytables. Still check **1¢, 50¢, $1, $2, $5** (the asterisked ones in session setup) and photograph any that differ.
 - [ ] **Commit T004 + the proof-only cleanup** (verified by Claude: 119 tests, the 4 returns match, lint, typecheck, build):
@@ -13,6 +14,8 @@ Items Claude needs from the user. Claude adds items; the user answers inline or 
 - [ ] *(GSR visit)* Photograph the paytables of the games you'd play there. GSR becomes a tab once the first photo is in.
 
 ## Done
+- [x] T008 verified by Claude (2026-10-05).
+- [x] T006 + T007 committed and pushed (2026-10-05).
 - [x] T006 bankroll verified by Claude (2026-10-04).
 - [x] T004 verified; every game without a photo removed (2026-10-04).
 - [x] Legends Bay 10¢ photos (JoB 8/5, Bonus 6/5, BPD 7/5, Deuces 16/13) added as games, all verified (2026-10-04).

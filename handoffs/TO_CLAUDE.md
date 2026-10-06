@@ -1,13 +1,13 @@
 # To Claude
-**Task:** T006 (bankroll)
+**Task:** T008 (bankroll-page)
 **Status:** done
-**Report:** handoffs/reports/T006-report.md
-**Updated:** 2026-10-04 18:45
+**Report:** handoffs/reports/T008-report.md
+**Updated:** 2026-10-05 18:15
 
 ## In one paragraph
-Bankroll sessions are fully wired: setup panel (bankroll presets + free field, 5¢/10¢/25¢ chips, validation, Start), draw + paytable settle + one `applyHand` on submit in Deal mode, final hand in the row with the original hand as emphasized MiniCards in the feedback panel, result line, bankroll bar (balance/bet/net/hands/coin-in/tier points/lifetime points + won + theo loss) with inline-confirm End session, out-of-credits → New session, session/lifetime/log persisted under the three new keys with validators, and a collapsed session log under the stats panel. Drill mode is untouched. All acceptance criteria pass; the only entry in acceptance #2's diff is your own uncommitted T006a `draw()` in `src/engine/cards.ts` (pre-existing; I didn't touch those paths).
+Built the Bankroll tab: chip-only calculator (denomination, session length, safety, error rate incl. a "Mine" chip from the current game's Deal-mode totals), result card (dollar figure + bets + sentence + expected loss + return), compare table sorted by the 2,000-hand column, a "Start a session with $X" button (rounds up to whole dollars, switches to Deal-mode Trainer, reuses `startBankroll`), and the RISK.md-model footnote. All figures come from `riskData.ts` via new pure helpers in `src/lib/bankrollTab.ts` (tested: sort order, Mine 0 hands → disabled, 1.3% → 0.01). All acceptance criteria pass: lint/typecheck/test (180) /build all exit 0; no T008 change touches protected paths; grep for hard-coded results is clean.
 
 ## Needs Claude's attention
-1. **Lifetime accrual timing (interpretation, please confirm):** I add a session's coin-in to the lifetime total when the session **ends** (one `closeSession`), so the bar's "Lifetime points" updates at end-of-session, not per hand. If you meant per-hand accrual, say so and I'll change it.
-2. **Games list after reload:** `Session` has no games field (I can't edit bankroll.ts), so I track game ids in component state; a reload mid-session loses the pre-reload games in the log's Games column. Want me to persist it (e.g. its own key), or add `gameIds` to `Session` yourself?
-3. "New session" (out of credits) ends the session in one click without inline confirm — only the bar's End session confirms, per spec. Flagging in case you want the confirm there too.
+1. Criterion 2 (`git diff --stat -- src/engine src/lib/risk.ts src/lib/riskData.ts src/bankroll scripts src/charts`) is not empty, but only because of your uncommitted T007 change to `scripts/bankroll-risk.ts` (it now writes `src/bankroll/risk.json`), which was already in the working tree before T008 started. DeepSeek made no change to any protected path.
+2. The compare table fits 375px via a ≤640px media query (11.5px type, 3px padding); the user will confirm visually. Headline checks hold: JoB 8/5 · 5¢ · ~4 h · 95% · 0% → $59.50 (238 bets); Deuces 16/13 same settings → $77.75 (311 bets).
+3. Proposal (not implemented): hide the Deal/Drill mode switch on the Chart and Bankroll tabs.

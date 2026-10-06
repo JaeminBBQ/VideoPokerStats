@@ -45,6 +45,7 @@ import {
 import { isWildCard } from './lib/wild.ts';
 import BankrollBar from './components/BankrollBar.tsx';
 import BankrollSetup from './components/BankrollSetup.tsx';
+import BankrollTab from './components/BankrollTab.tsx';
 import CardView, { type CardEmphasis } from './components/CardView.tsx';
 import ChartTab from './components/ChartTab.tsx';
 import DrillPanel from './components/DrillPanel.tsx';
@@ -84,7 +85,7 @@ function sanitizeSettings(s: Settings): Settings {
 }
 
 type Phase = 'preparing' | 'ready' | 'dealt' | 'graded' | 'error';
-type Tab = 'trainer' | 'chart';
+type Tab = 'trainer' | 'chart' | 'bankroll';
 
 /** What the hand currently out in Drill mode is about. */
 interface DrillCtx {
@@ -434,20 +435,29 @@ export default function App() {
         <button type="button" className={`tab${tab === 'chart' ? ' active' : ''}`} onClick={() => setTab('chart')}>
           Chart
         </button>
+        <button
+          type="button"
+          className={`tab${tab === 'bankroll' ? ' active' : ''}`}
+          onClick={() => setTab('bankroll')}
+        >
+          Bankroll
+        </button>
       </nav>
 
       <header className="header">
         <h1>Video Poker Trainer</h1>
-        <div className="header-row">
-          <div className="mode-switch" role="group" aria-label="Mode">
-            <button type="button" className={mode === 'deal' ? 'active' : ''} onClick={() => switchMode('deal')}>
-              Deal
-            </button>
-            <button type="button" className={mode === 'drill' ? 'active' : ''} onClick={() => switchMode('drill')}>
-              Drill
-            </button>
+        {tab === 'trainer' && (
+          <div className="header-row">
+            <div className="mode-switch" role="group" aria-label="Mode">
+              <button type="button" className={mode === 'deal' ? 'active' : ''} onClick={() => switchMode('deal')}>
+                Deal
+              </button>
+              <button type="button" className={mode === 'drill' ? 'active' : ''} onClick={() => switchMode('drill')}>
+                Drill
+              </button>
+            </div>
           </div>
-        </div>
+        )}
         <GamePicker gameId={gameId} onSelect={switchGame} />
         <p className="where">{game.where}</p>
         <Paytable game={game} open={paytableOpen} onToggle={() => setPaytableOpen((o) => !o)} />
@@ -456,6 +466,22 @@ export default function App() {
       {tab === 'chart' ? (
         <main>
           <ChartTab game={game} gameId={gameId} />
+        </main>
+      ) : tab === 'bankroll' ? (
+        <main>
+          <BankrollTab
+            game={game}
+            gameId={gameId}
+            denomination={settings.denomination}
+            onDenominationChange={(d) => setSettings((s) => ({ ...s, denomination: d }))}
+            totalsEntry={totalsEntry}
+            sessionActive={session !== null}
+            onStartSession={(cents) => {
+              setSettings((s) => ({ ...s, mode: { ...s.mode, [gameId]: 'deal' } }));
+              setTab('trainer');
+              startBankroll(cents);
+            }}
+          />
         </main>
       ) : (
         <>
