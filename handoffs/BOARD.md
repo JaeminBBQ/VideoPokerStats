@@ -14,5 +14,6 @@
 | T006 | Bankroll session UI: start $, 5¢/10¢/25¢ (default 5¢), draw + payout, bankroll bar, tier points, session log | DeepSeek | done | T006a |
 | T007 | Bankroll survival analysis: exact outcome distributions, exact risk-of-ruin DP, simulation cross-check (`docs/bankroll/`) | Claude (3 subagents) | done | T006a |
 | T008 | Bankroll tab: calculator (game, denom, length, safety, error rate incl. "mine"), compare table, start-session button | DeepSeek | done | T007 |
+| T009 | Assist tab: enter 5 cards (5 ranks then 5 suits), engine says what to hold; ties shown as ties; no stats (D15) | DeepSeek | done | T008 |
 
 Only `ready` tasks have full specs in `tasks/`. Claude writes the next spec after reviewing the previous task. See `docs/ROADMAP.md`.

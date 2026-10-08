@@ -1180,11 +1180,254 @@ select {
   font-weight: 600;
 }
 
+/* ---------------------------------------------------------------- assist tab */
+
+.assist-panel {
+  margin-top: 14px;
+}
+
+.assist-slots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 4px 0 12px;
+}
+
+.assist-slot {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 96px;
+  aspect-ratio: 0.68;
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  border-radius: 8px;
+  display: flex;
+}
+
+.assist-slot.cursor {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.assist-slot.empty {
+  border: 2px dashed rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.05);
+  align-items: center;
+  justify-content: center;
+}
+
+.assist-empty-mark {
+  font-size: clamp(18px, 6vw, 26px);
+  color: var(--muted);
+}
+
+.assist-slot .mini-card {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  max-width: none;
+  flex: none;
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+}
+
+.assist-slot .mini-rank {
+  font-size: clamp(12px, 3.8vw, 18px);
+  left: 3px;
+}
+
+.assist-slot .mini-suit {
+  font-size: clamp(15px, 5vw, 24px);
+  right: 3px;
+}
+
+.assist-slot .mini-wild {
+  font-size: clamp(10px, 3vw, 13px);
+}
+
+/* A slot with only a rank: a card face with the suit still pending. */
+.assist-pending {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: var(--card-bg);
+  color: var(--card-ink);
+  border-radius: 8px;
+}
+
+.assist-pending-rank {
+  font-weight: 800;
+  font-size: clamp(15px, 5vw, 22px);
+  line-height: 1;
+}
+
+.assist-pending-suit {
+  font-size: clamp(18px, 6vw, 26px);
+  line-height: 1;
+  color: rgba(32, 36, 31, 0.45);
+}
+
+.assist-pad {
+  margin: 10px 0;
+}
+
+.assist-pad-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.assist-ranks {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.assist-rank-btn {
+  min-height: 44px;
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--text);
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.assist-rank-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.assist-rank-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.assist-suits {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.assist-suit-btn {
+  min-height: 52px;
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--text);
+  border-radius: 8px;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.assist-suit-btn.red {
+  color: var(--red);
+}
+
+.assist-suit-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.assist-suit-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.assist-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 12px 0 4px;
+}
+
+.assist-result {
+  margin-top: 12px;
+  background: rgba(0, 0, 0, 0.22);
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.assist-result-cards {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.assist-result-cards .mini-slot {
+  flex: 1 1 0;
+  max-width: 96px;
+}
+
+.assist-result-cards .mini-card {
+  width: 100%;
+  height: auto;
+  max-width: none;
+  min-width: 0;
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+}
+
+.assist-result-cards .mini-rank {
+  font-size: clamp(12px, 3.8vw, 18px);
+}
+
+.assist-result-cards .mini-suit {
+  font-size: clamp(15px, 5vw, 24px);
+}
+
+/* The machine-style HOLD label, bigger than the feedback panel's. */
+.assist-result-cards .mini-held {
+  font-size: 11.5px;
+  min-height: 14px;
+}
+
+.assist-best {
+  text-align: center;
+  font-size: 16px;
+}
+
+.assist-best strong {
+  color: var(--gold);
+}
+
+.banner.tie {
+  background: rgba(230, 193, 92, 0.14);
+  border: 1px solid rgba(230, 193, 92, 0.5);
+  color: var(--gold);
+}
+
+.assist-ties {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+  text-align: center;
+  font-size: 15px;
+}
+
 /* ---------------------------------------------------------------- layout */
 
 @media (max-width: 640px) {
   .row {
     grid-template-columns: 1fr;
+  }
+
+  /* Four tabs must fit 375px without horizontal scroll. */
+  .tab {
+    padding: 8px 12px;
+    font-size: 14px;
   }
 
   .holds-table,

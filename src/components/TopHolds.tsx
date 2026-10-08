@@ -7,9 +7,11 @@ interface Props {
   holds: HoldEv[];
   hand: Card[];
   game: GameDef;
-  userMask: number;
-  userRank: number;
-  evBest: number;
+  /** The player's hold (Trainer). Omitted by read-only lists like Assist: no "yours" row. */
+  userMask?: number;
+  userRank?: number;
+  /** Best EV for the Δ column; defaults to the first hold's. */
+  evBest?: number;
 }
 
 interface Row {
@@ -21,17 +23,18 @@ interface Row {
 }
 
 export default function TopHolds({ holds, hand, game, userMask, userRank, evBest }: Props) {
+  const best = evBest ?? holds[0].ev;
   const ranks = competitionRanks(holds);
   const rows: Row[] = holds.slice(0, TOP_COUNT).map((h, i) => ({
     mask: h.mask,
     ev: h.ev,
     rank: ranks[i],
-    isUser: h.mask === userMask,
+    isUser: userMask !== undefined && h.mask === userMask,
     extra: false,
   }));
-  if (!rows.some((r) => r.isUser)) {
+  if (userMask !== undefined && !rows.some((r) => r.isUser)) {
     const user = holds.find((h) => h.mask === userMask);
-    if (user) rows.push({ mask: user.mask, ev: user.ev, rank: userRank, isUser: true, extra: true });
+    if (user) rows.push({ mask: user.mask, ev: user.ev, rank: userRank ?? 0, isUser: true, extra: true });
   }
   const showLine = hasChart(game);
   const label = (mask: number) =>
@@ -61,7 +64,7 @@ export default function TopHolds({ holds, hand, game, userMask, userRank, evBest
               </td>
               {showLine && <td className="line-cell">{line(r.mask)}</td>}
               <td>{r.ev.toFixed(4)}</td>
-              <td>{(r.ev - evBest).toFixed(4)}</td>
+              <td>{(r.ev - best).toFixed(4)}</td>
             </tr>
           ))}
         </tbody>

@@ -46,6 +46,7 @@ import { isWildCard } from './lib/wild.ts';
 import BankrollBar from './components/BankrollBar.tsx';
 import BankrollSetup from './components/BankrollSetup.tsx';
 import BankrollTab from './components/BankrollTab.tsx';
+import AssistTab from './components/AssistTab.tsx';
 import CardView, { type CardEmphasis } from './components/CardView.tsx';
 import ChartTab from './components/ChartTab.tsx';
 import DrillPanel from './components/DrillPanel.tsx';
@@ -85,7 +86,7 @@ function sanitizeSettings(s: Settings): Settings {
 }
 
 type Phase = 'preparing' | 'ready' | 'dealt' | 'graded' | 'error';
-type Tab = 'trainer' | 'chart' | 'bankroll';
+type Tab = 'trainer' | 'chart' | 'bankroll' | 'assist';
 
 /** What the hand currently out in Drill mode is about. */
 interface DrillCtx {
@@ -328,6 +329,8 @@ export default function App() {
   // render so the closures always see fresh state.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      // Shortcuts belong to the Trainer: elsewhere Enter would silently deal (and bet) a hand.
+      if (tab !== 'trainer') return;
       const t = e.target;
       const isTyping = t instanceof HTMLElement && ['SELECT', 'INPUT', 'TEXTAREA'].includes(t.tagName);
       const isAction = t instanceof HTMLElement && ['BUTTON', 'A'].includes(t.tagName);
@@ -442,6 +445,13 @@ export default function App() {
         >
           Bankroll
         </button>
+        <button
+          type="button"
+          className={`tab${tab === 'assist' ? ' active' : ''}`}
+          onClick={() => setTab('assist')}
+        >
+          Assist
+        </button>
       </nav>
 
       <header className="header">
@@ -482,6 +492,10 @@ export default function App() {
               startBankroll(cents);
             }}
           />
+        </main>
+      ) : tab === 'assist' ? (
+        <main>
+          <AssistTab game={game} gameId={gameId} engine={engine} phase={phase} />
         </main>
       ) : (
         <>

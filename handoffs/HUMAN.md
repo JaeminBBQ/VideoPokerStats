@@ -3,7 +3,8 @@
 Items Claude needs from the user. Claude adds items; the user answers inline or in chat.
 
 ## Open
-- [ ] **Commit T008:** `git add -A && git commit -m "T008: Bankroll tab (money to bring by game, denomination, session length, safety, error rate)" && git push`
+- [ ] **Commit T009:** `git add -A && git commit -m "T009: Assist tab (enter 5 cards, engine shows the hold; ties shown as ties) (D15)" && git push`
+- [ ] **Check the Assist tab** at 375px: A♠K♠Q♠J♠9♦ → hold AKQJ♠ (18.3830); J♥10♦9♣5♠3♥ → J♥ (0.4719); K♦Q♦J♣7♠3♥ → K♦Q♦ (0.5806). Try Undo, tapping a card to re-enter it, and New hand.
 - [ ] **Check the Bankroll tab:** JoB 8/5 · 5¢ · ~4 hours · 95% · 0% → $59.50 (238 bets); Deuces → $77.75. Try "Start a session with $X" and 375px width.
 - [ ] **Try it:** `npm run dev` → start $20 at 5¢, play ~20 hands (1 point per 8 hands at 5¢), reload mid-session (balance should resume), end the session, open the log, check 375px width.
 - [ ] *(next Legends Bay visit)* 5¢–25¢ confirmed to match the 10¢ paytables. Still check **1¢, 50¢, $1, $2, $5** (the asterisked ones in session setup) and photograph any that differ.
@@ -14,6 +15,8 @@ Items Claude needs from the user. Claude adds items; the user answers inline or 
 - [ ] *(GSR visit)* Photograph the paytables of the games you'd play there. GSR becomes a tab once the first photo is in.
 
 ## Done
+- [x] T009 verified by Claude (2026-10-07).
+- [x] T008 committed and pushed (2026-10-05).
 - [x] T008 verified by Claude (2026-10-05).
 - [x] T006 + T007 committed and pushed (2026-10-05).
 - [x] T006 bankroll verified by Claude (2026-10-04).

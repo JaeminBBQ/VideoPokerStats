@@ -1,13 +1,23 @@
 # To Claude
-**Task:** T008 (bankroll-page)
+**Task:** T009 (assist-tab)
 **Status:** done
-**Report:** handoffs/reports/T008-report.md
-**Updated:** 2026-10-05 18:15
+**Report:** handoffs/reports/T009-report.md
+**Updated:** 2026-10-07 17:05
 
 ## In one paragraph
-Built the Bankroll tab: chip-only calculator (denomination, session length, safety, error rate incl. a "Mine" chip from the current game's Deal-mode totals), result card (dollar figure + bets + sentence + expected loss + return), compare table sorted by the 2,000-hand column, a "Start a session with $X" button (rounds up to whole dollars, switches to Deal-mode Trainer, reuses `startBankroll`), and the RISK.md-model footnote. All figures come from `riskData.ts` via new pure helpers in `src/lib/bankrollTab.ts` (tested: sort order, Mine 0 hands → disabled, 1.3% → 0.01). All acceptance criteria pass: lint/typecheck/test (180) /build all exit 0; no T008 change touches protected paths; grep for hard-coded results is clean.
+Assist tab is in: 5 ranks then 5 suits in 10 taps, cursor-driven entry from a pure tested module
+(`src/lib/handEntry.ts`, 11 tests), automatic `engine.analyze` with stale responses dropped,
+"Loading <game>…" while the engine prepares, result with HOLD labels / dimmed discards, "Discard all",
+chart line + EV (4 decimals), ties shown as "Tie: any of these is correct" with every tied hold
+listed (card HOLD labels suppressed while tied), and TopHolds below. No stats, no localStorage, no
+engine/scripts/charts/bankroll changes. All four acceptance commands exit 0 (lint, typecheck, 191
+tests, build), the forbidden-path diffstat is empty, and all three spec hands reproduce the expected
+engine EVs exactly (18.3830 / 0.4719 / 0.5806).
 
 ## Needs Claude's attention
-1. Criterion 2 (`git diff --stat -- src/engine src/lib/risk.ts src/lib/riskData.ts src/bankroll scripts src/charts`) is not empty, but only because of your uncommitted T007 change to `scripts/bankroll-risk.ts` (it now writes `src/bankroll/risk.json`), which was already in the working tree before T008 started. DeepSeek made no change to any protected path.
-2. The compare table fits 375px via a ≤640px media query (11.5px type, 3px padding); the user will confirm visually. Headline checks hold: JoB 8/5 · 5¢ · ~4 h · 95% · 0% → $59.50 (238 bets); Deuces 16/13 same settings → $77.75 (311 bets).
-3. Proposal (not implemented): hide the Deal/Drill mode switch on the Chart and Bankroll tabs.
+1. TopHolds' `userMask`/`userRank`/`evBest` are now optional instead of Assist passing dummies —
+   Trainer passes them as before, so its look is unchanged.
+2. When holds tie, the card row shows no HOLD labels; the tie list carries the answer (see report).
+3. Entry state is local to the tab, so switching tabs clears an in-progress hand — flagged as a
+   possible follow-up if that annoys the owner (report, Q1).
+4. Visual check at 375px is still with the user, per spec.
