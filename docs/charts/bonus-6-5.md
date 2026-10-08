@@ -24,8 +24,8 @@ Play the first line you can make. "High" cards are J, Q, K, A.
 | 10 | 4 to a Flush (0 high) | 0.6% | `2c 2d 3c 4c 7c` |
 | 11 | 4 to a Straight Flush | 0.2% | `2c 2d 3c 4c 5c` |
 | 12 | Two Pair | 4.8% | `2c 2d 3c 3h 4c` |
-| 13 | High Pair (JJ–KK) | 9.7% | `2c 3c 4d Jc Jh` |
-| 14 | Pair of Aces | 3.2% | `2c 3c 4d Ac Ah` |
+| 13 | Pair of Aces | 3.2% | `2c 3c 4d Ac Ah` |
+| 14 | High Pair (JJ–KK) | 9.7% | `2c 3c 4d Jc Jh` |
 | 15 | 3 to a Royal | 1.1% | `2c 3d Th Jh Qh` |
 | 16 | 4 to a Flush (2 high) | 0.8% | `2c 2d 3c Jc Qc` |
 | 17 | 4 to a Flush (1 high) | 1.8% | `2c 2d 3c 4c Jc` |

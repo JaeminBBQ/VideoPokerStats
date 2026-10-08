@@ -29,7 +29,7 @@ export default function SessionLog({ log }: { log: SessionLogEntry[] }) {
                 <tr key={`${e.endedAt}-${e.startedAt}`}>
                   <td>{new Date(e.endedAt).toLocaleDateString()}</td>
                   <td>{e.gameIds.length === 0 ? '—' : e.gameIds.map((id) => GAMES[id].name).join(', ')}</td>
-                  <td>{DENOM_LABELS[e.denomination]}</td>
+                  <td>{(e.denominations ?? [e.denomination]).map((d) => DENOM_LABELS[d] ?? `$${d}`).join(', ')}</td>
                   <td>{formatCents(e.startCents)}</td>
                   <td>{formatCents(e.endCents)}</td>
                   <td>{e.hands}</td>

@@ -2,11 +2,13 @@ import type { GameDef } from '../engine/index.ts';
 
 interface Props {
   game: GameDef;
+  /** Coins in a max bet at the current denomination. */
+  maxCoins: number;
   open: boolean;
   onToggle: () => void;
 }
 
-export default function Paytable({ game, open, onToggle }: Props) {
+export default function Paytable({ game, maxCoins, open, onToggle }: Props) {
   return (
     <div className="paytable">
       <button type="button" className="paytable-toggle" onClick={onToggle} aria-expanded={open}>
@@ -18,7 +20,7 @@ export default function Paytable({ game, open, onToggle }: Props) {
             <tr>
               <th>Hand</th>
               <th>Pays</th>
-              <th>× 5 coins</th>
+              <th>× {maxCoins} coins</th>
             </tr>
           </thead>
           <tbody>
@@ -26,7 +28,7 @@ export default function Paytable({ game, open, onToggle }: Props) {
               <tr key={row.key}>
                 <td>{row.label}</td>
                 <td>{row.pays}</td>
-                <td>{row.pays * 5}</td>
+                <td>{row.pays * maxCoins}</td>
               </tr>
             ))}
           </tbody>

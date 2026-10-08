@@ -13,8 +13,13 @@ A video poker strategy trainer: deal a hand, pick holds, and get told, exactly, 
 | Bonus Poker 6/5 (`bonus-6-5`) | 1-2-3-4-5-6-(25 / 2s–4s 40 / A 80)-50-800 | 96.8687% | same machine, `context/2.webp` |
 | Deuces Wild 16/13 (`lb-deuces-16-13`) | 3K 1, St 2, Fl 2, FH 3, 4K 4, SF 13, 5K 16, WR 25, 4D 200, RF 800 | 96.7651% | same machine, `context/4.webp` |
 | Bonus Poker Deluxe 7/5 (`bpd-7-5`) | 1-1-3-4-5-7-80-50-800 | 96.2526% | same machine, `context/1.webp` |
+| **GSR** Jacks or Better 9/5, 5¢, 20 coins (`gsr-job-9-5`) | 1-2-3-4-5-9-25-50-800 | 98.4498% | GSR #13013, `context/gsr/1.webp` |
+| **GSR** Jacks or Better 9/6, $1, 10 coins (`gsr-job-9-6`) | 1-2-3-4-6-9-25-50-800 | 99.5439% | GSR, `context/gsr/preview.webp` |
+| **GSR** Double Bonus 9/7/5, $1, 10 coins (`gsr-db-9-7-5`) | 1-1-3-5-7-9-(50 / 2s–4s 80 / A 160)-50-800 | 99.1065% | GSR #13013, `context/gsr/2.webp` |
+| **GSR** Deuces Wild Bonus Poker, $1, 10 coins (`gsr-dwbp`) | 3K 1, St 1, Fl 3, FH 4, 4K 4, SF 9, WR 25, 5 6s–Ks 20, 5 3s–5s 40, 5A 80, 4D 200, 4D+A 400, RF 800 | 99.4502% | GSR #13013, `context/gsr/3.webp` |
+| **GSR** Deuces Wild 20/12/10, 5¢, 20 coins (`gsr-deuces-20-12-10`) | 3K 1, St 2, Fl 3, FH 4, 4K 4, SF 10, 5K 12, WR 20, 4D 200, RF 800 | 97.5791% | GSR, `context/gsr/4.webp` |
 
-Not yet photographed (so not in the app): the other games on that machine's menu, other denominations, and anything at GSR.
+GSR machines offer 5¢, 10¢, 25¢, 50¢ and $1, with a different paytable at each denomination and a progressive royal from 25¢ up. Returns above use the royal's 800-per-coin reset; a progressive above reset adds return. Not yet photographed (so not in the app): GSR at 10¢/25¢/50¢, the other games on each menu, and Legends Bay's other games.
 
 ## Features
 - **Trainer:** choose a game, deal, toggle holds (click or keys 1–5), submit. Feedback: optimal or not; if not, the correct hold and the EV cost. Top holds with EVs, the user's hold always shown with its rank.

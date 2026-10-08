@@ -26,7 +26,7 @@ export type Mode = 'deal' | 'drill';
 
 export interface Settings {
   gameId: GameId;
-  /** Dollars per coin (the bet is always 5 coins). */
+  /** Preferred dollars per coin; each game plays the closest denomination it's offered at (D16). */
   denomination: number;
   /** Last mode per game; missing games default to deal. */
   mode: Partial<Record<GameId, Mode>>;
@@ -34,11 +34,8 @@ export interface Settings {
 
 export const DEFAULT_SETTINGS: Settings = { gameId: 'job-8-5', denomination: 0.05, mode: {} };
 
-/** Denominations offered in the session setup. Every one plays the photographed (10¢) paytables. */
+/** Every denomination a setting may hold; which ones a game runs at is `GameDef.offers` (D16). */
 export const DENOMINATIONS = [0.01, 0.05, 0.1, 0.25, 0.5, 1, 2, 5] as const;
-
-/** Denominations the owner confirmed use the same paytables as the 10¢ photos (D12). */
-export const CONFIRMED_DENOMINATIONS: readonly number[] = [0.05, 0.1, 0.25];
 
 export const DENOM_LABELS: Record<number, string> = {
   0.01: '1¢',
@@ -92,6 +89,8 @@ const isLogEntry = (x: unknown): x is SessionLogEntry =>
   typeof x.denomination === 'number' &&
   Number.isFinite(x.denomination) &&
   x.denomination > 0 &&
+  (x.denominations === undefined ||
+    (Array.isArray(x.denominations) && x.denominations.every((d) => typeof d === 'number' && Number.isFinite(d) && d > 0))) &&
   Array.isArray(x.gameIds) &&
   x.gameIds.every((g) => typeof g === 'string');
 

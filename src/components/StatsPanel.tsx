@@ -5,12 +5,13 @@ interface Props {
   gameName: string;
   totals: TotalsEntry;
   denomination: number;
+  maxCoins: number;
   onReset: () => void;
 }
 
-export default function StatsPanel({ gameName, totals, denomination, onReset }: Props) {
+export default function StatsPanel({ gameName, totals, denomination, maxCoins, onReset }: Props) {
   const [confirming, setConfirming] = useState(false);
-  const money = (bets: number) => '$' + (bets * denomination * 5).toFixed(2);
+  const money = (bets: number) => '$' + (bets * denomination * maxCoins).toFixed(2);
   const avg = totals.hands === 0 ? 0 : totals.evLost / totals.hands;
   return (
     <section className="panel" aria-label="Stats">

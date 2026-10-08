@@ -9,6 +9,7 @@
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
+import { GAMES, type GameId } from '../src/engine/games.ts';
 import { bankrollNeeded, collapseOutcomes, mixDistribution, moments, survivalTables } from '../src/lib/risk.ts';
 
 interface Row {
@@ -37,7 +38,6 @@ const HORIZONS = [500, 2000, 10000];
 const HORIZON_LABEL: Record<number, string> = { 500: '~1 hour', 2000: '~4-hour session', 10000: 'long trip' };
 const TARGETS = [0.9, 0.95, 0.99];
 const DENOMS_CENTS = [1, 5, 10, 25, 50, 100, 200, 500];
-const COINS_PER_BET = 5;
 const MARGIN = 1000; // cap = maxBankroll + max pay + MARGIN
 const CHECK_MARGIN_EXTRA = 3000; // verification rerun uses a cap this much higher
 
@@ -45,7 +45,10 @@ const dist = JSON.parse(readFileSync(inPath, 'utf8')) as { games: GameDist[] };
 
 const t0 = performance.now();
 const denomLabel = (c: number) => (c < 100 ? `${c}¢` : `$${c / 100}`);
-const dollars = (bets: number, cents: number) => (bets * COINS_PER_BET * cents) / 100;
+const dollars = (bets: number, cents: number, maxCoins: number) => (bets * maxCoins * cents) / 100;
+/** The game's denominations in cents with their max bet in coins (D16). */
+const offersOf = (gameId: string) =>
+  GAMES[gameId as GameId].offers.map((o) => ({ cents: Math.round(o.denomination * 100), maxCoins: o.maxCoins }));
 const pct = (x: number, d = 1) => `${(x * 100).toFixed(d)}%`;
 const fmtInt = (x: number) => Math.round(x).toLocaleString('en-US');
 const fmtUsd = (x: number) => `$${fmtInt(x)}`;
@@ -82,7 +85,7 @@ for (const g of dist.games) {
         const b = bankrollNeeded(tabs[h], t);
         if (b !== bankrollNeeded(loose[h], t)) capChangedAnswer = true;
         needed[String(t)] = b;
-        neededDollars[String(t)] = Object.fromEntries(DENOMS_CENTS.map((cents) => [denomLabel(cents), dollars(b, cents)]));
+        neededDollars[String(t)] = Object.fromEntries(offersOf(g.gameId).map((o) => [denomLabel(o.cents), dollars(b, o.cents, o.maxCoins)]));
       }
       return {
         hands: n,
@@ -115,7 +118,7 @@ const out = {
   generatedBy: 'node scripts/bankroll-risk.ts',
   source: inPath,
   model: {
-    unit: `1 bet = one max-bet hand = ${COINS_PER_BET} coins`,
+    unit: '1 bet = one max-bet hand; coins per max bet depend on the machine and denomination (GameDef.offers)',
     ruin: 'before a hand, bankroll < 1 bet (cannot cover a max bet)',
     mistakes: 'each hand independently, with probability errorRate, plays the next-best hold instead of the best',
     method: 'exact backward DP over integer bankrolls (src/lib/risk.ts); no simulation',
@@ -139,11 +142,11 @@ const md: string[] = [
   '',
   '## Model',
   '',
-  `- **Unit:** 1 bet = one max-bet hand = ${COINS_PER_BET} coins. Dollars = bets × ${COINS_PER_BET} × denomination.`,
+  '- **Unit:** 1 bet = one max-bet hand. Dollars = bets × coins per max bet × denomination. Legends Bay plays 5 coins; GSR plays 20 coins at 5¢ and 10 coins at $1 (D16).',
   '- **Ruin** = you cannot cover a max bet. "Survival" = you play every hand of the horizon without that happening. Finishing the last hand with nothing left counts as surviving.',
   '- **Mistakes:** each hand independently, with probability *e*, you play the next-best hold instead of the best one. Real mistakes are not all "next-best", and not uniformly spread across hands, so treat the error columns as a guide.',
   '- **No comps:** tier points, free play, mailers, and promotions are not counted.',
-  '- **Paytables** are the photographed 10¢ ones (D10). The dollar tables just scale bets by denomination; a different denomination may have a different paytable on the floor.',
+  '- **Paytables** are the photographed ones (D10). Each game\'s dollar table lists only the denominations that paytable is offered at; unconfirmed ones are marked *.',
   '- **Exact:** survival is computed by exact dynamic programming over every whole-bet bankroll, not simulation. Bankrolls above an internal cap are clamped, which can only understate survival; rerunning with a cap 3,000 bets higher changes no answer and moves no survival probability by more than the "cap check" figure shown per game.',
   `- Horizons: ${HORIZONS.map((n) => `${fmtInt(n)} hands (${HORIZON_LABEL[n]})`).join(', ')}. At ~500 hands/hour.`,
   '',
@@ -187,10 +190,12 @@ for (const g of gamesOut) {
     `| Denom | ${cols.map((c) => `${fmtInt(HORIZONS[c.h])} h, ${pct(ERROR_RATES[c.ei], 0)} err`).join(' | ')} |`,
     `|---|${cols.map(() => '--:').join('|')}|`,
   );
-  for (const cents of DENOMS_CENTS)
+  for (const o of GAMES[g.gameId as GameId].offers) {
+    const cents = Math.round(o.denomination * 100);
     md.push(
-      `| ${denomLabel(cents)} | ${cols.map((c) => fmtUsd(dollars(g.perError[c.ei].horizons[c.h].bankrollNeededBets['0.95'], cents))).join(' | ')} |`,
+      `| ${denomLabel(cents)}${o.confirmed ? '' : '*'} (${o.maxCoins} coins) | ${cols.map((c) => fmtUsd(dollars(g.perError[c.ei].horizons[c.h].bankrollNeededBets['0.95'], cents, o.maxCoins))).join(' | ')} |`,
     );
+  }
   md.push('');
 }
 writeFileSync(join(outDir, 'RISK.md'), md.join('\n'));

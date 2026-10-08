@@ -58,8 +58,10 @@ describe('bankroll', () => {
     expect(denomCents(0.05)).toBe(5);
     expect(denomCents(0.1)).toBe(10);
     expect(denomCents(0.25)).toBe(25);
-    expect(betCents(0.05)).toBe(25);
-    expect(betCents(0.25)).toBe(125);
+    expect(betCents(0.05, 5)).toBe(25);
+    expect(betCents(0.25, 5)).toBe(125);
+    expect(betCents(0.05, 20)).toBe(100); // GSR 5¢ max bet is 20 coins
+    expect(betCents(1, 10)).toBe(1000);
     expect(DENOMINATIONS.map(denomCents)).toEqual([1, 5, 10, 25, 50, 100, 200, 500]);
     for (const d of DENOMINATIONS) expect(DENOM_LABELS[d]).toBeTruthy();
   });
@@ -72,6 +74,18 @@ describe('bankroll', () => {
     expect(settleHand(job, parseHand('2c 5d 8h Js Kc'), 0.25)).toEqual({ betCents: 125, winCents: 0, rowIndex: -1 });
     // Deuces 16/13: four deuces pay 200 per coin → $50 at 5¢ max bet.
     expect(settleHand(deuces, parseHand('2c 2d 2h 2s 9c'), 0.05).winCents).toBe(5000);
+  });
+
+  it('settles GSR games at their own max bet (D16)', () => {
+    const job95 = GAMES['gsr-job-9-5'];
+    const db = GAMES['gsr-db-9-7-5'];
+    // 5¢ × 20 coins = $1.00 a hand; a royal pays 800 per coin = $800.
+    expect(settleHand(job95, parseHand('As Ks Qs Js Ts'), 0.05)).toEqual({ betCents: 100, winCents: 80000, rowIndex: 0 });
+    // $1 × 10 coins = $10 a hand; four aces pay 160 per coin = $1,600.
+    expect(settleHand(db, parseHand('Ac Ad Ah As 3c'), 1).winCents).toBe(160000);
+    expect(canAfford(startSession(99, 0), job95, 0.05)).toBe(false);
+    expect(canAfford(startSession(100, 0), job95, 0.05)).toBe(true);
+    expect(() => settleHand(job95, parseHand('As Ks Qs Js Ts'), 0.25)).toThrow(); // not offered at 25¢
   });
 
   it('tracks balance, coin-in, wins and net', () => {
@@ -89,10 +103,10 @@ describe('bankroll', () => {
 
   it('refuses a bet the balance cannot cover', () => {
     const s = startSession(30, 0);
-    expect(canAfford(s, 0.05)).toBe(true);
+    expect(canAfford(s, job, 0.05)).toBe(true);
     const after = applyHand(s, job, settleHand(job, parseHand('2c 5d 8h Js Kc'), 0.05));
     expect(after.balanceCents).toBe(5);
-    expect(canAfford(after, 0.05)).toBe(false);
+    expect(canAfford(after, job, 0.05)).toBe(false);
     expect(() => applyHand(after, job, settleHand(job, parseHand('2c 5d 8h Js Kc'), 0.05))).toThrow();
   });
 

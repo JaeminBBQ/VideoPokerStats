@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { deal, mulberry32, parseHand, type Card } from './cards.ts';
 import { analyzeHand, buildTables, holdEvs, BINOM, type Tables } from './ev.ts';
-import { GAMES, GAME_LIST, VENUES, gamesAt, payout, type GameDef, type GameId } from './games.ts';
+import { GAMES, GAME_LIST, VENUES, gamesAt, maxCoinsAt, offerAt, payout, snapDenomination, type GameDef, type GameId } from './games.ts';
 
 const rowKey = (game: GameDef, hand: string) => {
   const i = game.evaluate(parseHand(hand));
@@ -31,6 +31,51 @@ describe('deuces evaluator', () => {
   ])('%s → %s', (hand, key) => expect(rowKey(g, hand)).toBe(key));
 });
 
+describe('offers (D16)', () => {
+  it('every game has offers, smallest denomination first', () => {
+    for (const g of GAME_LIST) {
+      expect(g.offers.length).toBeGreaterThan(0);
+      const d = g.offers.map((o) => o.denomination);
+      expect(d).toEqual([...d].sort((a, b) => a - b));
+    }
+  });
+  it('GSR max bets and Legends Bay 5 coins', () => {
+    expect(maxCoinsAt(GAMES['gsr-job-9-5'], 0.05)).toBe(20);
+    expect(maxCoinsAt(GAMES['gsr-deuces-20-12-10'], 0.05)).toBe(20);
+    expect(maxCoinsAt(GAMES['gsr-job-9-6'], 1)).toBe(10);
+    expect(maxCoinsAt(GAMES['job-8-5'], 0.25)).toBe(5);
+    expect(offerAt(GAMES['gsr-job-9-6'], 0.05)).toBeUndefined();
+    expect(() => maxCoinsAt(GAMES['gsr-job-9-6'], 0.05)).toThrow();
+  });
+  it('snaps a denomination the game is not offered at to the closest one', () => {
+    expect(snapDenomination(GAMES['gsr-job-9-6'], 0.05)).toBe(1);
+    expect(snapDenomination(GAMES['gsr-job-9-5'], 1)).toBe(0.05);
+    expect(snapDenomination(GAMES['job-8-5'], 0.1)).toBe(0.1);
+  });
+});
+
+describe('deuces wild bonus poker evaluator', () => {
+  const g = GAMES['gsr-dwbp'];
+  it.each([
+    ['As Ks Qs Js Ts', 'natural-royal'],
+    ['2c 2d 2h 2s Ac', 'four-deuces-ace'],
+    ['2c 2d 2h 2s 3c', 'four-deuces'],
+    ['2c 2d Ah Ad As', 'five-aces'],
+    ['2c 3h 3d 3s 3c', 'five-3-5'],
+    ['2c 2d 2h 5s 5d', 'five-3-5'],
+    ['2c 2d 2h 6s 6d', 'five-6-k'],
+    ['2c 2d Kh Ks Kd', 'five-6-k'],
+    ['2c As Ks Qs Ts', 'wild-royal'],
+    ['2c 5h 6h 8h 9h', 'straight-flush'],
+    ['2c 2d 2h 7s 9d', 'four-kind'],
+    ['2c 8h 8d Ks Kc', 'full-house'],
+    ['2c 3h 7h 9h Kh', 'flush'],
+    ['2c 2d 6h 9s Ts', 'straight'],
+    ['2c 9h 9d 4s 5c', 'three-kind'],
+    ['2c 9h Jd 4s 5c', 'nothing'],
+  ])('%s → %s', (hand, key) => expect(rowKey(g, hand)).toBe(key));
+});
+
 describe('bonus evaluators', () => {
   it.each([
     ['bonus-6-5', 'Ac Ad Ah As 3c', 'four-aces'],
@@ -45,6 +90,10 @@ describe('bonus evaluators', () => {
     ['bonus-6-5', 'Ac Ad Ah As 3c', 'four-aces'],
     ['bonus-6-5', '4c 4d 4h 4s 3c', 'four-2-4'],
     ['bpd-7-5', '6c 6d 6h 6s 3c', 'four-kind'],
+    ['gsr-db-9-7-5', 'Ac Ad Ah As 3c', 'four-aces'],
+    ['gsr-db-9-7-5', '2c 2d 2h 2s Kc', 'four-2-4'],
+    ['gsr-db-9-7-5', 'Kc Kd Kh Ks 3c', 'four-5-k'],
+    ['gsr-db-9-7-5', '7c 7h 3d 3s Kc', 'two-pair'],
   ])('%s: %s → %s', (id, hand, key) => expect(rowKey(GAMES[id as GameId], hand)).toBe(key));
 
   it('pays two pair as on the photographed Legends Bay machine', () => {

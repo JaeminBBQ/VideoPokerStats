@@ -22,7 +22,10 @@ export interface SessionLogEntry {
   wonCents: number;
   /** Whole tier points the session earned (partial dollars don't count yet). */
   points: number;
+  /** The first denomination played (kept for logs written before D16). */
   denomination: number;
+  /** Every denomination the session played, in order first played (absent in pre-D16 logs). */
+  denominations?: number[];
   gameIds: GameId[];
 }
 
@@ -32,7 +35,7 @@ export interface SessionLogEntry {
  */
 export function closeSession(
   session: Session,
-  denomination: number,
+  denominations: readonly number[],
   gameIds: readonly GameId[],
   lifetime: Lifetime,
   log: readonly SessionLogEntry[],
@@ -47,7 +50,8 @@ export function closeSession(
     coinInCents: session.coinInCents,
     wonCents: session.wonCents,
     points: tierPoints(session.coinInCents),
-    denomination,
+    denomination: denominations[0],
+    denominations: [...denominations],
     gameIds: [...gameIds],
   };
   const next = [entry, ...log];

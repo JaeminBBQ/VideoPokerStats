@@ -1,0 +1,1422 @@
+{
+ "gameId": "gsr-db-9-7-5",
+ "rule": "Play the first line you can make. \"High\" cards are J, Q, K, A.",
+ "sections": [
+  {
+   "section": 0,
+   "title": "All hands",
+   "share": 1,
+   "lines": [
+    {
+     "key": "made:Royal Flush",
+     "label": "Pat Royal Flush",
+     "share": 0.0000015390771693292702,
+     "example": [
+      32,
+      36,
+      40,
+      44,
+      48
+     ]
+    },
+    {
+     "key": "quads",
+     "label": "Four of a Kind",
+     "share": 0.00024009603841536616,
+     "example": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    {
+     "key": "made:Straight Flush",
+     "label": "Pat Straight Flush",
+     "share": 0.000013851694523963431,
+     "example": [
+      0,
+      4,
+      8,
+      12,
+      16
+     ]
+    },
+    {
+     "key": "royal4",
+     "label": "4 to a Royal",
+     "share": 0.0003601440576230492,
+     "example": [
+      0,
+      33,
+      37,
+      41,
+      45
+     ]
+    },
+    {
+     "key": "trips:A",
+     "label": "Three Aces",
+     "share": 0.0017360790470034167,
+     "example": [
+      0,
+      5,
+      48,
+      49,
+      50
+     ]
+    },
+    {
+     "key": "made:Full House",
+     "label": "Pat Full House",
+     "share": 0.0013297626743004895,
+     "example": [
+      0,
+      1,
+      2,
+      4,
+      5
+     ]
+    },
+    {
+     "key": "made:Flush",
+     "label": "Pat Flush",
+     "share": 0.0019053775356296365,
+     "example": [
+      0,
+      4,
+      8,
+      12,
+      20
+     ]
+    },
+    {
+     "key": "trips",
+     "label": "Three of a Kind",
+     "share": 0.019503185889740513,
+     "example": [
+      0,
+      1,
+      2,
+      4,
+      9
+     ]
+    },
+    {
+     "key": "made:Straight",
+     "label": "Pat Straight",
+     "share": 0.003896943392741712,
+     "example": [
+      0,
+      4,
+      8,
+      13,
+      18
+     ]
+    },
+    {
+     "key": "flush4:h0",
+     "label": "4 to a Flush (0 high)",
+     "share": 0.0063025210084033615,
+     "example": [
+      0,
+      1,
+      4,
+      8,
+      20
+     ]
+    },
+    {
+     "key": "sf4",
+     "label": "4 to a Straight Flush",
+     "share": 0.0019577061593868315,
+     "example": [
+      0,
+      1,
+      4,
+      8,
+      12
+     ]
+    },
+    {
+     "key": "pair:A",
+     "label": "Pair of Aces",
+     "share": 0.039782066672822976,
+     "example": [
+      0,
+      1,
+      4,
+      48,
+      50
+     ]
+    },
+    {
+     "key": "twopair",
+     "label": "Two Pair",
+     "share": 0.0402253208975898,
+     "example": [
+      0,
+      1,
+      4,
+      6,
+      8
+     ]
+    },
+    {
+     "key": "flush4:h3",
+     "label": "4 to a Flush (3 high)",
+     "share": 0.00174993074152738,
+     "example": [
+      0,
+      1,
+      36,
+      40,
+      44
+     ]
+    },
+    {
+     "key": "flush4:h2",
+     "label": "4 to a Flush (2 high)",
+     "share": 0.01216640502354788,
+     "example": [
+      0,
+      1,
+      4,
+      36,
+      40
+     ]
+    },
+    {
+     "key": "pair:high",
+     "label": "High Pair (JJ–KK)",
+     "share": 0.09560901283590359,
+     "example": [
+      0,
+      4,
+      9,
+      36,
+      38
+     ]
+    },
+    {
+     "key": "flush4:h1",
+     "label": "4 to a Flush (1 high)",
+     "share": 0.01811801643734417,
+     "example": [
+      0,
+      1,
+      4,
+      8,
+      36
+     ]
+    },
+    {
+     "key": "royal3",
+     "label": "3 to a Royal",
+     "share": 0.007244436236032875,
+     "example": [
+      0,
+      5,
+      34,
+      38,
+      42
+     ]
+    },
+    {
+     "key": "str4:open",
+     "label": "4 to an Open Straight",
+     "share": 0.026946163080616863,
+     "example": [
+      0,
+      1,
+      4,
+      8,
+      14
+     ]
+    },
+    {
+     "key": "sf3:h2g1",
+     "label": "3 to a Straight Flush (2 high, 1 gap)",
+     "share": 0.0006556468741342691,
+     "example": [
+      0,
+      5,
+      30,
+      38,
+      42
+     ]
+    },
+    {
+     "key": "pair:low",
+     "label": "Low Pair (22–TT)",
+     "share": 0.2778003509095946,
+     "example": [
+      0,
+      1,
+      4,
+      8,
+      18
+     ]
+    },
+    {
+     "key": "str4:in:h4",
+     "label": "4 to an Inside Straight (4 high)",
+     "share": 0.0024979222458214054,
+     "example": [
+      0,
+      36,
+      40,
+      45,
+      50
+     ]
+    },
+    {
+     "key": "sf3:h1g0",
+     "label": "3 to a Straight Flush (1 high, no gaps)",
+     "share": 0.0009973220057253672,
+     "example": [
+      0,
+      4,
+      9,
+      18,
+      48
+     ]
+    },
+    {
+     "key": "sf3:h2g2",
+     "label": "3 to a Straight Flush (2 high, 2 gaps)",
+     "share": 0.0017591652045433558,
+     "example": [
+      0,
+      5,
+      26,
+      38,
+      42
+     ]
+    },
+    {
+     "key": "sf3:h0g0",
+     "label": "3 to a Straight Flush (0 high, no gaps)",
+     "share": 0.00282574568288854,
+     "example": [
+      0,
+      4,
+      8,
+      17,
+      22
+     ]
+    },
+    {
+     "key": "sf3:h1g1",
+     "label": "3 to a Straight Flush (1 high, 1 gap)",
+     "share": 0.002659525348600979,
+     "example": [
+      0,
+      5,
+      8,
+      18,
+      48
+     ]
+    },
+    {
+     "key": "str4:in:h3",
+     "label": "4 to an Inside Straight (3 high)",
+     "share": 0.009294487025579463,
+     "example": [
+      0,
+      28,
+      36,
+      41,
+      46
+     ]
+    },
+    {
+     "key": "royal2:QJ",
+     "label": "Suited QJ",
+     "share": 0.00851879213223751,
+     "example": [
+      0,
+      4,
+      9,
+      38,
+      42
+     ]
+    },
+    {
+     "key": "flush3:h2",
+     "label": "3 to a Flush (2 high)",
+     "share": 0.02187182565333826,
+     "example": [
+      0,
+      5,
+      10,
+      36,
+      44
+     ]
+    },
+    {
+     "key": "royal2:KJ",
+     "label": "Suited KJ",
+     "share": 0.005443715947917629,
+     "example": [
+      0,
+      4,
+      9,
+      38,
+      46
+     ]
+    },
+    {
+     "key": "royal2:KQ",
+     "label": "Suited KQ",
+     "share": 0.005480653799981531,
+     "example": [
+      0,
+      4,
+      9,
+      42,
+      46
+     ]
+    },
+    {
+     "key": "sf3:h0g1",
+     "label": "3 to a Straight Flush (0 high, 1 gap)",
+     "share": 0.005683811986332995,
+     "example": [
+      0,
+      4,
+      12,
+      17,
+      22
+     ]
+    },
+    {
+     "key": "royal2:AJ",
+     "label": "Suited AJ",
+     "share": 0.005693046449348971,
+     "example": [
+      0,
+      4,
+      9,
+      38,
+      50
+     ]
+    },
+    {
+     "key": "royal2:AQ",
+     "label": "Suited AQ",
+     "share": 0.005725367069904885,
+     "example": [
+      0,
+      4,
+      9,
+      42,
+      50
+     ]
+    },
+    {
+     "key": "str4:in:h2",
+     "label": "4 to an Inside Straight (2 high)",
+     "share": 0.006893526641425801,
+     "example": [
+      0,
+      24,
+      28,
+      37,
+      42
+     ]
+    },
+    {
+     "key": "sf3:h1g2",
+     "label": "3 to a Straight Flush (1 high, 2 gaps)",
+     "share": 0.00464031766552775,
+     "example": [
+      0,
+      5,
+      12,
+      18,
+      48
+     ]
+    },
+    {
+     "key": "royal2:AK",
+     "label": "Suited AK",
+     "share": 0.005711515375380922,
+     "example": [
+      0,
+      4,
+      9,
+      46,
+      50
+     ]
+    },
+    {
+     "key": "str4:in:h1",
+     "label": "4 to an Inside Straight (1 high)",
+     "share": 0.016031027795733677,
+     "example": [
+      0,
+      4,
+      9,
+      16,
+      50
+     ]
+    },
+    {
+     "key": "royal2:JT",
+     "label": "Suited JT",
+     "share": 0.0065703204358666546,
+     "example": [
+      0,
+      4,
+      9,
+      34,
+      38
+     ]
+    },
+    {
+     "key": "hc:KQJ",
+     "label": "KQJ unsuited",
+     "share": 0.003093545110351833,
+     "example": [
+      0,
+      4,
+      36,
+      41,
+      46
+     ]
+    },
+    {
+     "key": "hc:QJ",
+     "label": "QJ unsuited",
+     "share": 0.021216178779203988,
+     "example": [
+      0,
+      4,
+      9,
+      36,
+      42
+     ]
+    },
+    {
+     "key": "flush3:h1",
+     "label": "3 to a Flush (1 high)",
+     "share": 0.06251731461815495,
+     "example": [
+      0,
+      4,
+      9,
+      18,
+      36
+     ]
+    },
+    {
+     "key": "royal2:QT",
+     "label": "Suited QT",
+     "share": 0.0037861298365500047,
+     "example": [
+      0,
+      4,
+      9,
+      34,
+      42
+     ]
+    },
+    {
+     "key": "sf3:h0g2",
+     "label": "3 to a Straight Flush (0 high, 2 gaps)",
+     "share": 0.007798504016991412,
+     "example": [
+      0,
+      4,
+      9,
+      16,
+      22
+     ]
+    },
+    {
+     "key": "hc:KJ",
+     "label": "KJ unsuited",
+     "share": 0.01759165204543356,
+     "example": [
+      0,
+      4,
+      9,
+      37,
+      46
+     ]
+    },
+    {
+     "key": "hc:KQ",
+     "label": "KQ unsuited",
+     "share": 0.01794256164004063,
+     "example": [
+      0,
+      4,
+      9,
+      41,
+      46
+     ]
+    },
+    {
+     "key": "hc:A",
+     "label": "A only",
+     "share": 0.07195493582048204,
+     "example": [
+      0,
+      4,
+      17,
+      20,
+      50
+     ]
+    },
+    {
+     "key": "hc:Q",
+     "label": "Q only",
+     "share": 0.028589897497460524,
+     "example": [
+      0,
+      4,
+      9,
+      17,
+      42
+     ]
+    },
+    {
+     "key": "hc:J",
+     "label": "J only",
+     "share": 0.02534860097885308,
+     "example": [
+      0,
+      4,
+      9,
+      17,
+      38
+     ]
+    },
+    {
+     "key": "royal2:KT",
+     "label": "Suited KT",
+     "share": 0.0021608643457382954,
+     "example": [
+      0,
+      4,
+      9,
+      34,
+      46
+     ]
+    },
+    {
+     "key": "hc:K",
+     "label": "K only",
+     "share": 0.0296980330593776,
+     "example": [
+      0,
+      4,
+      9,
+      17,
+      46
+     ]
+    },
+    {
+     "key": "str4:in:h0",
+     "label": "4 to an Inside Straight (0 high)",
+     "share": 0.012138701634499954,
+     "example": [
+      0,
+      4,
+      9,
+      17,
+      22
+     ]
+    },
+    {
+     "key": "flush3:h0",
+     "label": "3 to a Flush (0 high)",
+     "share": 0.006468741342690923,
+     "example": [
+      0,
+      4,
+      9,
+      20,
+      26
+     ]
+    },
+    {
+     "key": "none",
+     "label": "Discard everything",
+     "share": 0.013851694523963431,
+     "example": [
+      0,
+      4,
+      9,
+      21,
+      26
+     ]
+    }
+   ]
+  }
+ ],
+ "perfectReturn": 0.991064718540315,
+ "chartReturn": 0.9908119530143638,
+ "errorRate": 0.035917443900637176,
+ "worstErrors": [
+  {
+   "hand": [
+    0,
+    33,
+    37,
+    38,
+    41
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09694727104532852
+  },
+  {
+   "hand": [
+    0,
+    33,
+    37,
+    41,
+    42
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09694727104532852
+  },
+  {
+   "hand": [
+    4,
+    33,
+    37,
+    38,
+    41
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09694727104532852
+  },
+  {
+   "hand": [
+    4,
+    33,
+    37,
+    41,
+    42
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09694727104532852
+  },
+  {
+   "hand": [
+    8,
+    33,
+    37,
+    38,
+    41
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09694727104532852
+  },
+  {
+   "hand": [
+    8,
+    33,
+    37,
+    41,
+    42
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09694727104532852
+  },
+  {
+   "hand": [
+    12,
+    33,
+    37,
+    38,
+    41
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09694727104532852
+  },
+  {
+   "hand": [
+    12,
+    33,
+    37,
+    41,
+    42
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09694727104532852
+  },
+  {
+   "hand": [
+    16,
+    33,
+    37,
+    38,
+    41
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09694727104532852
+  },
+  {
+   "hand": [
+    16,
+    33,
+    37,
+    41,
+    42
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09694727104532852
+  },
+  {
+   "hand": [
+    20,
+    33,
+    37,
+    38,
+    41
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09694727104532852
+  },
+  {
+   "hand": [
+    20,
+    33,
+    37,
+    41,
+    42
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09694727104532852
+  },
+  {
+   "hand": [
+    0,
+    37,
+    38,
+    41,
+    45
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    0,
+    37,
+    41,
+    42,
+    45
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    0,
+    37,
+    41,
+    45,
+    46
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    4,
+    37,
+    38,
+    41,
+    45
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    4,
+    37,
+    41,
+    42,
+    45
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    4,
+    37,
+    41,
+    45,
+    46
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    8,
+    37,
+    38,
+    41,
+    45
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    8,
+    37,
+    41,
+    42,
+    45
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    8,
+    37,
+    41,
+    45,
+    46
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    12,
+    37,
+    38,
+    41,
+    45
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    12,
+    37,
+    41,
+    42,
+    45
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    12,
+    37,
+    41,
+    45,
+    46
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    16,
+    37,
+    38,
+    41,
+    45
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    16,
+    37,
+    41,
+    42,
+    45
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    16,
+    37,
+    41,
+    45,
+    46
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    20,
+    37,
+    38,
+    41,
+    45
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    20,
+    37,
+    41,
+    42,
+    45
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    20,
+    37,
+    41,
+    45,
+    46
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    24,
+    37,
+    38,
+    41,
+    45
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    24,
+    37,
+    41,
+    42,
+    45
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    24,
+    37,
+    41,
+    45,
+    46
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.09047178538390388
+  },
+  {
+   "hand": [
+    24,
+    33,
+    37,
+    38,
+    41
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.07844588344125825
+  },
+  {
+   "hand": [
+    24,
+    33,
+    37,
+    41,
+    42
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.07844588344125825
+  },
+  {
+   "hand": [
+    32,
+    36,
+    37,
+    40,
+    50
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.07567067530064775
+  },
+  {
+   "hand": [
+    32,
+    36,
+    40,
+    41,
+    50
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.07567067530064775
+  },
+  {
+   "hand": [
+    28,
+    37,
+    38,
+    41,
+    45
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.0719703977798336
+  },
+  {
+   "hand": [
+    28,
+    37,
+    41,
+    42,
+    45
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.0719703977798336
+  },
+  {
+   "hand": [
+    28,
+    37,
+    41,
+    45,
+    46
+   ],
+   "weight": 24,
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "cost": 0.0719703977798336
+  }
+ ],
+ "errorGroups": [
+  {
+   "chartLabel": "QJ unsuited",
+   "bestLabel": "3 to a Straight (2 high)",
+   "share": 0.0032551482131314277,
+   "evLost": 0.00009073863659176025
+  },
+  {
+   "chartLabel": "High Pair (JJ–KK)",
+   "bestLabel": "3 to a Royal",
+   "share": 0.0006972019577061611,
+   "evLost": 0.000058310380296714214
+  },
+  {
+   "chartLabel": "Suited JT",
+   "bestLabel": "3 to a Straight (2 high)",
+   "share": 0.0009696186166774402,
+   "evLost": 0.000023043444945045475
+  },
+  {
+   "chartLabel": "4 to a Flush (2 high)",
+   "bestLabel": "3 to a Royal",
+   "share": 0.0003601440576230488,
+   "evLost": 0.00001647851910991396
+  },
+  {
+   "chartLabel": "A only",
+   "bestLabel": "AK unsuited",
+   "share": 0.006353310554991279,
+   "evLost": 0.000013200418054311589
+  },
+  {
+   "chartLabel": "A only",
+   "bestLabel": "AQ unsuited",
+   "share": 0.006316372702927376,
+   "evLost": 0.000013194412404605348
+  },
+  {
+   "chartLabel": "A only",
+   "bestLabel": "AJ unsuited",
+   "share": 0.00624249699879957,
+   "evLost": 0.000013182401105192866
+  },
+  {
+   "chartLabel": "Low Pair (22–TT)",
+   "bestLabel": "3 to a Straight Flush (1 high, no gaps)",
+   "share": 0.00023547880690737817,
+   "evLost": 0.00001039795410087469
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (0 high, 2 gaps)",
+   "bestLabel": "A only",
+   "share": 0.00030473727952719536,
+   "evLost": 0.0000038920751923806864
+  },
+  {
+   "chartLabel": "3 to a Flush (1 high)",
+   "bestLabel": "KQ unsuited",
+   "share": 0.0029088558500323385,
+   "evLost": 0.0000014351431884217085
+  },
+  {
+   "chartLabel": "3 to a Flush (1 high)",
+   "bestLabel": "KJ unsuited",
+   "share": 0.0028395973774125206,
+   "evLost": 0.0000014009731125069048
+  },
+  {
+   "chartLabel": "Suited JT",
+   "bestLabel": "3 to a Flush (1 high)",
+   "share": 0.00027703389047926865,
+   "evLost": 0.0000011105274672311142
+  },
+  {
+   "chartLabel": "KJ unsuited",
+   "bestLabel": "AKJ unsuited",
+   "share": 0.0008403361344537805,
+   "evLost": 0.0000010364923027490437
+  },
+  {
+   "chartLabel": "KQ unsuited",
+   "bestLabel": "AKQ unsuited",
+   "share": 0.0008403361344537805,
+   "evLost": 0.0000010364923027490437
+  },
+  {
+   "chartLabel": "3 to a Flush (2 high)",
+   "bestLabel": "Suited KJ",
+   "share": 0.0014544279250161638,
+   "evLost": 8.072680434871247e-7
+  },
+  {
+   "chartLabel": "3 to a Flush (2 high)",
+   "bestLabel": "Suited KQ",
+   "share": 0.0014544279250161638,
+   "evLost": 8.072680434871247e-7
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (0 high, 2 gaps)",
+   "bestLabel": "J only",
+   "share": 0.0001662203342875612,
+   "evLost": 5.327425472171579e-7
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (2 high, 1 gap)",
+   "bestLabel": "Low Pair (22–TT)",
+   "share": 0.000013851694523963431,
+   "evLost": 4.817980703987283e-7
+  },
+  {
+   "chartLabel": "3 to a Flush (1 high)",
+   "bestLabel": "Suited QT",
+   "share": 0.00013851694523963433,
+   "evLost": 3.075306832332282e-7
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (1 high, 1 gap)",
+   "bestLabel": "Suited QJ",
+   "share": 0.00000923446301597562,
+   "evLost": 2.471635491170779e-7
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (0 high, 1 gap)",
+   "bestLabel": "Suited AJ",
+   "share": 0.00001846892603195124,
+   "evLost": 1.4351431884217403e-7
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (0 high, no gaps)",
+   "bestLabel": "Suited QJ",
+   "share": 0.00000461723150798781,
+   "evLost": 1.344022985982268e-7
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (1 high, no gaps)",
+   "bestLabel": "Suited QJ",
+   "share": 0.00000461723150798781,
+   "evLost": 1.2358177455853895e-7
+  },
+  {
+   "chartLabel": "Suited AQ",
+   "bestLabel": "3 to a Straight Flush (1 high, 2 gaps)",
+   "share": 0.00000923446301597562,
+   "evLost": 9.795421762243684e-8
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (0 high, 1 gap)",
+   "bestLabel": "Suited AQ",
+   "share": 0.00000923446301597562,
+   "evLost": 9.45372100309556e-8
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (0 high, 1 gap)",
+   "bestLabel": "Suited AK",
+   "share": 0.00000923446301597562,
+   "evLost": 9.45372100309556e-8
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (0 high, no gaps)",
+   "bestLabel": "Suited AJ",
+   "share": 0.00000461723150798781,
+   "evLost": 4.72686050154778e-8
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (0 high, no gaps)",
+   "bestLabel": "Suited AQ",
+   "share": 0.00000461723150798781,
+   "evLost": 4.72686050154778e-8
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (0 high, no gaps)",
+   "bestLabel": "Suited AK",
+   "share": 0.00000461723150798781,
+   "evLost": 4.72686050154778e-8
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (1 high, 1 gap)",
+   "bestLabel": "Suited KJ",
+   "share": 0.00000923446301597562,
+   "evLost": 4.3282096158751406e-8
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (1 high, 1 gap)",
+   "bestLabel": "Suited KQ",
+   "share": 0.00000923446301597562,
+   "evLost": 4.3282096158751406e-8
+  },
+  {
+   "chartLabel": "Suited KQ",
+   "bestLabel": "3 to a Straight Flush (0 high, 1 gap)",
+   "share": 0.00000923446301597562,
+   "evLost": 4.328209615875089e-8
+  },
+  {
+   "chartLabel": "A only",
+   "bestLabel": "Suited KT",
+   "share": 0.00011081355619170742,
+   "evLost": 3.7276446452513646e-8
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (0 high, no gaps)",
+   "bestLabel": "Suited KJ",
+   "share": 0.00000461723150798781,
+   "evLost": 3.246157211906355e-8
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (0 high, no gaps)",
+   "bestLabel": "Suited KQ",
+   "share": 0.00000461723150798781,
+   "evLost": 3.246157211906355e-8
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (1 high, no gaps)",
+   "bestLabel": "Suited KJ",
+   "share": 0.00000461723150798781,
+   "evLost": 2.1641048079375703e-8
+  },
+  {
+   "chartLabel": "3 to a Straight Flush (1 high, no gaps)",
+   "bestLabel": "Suited KQ",
+   "share": 0.00000461723150798781,
+   "evLost": 2.1641048079375703e-8
+  },
+  {
+   "chartLabel": "Suited QT",
+   "bestLabel": "3 to a Straight Flush (0 high, 2 gaps)",
+   "share": 0.00000923446301597562,
+   "evLost": 1.7085037957401574e-8
+  },
+  {
+   "chartLabel": "Suited KQ",
+   "bestLabel": "3 to a Straight Flush (1 high, 2 gaps)",
+   "share": 0.00000461723150798781,
+   "evLost": 1.139002530493404e-9
+  }
+ ]
+}

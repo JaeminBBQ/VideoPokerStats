@@ -27,9 +27,15 @@ const oldEntry: SessionLogEntry = {
 };
 
 describe('closeSession', () => {
+  it('logs every denomination a mixed session played (D16)', () => {
+    const out = closeSession(s, [0.05, 1], ['job-8-5', 'gsr-job-9-6'], { coinInCents: 0 }, [], 2000);
+    expect(out.log[0].denomination).toBe(0.05);
+    expect(out.log[0].denominations).toEqual([0.05, 1]);
+  });
+
   it('moves the session coin-in into lifetime and logs a summary newest-first', () => {
     const lifetime: Lifetime = { coinInCents: 500 };
-    const out = closeSession(s, 0.05, ['job-8-5', 'lb-deuces-16-13'], lifetime, [oldEntry], 2000);
+    const out = closeSession(s, [0.05], ['job-8-5', 'lb-deuces-16-13'], lifetime, [oldEntry], 2000);
     expect(out.lifetime).toEqual({ coinInCents: 600 });
     expect(out.log).toHaveLength(2);
     expect(out.log[0]).toEqual({
@@ -42,6 +48,7 @@ describe('closeSession', () => {
       wonCents: 75,
       points: 0, // $1 of coin-in: a point needs $2 (D13)
       denomination: 0.05,
+      denominations: [0.05],
       gameIds: ['job-8-5', 'lb-deuces-16-13'],
     });
     expect(out.log[1]).toEqual(oldEntry);
@@ -55,7 +62,7 @@ describe('closeSession', () => {
       endedAt: 29 - i,
       startedAt: i,
     }));
-    const out = closeSession(s, 0.05, [], EMPTY, old, 2000);
+    const out = closeSession(s, [0.05], [], EMPTY, old, 2000);
     expect(out.log).toHaveLength(SESSION_LOG_CAP);
     expect(out.log[0].endedAt).toBe(2000);
     expect(out.log[SESSION_LOG_CAP - 1].endedAt).toBe(11); // oldest old entries (0..10) are dropped

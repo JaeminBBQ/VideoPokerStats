@@ -3,7 +3,9 @@
 Items Claude needs from the user. Claude adds items; the user answers inline or in chat.
 
 ## Open
-- [ ] **Commit T009:** `git add -A && git commit -m "T009: Assist tab (enter 5 cards, engine shows the hold; ties shown as ties) (D15)" && git push`
+- [ ] **Commit GSR (T010):** `git add -A && git commit -m "T010: GSR paytables (JoB 9/5, JoB 9/6, DB 9/7/5, DWBP, Deuces 20/12/10), per-machine max bet (D16)" && git push`
+- [ ] **Check the GSR tab:** JoB 9/5 should show 5¢ only, with the paytable at "× 20 coins" and a $1.00 bet. The $1 games should show a $10 bet. Switching games should snap the denomination.
+- [ ] *(GSR questions)* (1) Is `preview.webp` (the $1 JoB 9/6) also machine #13013? (2) What paytables run at **10¢, 25¢, 50¢**? Photograph them. (3) The deuces machine in `4.webp`: what's its number, and does it offer other denominations? (4) Are GSR tier points also 1 per $2 coin-in?
 - [ ] **Check the Assist tab** at 375px: A♠K♠Q♠J♠9♦ → hold AKQJ♠ (18.3830); J♥10♦9♣5♠3♥ → J♥ (0.4719); K♦Q♦J♣7♠3♥ → K♦Q♦ (0.5806). Try Undo, tapping a card to re-enter it, and New hand.
 - [ ] **Check the Bankroll tab:** JoB 8/5 · 5¢ · ~4 hours · 95% · 0% → $59.50 (238 bets); Deuces → $77.75. Try "Start a session with $X" and 375px width.
 - [ ] **Try it:** `npm run dev` → start $20 at 5¢, play ~20 hands (1 point per 8 hands at 5¢), reload mid-session (balance should resume), end the session, open the log, check 375px width.

@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import type { GameDef, GameId } from '../engine/index.ts';
+import { offerAt, type GameDef, type GameId } from '../engine/index.ts';
 import { formatCents } from '../lib/bankroll.ts';
 import { compareRows, mineFromTotals, rateLabel } from '../lib/bankrollTab.ts';
 import { betsToCents, riskFor, RISK } from '../lib/riskData.ts';
 import type { TotalsEntry } from '../lib/stats.ts';
-import { CONFIRMED_DENOMINATIONS, DENOMINATIONS, DENOM_LABELS } from '../lib/storage.ts';
+import { DENOM_LABELS } from '../lib/storage.ts';
 
 /** Short labels for the risk horizons (the parenthetical copy in RISK.md). */
 const HORIZON_LABELS: Record<number, string> = {
@@ -65,7 +65,9 @@ export default function BankrollTab({
   const perError = rgame?.perError.find((p) => p.errorRate === errorRate);
   const horizon = perError?.horizons.find((h) => h.hands === hands);
   const bets = horizon?.bankrollNeededBets[String(target)];
-  const cents = bets !== undefined ? betsToCents(bets, denomination) : undefined;
+  const offer = offerAt(game, denomination);
+  const maxCoins = offer?.maxCoins ?? 0;
+  const cents = bets !== undefined && offer ? betsToCents(bets, denomination, maxCoins) : undefined;
   const startCents = cents !== undefined ? Math.ceil(cents / 100) * 100 : undefined;
   const rows = compareRows(denomination, errorRate, target);
   const targetLabel = `${Math.round(target * 100)}%`;
@@ -87,15 +89,15 @@ export default function BankrollTab({
         <div className="bankroll-control">
           <span className="bankroll-control-label">Denomination</span>
           <div className="chip-row" role="group" aria-label="Denomination">
-            {DENOMINATIONS.map((d) => (
+            {game.offers.map((o) => (
               <button
-                key={d}
+                key={o.denomination}
                 type="button"
-                className={`chip${d === denomination ? ' active' : ''}`}
-                onClick={() => onDenominationChange(d)}
+                className={`chip${o.denomination === denomination ? ' active' : ''}`}
+                onClick={() => onDenominationChange(o.denomination)}
               >
-                {DENOM_LABELS[d]}
-                {!CONFIRMED_DENOMINATIONS.includes(d) && <span className="denom-unconfirmed">*</span>}
+                {DENOM_LABELS[o.denomination]}
+                {!o.confirmed && <span className="denom-unconfirmed">*</span>}
               </button>
             ))}
           </div>
@@ -159,7 +161,7 @@ export default function BankrollTab({
               {DENOM_LABELS[denomination]} with a {targetLabel} chance of not going broke.
             </p>
             <div className="bankroll-substats">
-              <span>Expected loss: {formatCents(betsToCents(horizon.expectedLossBets, denomination))}</span>
+              <span>Expected loss: {formatCents(betsToCents(horizon.expectedLossBets, denomination, maxCoins))}</span>
               <span>Return at this error rate: {(perError.return * 100).toFixed(3)}%</span>
             </div>
           </div>
@@ -212,12 +214,13 @@ export default function BankrollTab({
       )}
 
       <p className="bankroll-footnote">
-        One bet is one max-bet hand (5 coins); dollars = bets × 5 × denomination. "Going broke" means your balance
+        One bet is one max-bet hand ({maxCoins} coins on this machine at {DENOM_LABELS[denomination]}); dollars =
+        bets × coins × denomination. "Going broke" means your balance
         can&apos;t cover a max bet, and surviving means playing every hand of the session length without that
         happening. With an error rate, each hand independently plays the next-best hold with that chance — real
         mistakes aren&apos;t all next-best or evenly spread, so treat those columns as a guide. Tier points, free
-        play, and other comps aren&apos;t counted. Paytables are the photographed 10¢ ones (confirmed at 5¢–25¢;
-        another denomination may have a different paytable on the floor). The numbers are exact and were checked
+        play, and other comps aren&apos;t counted. Each paytable is the one photographed at the denominations shown (an
+        asterisk means not yet confirmed at that denomination). The numbers are exact and were checked
         against 240 million simulated hands.
       </p>
     </section>

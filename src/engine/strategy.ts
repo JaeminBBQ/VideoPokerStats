@@ -64,10 +64,18 @@ export function deucesPattern(game: GameDef, held: readonly Card[]): Pattern {
   }
   const maxCount = Math.max(...counts.values());
   const flush = (suits & (suits - 1)) === 0;
+  // Deuces Wild Bonus Poker pays five of a kind by rank and four deuces + ace extra, so aces and
+  // the rank group of a kind are part of the decision there.
+  const bonus = game.rows.some((r) => r.key === 'five-aces');
+  const group = (r: number) => (r === ACE ? 'Aces' : r <= 3 ? '3s–5s' : '6s–Ks');
+  if (bonus && d > 0 && nats.length === 1 && rankOf(nats[0]) === ACE)
+    return { key: `d${d}:ace`, label: `${plural(d, 'deuce')} + Ace` };
   if (counts.size === 1 && maxCount > 1) {
     const kind = maxCount + d;
     const name = kind === 4 ? 'Four of a Kind' : kind === 3 ? 'Three of a Kind' : 'Pair';
-    return { key: `d${d}:kind${kind}`, label: d ? `${name} (${deuces.slice(0, -3)} + ${maxCount} natural)` : name };
+    const g = bonus ? group(rankOf(nats[0])) : '';
+    const label = d ? `${name} (${deuces.slice(0, -3)} + ${maxCount} natural)` : name;
+    return bonus ? { key: `d${d}:kind${kind}:${g}`, label: `${label}, ${g}` } : { key: `d${d}:kind${kind}`, label };
   }
   if (d === 0 && n === 4 && counts.size === 2 && maxCount === 2) return { key: 'twopair', label: 'Two Pair' };
   if (maxCount === 1) {
@@ -126,6 +134,12 @@ export function naturalPattern(game: GameDef, held: readonly Card[]): Pattern {
   if (n === 5) {
     const i = game.evaluate(held);
     const label = i < 0 ? 'Nothing (hold 5)' : game.rows[i].label;
+    // Where four aces pay a bonus, aces full can be worth breaking for the three aces.
+    const acesFull =
+      game.rows[i]?.key === 'full-house' &&
+      game.rows.some((r) => r.key === 'four-aces') &&
+      held.filter((c) => rankOf(c) === ACE).length === 3;
+    if (acesFull) return { key: 'made:aces-full', label: 'Pat Full House (aces full)' };
     return { key: `made:${label}`, label: `Pat ${label}` };
   }
   if (n === 0) return { key: 'none', label: 'Discard everything' };

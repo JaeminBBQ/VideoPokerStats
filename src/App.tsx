@@ -6,7 +6,9 @@ import {
   deal,
   disguiseHand,
   draw,
+  maxCoinsAt,
   patternFor,
+  snapDenomination,
   type Card,
   type GameId,
   type HoldEv,
@@ -15,6 +17,7 @@ import {
 } from './engine/index.ts';
 import {
   applyHand,
+  betCents,
   canAfford,
   formatCents,
   settleHand,
@@ -76,13 +79,12 @@ function sanitizeSettings(s: Settings): Settings {
       if (GAMES[k as GameId] && (v === 'deal' || v === 'drill')) mode[k as GameId] = v;
     }
   }
-  return {
-    gameId: GAMES[s.gameId] ? s.gameId : DEFAULT_SETTINGS.gameId,
-    denomination: (DENOMINATIONS as readonly number[]).includes(s.denomination)
-      ? s.denomination
-      : DEFAULT_SETTINGS.denomination,
-    mode,
-  };
+  const gameId = GAMES[s.gameId] ? s.gameId : DEFAULT_SETTINGS.gameId;
+  const denomination = (DENOMINATIONS as readonly number[]).includes(s.denomination)
+    ? s.denomination
+    : DEFAULT_SETTINGS.denomination;
+  // `denomination` is the player's preference; each game plays the closest one it's offered at (D16).
+  return { gameId, denomination, mode };
 }
 
 type Phase = 'preparing' | 'ready' | 'dealt' | 'graded' | 'error';
@@ -122,6 +124,7 @@ export default function App() {
   const [lifetime, setLifetime] = useState<Lifetime>(() => storage.loadLifetime());
   const [sessionLog, setSessionLog] = useState<SessionLogEntry[]>(() => storage.loadSessionLog());
   const [sessionGames, setSessionGames] = useState<GameId[]>([]);
+  const [sessionDenoms, setSessionDenoms] = useState<number[]>([]);
   const [drillCtx, setDrillCtx] = useState<DrillCtx | null>(null);
   const [drillPreparing, setDrillPreparing] = useState(false);
   const [lastDrill, setLastDrill] = useState<{ gameId: GameId; key: string } | null>(null);
@@ -133,6 +136,10 @@ export default function App() {
   const gameId = settings.gameId;
   const game = GAMES[gameId];
   const mode = settings.mode[gameId] ?? 'deal';
+  // The preference stays put across games (so a trip to a $1-only game and back keeps 5¢); this is
+  // what the current game actually plays.
+  const denomination = snapDenomination(game, settings.denomination);
+  const maxCoins = maxCoinsAt(game, denomination);
 
   const confusions = groupConfusions(history, game);
   const toDrill = confusions.filter((c) => !drillState[gameId]?.[c.key]?.cleared);
@@ -189,7 +196,7 @@ export default function App() {
 
   const dealNew = () => {
     // Deal mode needs an active session that can cover the bet (drill plays for free).
-    if (mode === 'deal' && (session === null || !canAfford(session, settings.denomination))) return;
+    if (mode === 'deal' && (session === null || !canAfford(session, game, denomination))) return;
     setHand(deal(game.deckSize, secureRng()));
     setHeldMask(0);
     setResult(null);
@@ -266,10 +273,11 @@ export default function App() {
       if (mode === 'deal' && session) {
         // The machine's second deal: held cards stay, the rest are drawn, and the paytable settles.
         const finalHand = draw(hand, heldMask, game.deckSize, secureRng());
-        const outcome = settleHand(game, finalHand, settings.denomination);
+        const outcome = settleHand(game, finalHand, denomination);
         setSession((s) => (s ? applyHand(s, game, outcome) : s));
         setHand(finalHand);
         setSessionGames((games) => (games.includes(gameId) ? games : [...games, gameId]));
+        setSessionDenoms((ds) => (ds.includes(denomination) ? ds : [...ds, denomination]));
         setResult({ holds, grade: g, originalHand: hand, outcome });
       } else {
         setResult({ holds, grade: g });
@@ -357,7 +365,7 @@ export default function App() {
     mask === 0
       ? 'Discard all'
       : (result?.originalHand ?? hand ?? []).filter((_, i) => mask & (1 << i)).map(cardToString).join(' ');
-  const money = (bets: number) => '$' + (bets * settings.denomination * 5).toFixed(2);
+  const money = (bets: number) => '$' + (bets * denomination * maxCoins).toFixed(2);
 
   /** Grading emphasis for the dealt hand, by position. */
   const gradeEmphasis = (i: number): CardEmphasis => {
@@ -391,6 +399,7 @@ export default function App() {
   const startBankroll = (cents: number) => {
     setSession(startSession(cents, Date.now()));
     setSessionGames([]);
+    setSessionDenoms([]);
     setHand(null);
     setHeldMask(0);
     setResult(null);
@@ -400,11 +409,13 @@ export default function App() {
   /** End the session: coin-in joins the lifetime total, a summary goes to the log. */
   const finishSession = () => {
     if (!session) return;
-    const ended = closeSession(session, settings.denomination, sessionGames, lifetime, sessionLog, Date.now());
+    const denoms = sessionDenoms.length ? sessionDenoms : [denomination];
+    const ended = closeSession(session, denoms, sessionGames, lifetime, sessionLog, Date.now());
     setLifetime(ended.lifetime);
     setSessionLog(ended.log);
     setSession(null);
     setSessionGames([]);
+    setSessionDenoms([]);
     setHand(null);
     setHeldMask(0);
     setResult(null);
@@ -415,8 +426,8 @@ export default function App() {
     !busy &&
     (phase === 'ready' || phase === 'graded' || phase === 'error') &&
     !(mode === 'drill' && toDrill.length === 0) &&
-    !(mode === 'deal' && (session === null || !canAfford(session, settings.denomination)));
-  const outOfCredits = mode === 'deal' && session !== null && !canAfford(session, settings.denomination);
+    !(mode === 'deal' && (session === null || !canAfford(session, game, denomination)));
+  const outOfCredits = mode === 'deal' && session !== null && !canAfford(session, game, denomination);
 
   const feedbackBestLine = result
     ? patternFor(game, (result.originalHand ?? hand ?? []).filter((_, i) => result.grade.bestMask & (1 << i)))
@@ -470,7 +481,7 @@ export default function App() {
         )}
         <GamePicker gameId={gameId} onSelect={switchGame} />
         <p className="where">{game.where}</p>
-        <Paytable game={game} open={paytableOpen} onToggle={() => setPaytableOpen((o) => !o)} />
+        <Paytable game={game} maxCoins={maxCoins} open={paytableOpen} onToggle={() => setPaytableOpen((o) => !o)} />
       </header>
 
       {tab === 'chart' ? (
@@ -482,7 +493,7 @@ export default function App() {
           <BankrollTab
             game={game}
             gameId={gameId}
-            denomination={settings.denomination}
+            denomination={denomination}
             onDenominationChange={(d) => setSettings((s) => ({ ...s, denomination: d }))}
             totalsEntry={totalsEntry}
             sessionActive={session !== null}
@@ -541,7 +552,8 @@ export default function App() {
 
             {mode === 'deal' && session === null ? (
               <BankrollSetup
-                denomination={settings.denomination}
+                game={game}
+                denomination={denomination}
                 onDenominationChange={(d) => setSettings((s) => ({ ...s, denomination: d }))}
                 onStart={startBankroll}
               />
@@ -549,9 +561,10 @@ export default function App() {
               <>
                 {mode === 'deal' && session !== null && (
                   <BankrollBar
+                    maxCoins={maxCoins}
                     session={session}
                     lifetime={lifetime}
-                    denomination={settings.denomination}
+                    denomination={denomination}
                     onEnd={finishSession}
                   />
                 )}
@@ -588,9 +601,13 @@ export default function App() {
 
                 {outOfCredits ? (
                   <div className="controls">
-                    <span className="out-credits">Out of credits</span>
+                    <span className="out-credits">
+                      {session && session.balanceCents > 0
+                        ? `${formatCents(session.balanceCents)} left can't cover this game's ${formatCents(betCents(denomination, maxCoins))} bet. Pick another game or denomination, or end the session.`
+                        : 'Out of credits'}
+                    </span>
                     <button type="button" className="btn primary" onClick={finishSession}>
-                      New session
+                      End session
                     </button>
                   </div>
                 ) : (
@@ -661,7 +678,7 @@ export default function App() {
                         </div>
                         <div>
                           Cost: {result.grade.evLost.toFixed(4)} bets = {money(result.grade.evLost)} at{' '}
-                          {DENOM_LABELS[settings.denomination]} × 5
+                          {DENOM_LABELS[denomination]} × {maxCoins}
                         </div>
                       </div>
                     </>
@@ -681,9 +698,10 @@ export default function App() {
             )}
 
             <StatsPanel
+              maxCoins={maxCoins}
               gameName={game.name}
               totals={totalsEntry}
-              denomination={settings.denomination}
+              denomination={denomination}
               onReset={resetStats}
             />
 

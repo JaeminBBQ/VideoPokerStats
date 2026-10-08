@@ -15,10 +15,11 @@ interface Props {
   session: Session;
   lifetime: Lifetime;
   denomination: number;
+  maxCoins: number;
   onEnd: () => void;
 }
 
-export default function BankrollBar({ session, lifetime, denomination, onEnd }: Props) {
+export default function BankrollBar({ session, lifetime, denomination, maxCoins, onEnd }: Props) {
   const [confirming, setConfirming] = useState(false);
   const net = netCents(session);
   return (
@@ -29,7 +30,7 @@ export default function BankrollBar({ session, lifetime, denomination, onEnd }: 
           <div className="stat-label">Balance</div>
         </div>
         <div className="stat">
-          <div className="stat-value">{formatCents(betCents(denomination))}</div>
+          <div className="stat-value">{formatCents(betCents(denomination, maxCoins))}</div>
           <div className="stat-label">Bet · {DENOM_LABELS[denomination]}</div>
         </div>
         <div className="stat">

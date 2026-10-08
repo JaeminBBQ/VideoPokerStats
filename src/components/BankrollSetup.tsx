@@ -1,18 +1,21 @@
 import { useState, type FormEvent } from 'react';
+import { maxCoinsAt, offerAt, type GameDef } from '../engine/index.ts';
 import { betCents, formatCents } from '../lib/bankroll.ts';
-import { CONFIRMED_DENOMINATIONS, DENOMINATIONS, DENOM_LABELS } from '../lib/storage.ts';
+import { DENOM_LABELS } from '../lib/storage.ts';
 
 const PRESETS = [20, 50, 100, 200];
 
 interface Props {
+  game: GameDef;
   denomination: number;
   onDenominationChange: (d: number) => void;
   onStart: (bankrollCents: number) => void;
 }
 
-export default function BankrollSetup({ denomination, onDenominationChange, onStart }: Props) {
+export default function BankrollSetup({ game, denomination, onDenominationChange, onStart }: Props) {
   const [text, setText] = useState('');
-  const minBet = betCents(denomination);
+  const minBet = betCents(denomination, maxCoinsAt(game, denomination));
+  const confirmed = offerAt(game, denomination)?.confirmed ?? false;
   const error = (() => {
     if (text.trim() === '') return null;
     const n = Number(text);
@@ -31,22 +34,21 @@ export default function BankrollSetup({ denomination, onDenominationChange, onSt
     <section className="panel bankroll-setup" aria-label="Bankroll setup">
       <h2>Start a session</h2>
       <div className="setup-denoms" role="group" aria-label="Denomination">
-        {DENOMINATIONS.map((d) => (
+        {game.offers.map((o) => (
           <button
-            key={d}
+            key={o.denomination}
             type="button"
-            className={`denom-chip${d === denomination ? ' active' : ''}`}
-            onClick={() => onDenominationChange(d)}
+            className={`denom-chip${o.denomination === denomination ? ' active' : ''}`}
+            onClick={() => onDenominationChange(o.denomination)}
           >
-            {DENOM_LABELS[d]} · {formatCents(betCents(d))}/hand
-            {!CONFIRMED_DENOMINATIONS.includes(d) && <span className="denom-unconfirmed">*</span>}
+            {DENOM_LABELS[o.denomination]} · {formatCents(betCents(o.denomination, o.maxCoins))}/hand
+            {!o.confirmed && <span className="denom-unconfirmed">*</span>}
           </button>
         ))}
       </div>
-      {!CONFIRMED_DENOMINATIONS.includes(denomination) && (
+      {!confirmed && (
         <p className="setup-note">
-          * Paytable not yet confirmed at {DENOM_LABELS[denomination]}. Plays the 10¢ machine's paytable, which matches at
-          5¢–25¢.
+          * Paytable not yet confirmed at {DENOM_LABELS[denomination]}. Plays the photographed paytable ({game.where}).
         </p>
       )}
       <div className="presets">

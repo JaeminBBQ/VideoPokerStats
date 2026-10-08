@@ -7,11 +7,32 @@ export interface PayRow {
   pays: number;
 }
 
-export type GameId = 'job-8-5' | 'bonus-6-5' | 'lb-deuces-16-13' | 'bpd-7-5';
+export type GameId =
+  | 'job-8-5'
+  | 'bonus-6-5'
+  | 'lb-deuces-16-13'
+  | 'bpd-7-5'
+  | 'gsr-job-9-5'
+  | 'gsr-job-9-6'
+  | 'gsr-db-9-7-5'
+  | 'gsr-dwbp'
+  | 'gsr-deuces-20-12-10';
 
 /** Casinos where the owner has photographed a paytable. Add one only with a photo in `context/`. */
-export type Venue = 'Legends Bay';
-export const VENUES: Venue[] = ['Legends Bay'];
+export type Venue = 'Legends Bay' | 'GSR';
+export const VENUES: Venue[] = ['Legends Bay', 'GSR'];
+
+/**
+ * A denomination the game is offered at with this paytable. `maxCoins` is the bet that earns the
+ * full royal (the pays are per coin at that bet). `confirmed`: photographed or confirmed by the owner;
+ * unconfirmed denominations are shown with an asterisk.
+ */
+export interface Offer {
+  /** Dollars per coin, matching `DENOMINATIONS` in src/lib/storage.ts (0.05 = 5¢). */
+  denomination: number;
+  maxCoins: number;
+  confirmed: boolean;
+}
 
 export interface GameDef {
   id: GameId;
@@ -22,6 +43,8 @@ export interface GameDef {
   proof: string;
   /** Where the user can find it; shown in the UI. */
   where: string;
+  /** Denominations this paytable is offered at, smallest first (D16). */
+  offers: Offer[];
   deckSize: 52 | 53;
   /** Rows ordered best first. */
   rows: PayRow[];
@@ -129,6 +152,42 @@ function deucesRows(pays: number[]): PayRow[] {
   return DEUCES_ROWS.map(([key, label], i) => ({ key, label, pays: pays[i] }));
 }
 
+// ---------------------------------------------------------------- Deuces Wild Bonus Poker
+
+const DWBP_ROWS = [
+  ['natural-royal', 'Royal Flush (no deuces)'],
+  ['four-deuces-ace', 'Four Deuces + Ace'],
+  ['four-deuces', 'Four Deuces'],
+  ['five-aces', 'Five Aces'],
+  ['five-3-5', 'Five 3s–5s'],
+  ['five-6-k', 'Five 6s–Ks'],
+  ['wild-royal', 'Wild Royal Flush'],
+  ['straight-flush', 'Straight Flush'],
+  ['four-kind', 'Four of a Kind'],
+  ['full-house', 'Full House'],
+  ['flush', 'Flush'],
+  ['straight', 'Straight'],
+  ['three-kind', 'Three of a Kind'],
+] as const;
+
+/** Deuces Wild with five of a kind split by rank and a bonus for four deuces with an ace. */
+function dwbpEvaluate(hand: readonly Card[]): number {
+  const base = deucesEvaluate(hand);
+  if (base <= 0) return base; // no pay, or natural royal (index 0 in both tables)
+  if (base === 1) return hand.some((c) => rankOf(c) === ACE) ? 1 : 2;
+  if (base === 2) return 6;
+  if (base === 3) {
+    // Five of a kind without four deuces: every natural shares one rank.
+    const rank = rankOf(hand.find((c) => rankOf(c) !== 0)!);
+    return rank === ACE ? 3 : rank <= 3 ? 4 : 5; // rank 1..3 = 3s, 4s, 5s
+  }
+  return base + 3; // straight flush .. three of a kind
+}
+
+function dwbpRows(pays: number[]): PayRow[] {
+  return DWBP_ROWS.map(([key, label], i) => ({ key, label, pays: pays[i] }));
+}
+
 // ---------------------------------------------------------------- Bonus family (natural cards, Jacks or Better)
 
 type QuadRule = { key: string; label: string; pays: number; quad: (r: number) => boolean; kicker?: (r: number) => boolean };
@@ -189,6 +248,19 @@ const job85 = bonusGame([{ key: 'four-kind', label: 'Four of a Kind', pays: 25, 
 const bonus65 = bonusGame(quads(80, 40, 25), 6, 5, 4, 2);
 const bpd75 = bonusGame([{ key: 'four-kind', label: 'Four of a Kind', pays: 80, quad: () => true }], 7, 5, 4, 1);
 
+// GSR (owner photos context/gsr/, 2026-10-08). Machine #13013 offers 5¢–$1; the paytable changes
+// with the denomination, so each photographed (game, denomination) is its own game.
+const job95 = bonusGame([{ key: 'four-kind', label: 'Four of a Kind', pays: 25, quad: () => true }], 9, 5, 4, 2);
+const job96 = bonusGame([{ key: 'four-kind', label: 'Four of a Kind', pays: 25, quad: () => true }], 9, 6, 4, 2);
+const db975 = bonusGame(quads(160, 80, 50), 9, 7, 5, 1);
+
+/** Legends Bay #12139: photographed at 10¢; the owner confirmed 5¢–25¢ match (D11, D12). */
+const LB_OFFERS: Offer[] = [0.01, 0.05, 0.1, 0.25, 0.5, 1, 2, 5].map((denomination) => ({
+  denomination,
+  maxCoins: 5,
+  confirmed: denomination >= 0.05 && denomination <= 0.25,
+}));
+
 // ---------------------------------------------------------------- catalog
 
 export const GAMES: Record<GameId, GameDef> = {
@@ -198,6 +270,7 @@ export const GAMES: Record<GameId, GameDef> = {
     proof: 'context/4.webp',
     name: 'Deuces Wild — 16/13',
     where: 'Legends Bay Game King #12139, 10¢ (photographed 2026-10-04)',
+    offers: LB_OFFERS,
     deckSize: 52,
     rows: deucesRows([800, 200, 25, 16, 13, 4, 3, 2, 2, 1]),
     evaluate: deucesEvaluate,
@@ -211,6 +284,7 @@ export const GAMES: Record<GameId, GameDef> = {
     proof: 'context/3.webp',
     name: 'Jacks or Better — 8/5',
     where: 'Legends Bay Game King #12139, 10¢ (photographed 2026-10-04)',
+    offers: LB_OFFERS,
     deckSize: 52,
     ...job85,
     publishedReturn: 0.9730,
@@ -223,6 +297,7 @@ export const GAMES: Record<GameId, GameDef> = {
     proof: 'context/2.webp',
     name: 'Bonus Poker — 6/5',
     where: 'Legends Bay Game King #12139, 10¢ (photographed 2026-10-04)',
+    offers: LB_OFFERS,
     deckSize: 52,
     ...bonus65,
     publishedReturn: 0.9687,
@@ -235,11 +310,79 @@ export const GAMES: Record<GameId, GameDef> = {
     proof: 'context/1.webp',
     name: 'Bonus Poker Deluxe — 7/5',
     where: 'Legends Bay Game King #12139, 10¢ (photographed 2026-10-04)',
+    offers: LB_OFFERS,
     deckSize: 52,
     ...bpd75,
     publishedReturn: 0.9625,
     publishedDecimals: 2,
     source: 'https://wizardofodds.com/games/video-poker/tables/bonus-poker-deluxe/',
+  },
+  'gsr-job-9-5': {
+    id: 'gsr-job-9-5',
+    venue: 'GSR',
+    proof: 'context/gsr/1.webp',
+    name: 'Jacks or Better — 9/5 (5¢)',
+    where: 'GSR machine #13013, 5¢, max bet 20 coins (photographed 2026-10-08)',
+    offers: [{ denomination: 0.05, maxCoins: 20, confirmed: true }],
+    deckSize: 52,
+    ...job95,
+    publishedReturn: 0.9845,
+    publishedDecimals: 2,
+    source: 'https://wizardofodds.com/games/video-poker/tables/jacks-or-better/ (9/5: 98.45%); paytable from owner photo',
+  },
+  'gsr-job-9-6': {
+    id: 'gsr-job-9-6',
+    venue: 'GSR',
+    proof: 'context/gsr/preview.webp',
+    name: 'Jacks or Better — 9/6 ($1)',
+    where: 'GSR, $1, max bet 10 coins (photographed 2026-10-08)',
+    offers: [{ denomination: 1, maxCoins: 10, confirmed: true }],
+    deckSize: 52,
+    ...job96,
+    publishedReturn: 0.9954,
+    publishedDecimals: 2,
+    source: 'https://wizardofodds.com/games/video-poker/tables/jacks-or-better/ (9/6: 99.54%); paytable from owner photo',
+  },
+  'gsr-db-9-7-5': {
+    id: 'gsr-db-9-7-5',
+    venue: 'GSR',
+    proof: 'context/gsr/2.webp',
+    name: 'Double Bonus — 9/7/5 ($1)',
+    where: 'GSR machine #13013, $1, max bet 10 coins (photographed 2026-10-08)',
+    offers: [{ denomination: 1, maxCoins: 10, confirmed: true }],
+    deckSize: 52,
+    ...db975,
+    publishedReturn: 0.9911,
+    publishedDecimals: 2,
+    source: 'https://wizardofodds.com/games/video-poker/tables/double-bonus/ (9/7/5: 99.11%); paytable from owner photo',
+  },
+  'gsr-dwbp': {
+    id: 'gsr-dwbp',
+    venue: 'GSR',
+    proof: 'context/gsr/3.webp',
+    name: 'Deuces Wild Bonus Poker ($1)',
+    where: 'GSR machine #13013, $1, max bet 10 coins (photographed 2026-10-08)',
+    offers: [{ denomination: 1, maxCoins: 10, confirmed: true }],
+    deckSize: 52,
+    rows: dwbpRows([800, 400, 200, 80, 40, 20, 25, 9, 4, 4, 3, 1, 1]),
+    evaluate: dwbpEvaluate,
+    publishedReturn: 0.9945,
+    publishedDecimals: 2,
+    source: 'https://wizardofodds.com/games/video-poker/tables/bonus-deuces-wild/ (9/4/4: 99.45%); videopokertrainer.org/bonus-deuces-wild/ (99.4502%); paytable from owner photo',
+  },
+  'gsr-deuces-20-12-10': {
+    id: 'gsr-deuces-20-12-10',
+    venue: 'GSR',
+    proof: 'context/gsr/4.webp',
+    name: 'Deuces Wild — 20/12/10 (5¢)',
+    where: 'GSR, 5¢, max bet 20 coins (photographed 2026-10-08)',
+    offers: [{ denomination: 0.05, maxCoins: 20, confirmed: true }],
+    deckSize: 52,
+    rows: deucesRows([800, 200, 20, 12, 10, 4, 4, 3, 2, 1]),
+    evaluate: deucesEvaluate,
+    publishedReturn: 0.975791,
+    publishedDecimals: 4,
+    source: 'https://wizardofodds.com/games/video-poker/tables/deuces-wild/ (20-12-10-4-4-3: 0.975791); paytable from owner photo',
   },
 };
 
@@ -247,6 +390,26 @@ export const GAME_LIST: GameDef[] = Object.values(GAMES);
 
 /** Games for a casino tab, best return first. */
 export const gamesAt = (venue: Venue): GameDef[] => GAME_LIST.filter((g) => g.venue === venue).sort((a, b) => b.publishedReturn - a.publishedReturn);
+
+/** The game's offer at `denomination`, if this paytable runs there. */
+export const offerAt = (game: GameDef, denomination: number): Offer | undefined =>
+  game.offers.find((o) => o.denomination === denomination);
+
+/** `denomination` if the game is offered there, otherwise its closest offered denomination. */
+export function snapDenomination(game: GameDef, denomination: number): number {
+  if (offerAt(game, denomination)) return denomination;
+  return game.offers.reduce(
+    (best, o) => (Math.abs(o.denomination - denomination) < Math.abs(best - denomination) ? o.denomination : best),
+    game.offers[0].denomination,
+  );
+}
+
+/** Coins in a max bet for this game at `denomination`. Throws if the game isn't offered there. */
+export function maxCoinsAt(game: GameDef, denomination: number): number {
+  const o = offerAt(game, denomination);
+  if (!o) throw new Error(`${game.id} is not offered at ${denomination}`);
+  return o.maxCoins;
+}
 
 /** Payout per coin for a final 5-card hand. */
 export function payout(game: GameDef, hand: readonly Card[]): number {

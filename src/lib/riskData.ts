@@ -38,8 +38,6 @@ export interface RiskData {
 
 export const RISK: RiskData = data as unknown as RiskData;
 
-export const COINS_PER_BET = 5;
-
 export const riskFor = (gameId: GameId): RiskGame | undefined => RISK.games.find((g) => g.gameId === gameId);
 
 /** The error-rate column closest to `rate` (fraction, e.g. 0.012 → 0.01), for "your error rate". */
@@ -53,6 +51,6 @@ export function bankrollBets(gameId: GameId, errorRate: number, hands: number, t
   return pe?.horizons.find((h) => h.hands === hands)?.bankrollNeededBets[String(target)];
 }
 
-/** Bets → cents at a denomination (dollars per coin), max bet. */
-export const betsToCents = (bets: number, denomination: number): number =>
-  bets * COINS_PER_BET * Math.round(denomination * 100);
+/** Bets → cents at a denomination (dollars per coin) and max bet of `maxCoins` coins. */
+export const betsToCents = (bets: number, denomination: number, maxCoins: number): number =>
+  bets * maxCoins * Math.round(denomination * 100);

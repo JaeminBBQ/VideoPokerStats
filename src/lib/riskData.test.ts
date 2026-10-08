@@ -32,8 +32,8 @@ describe('risk data', () => {
     expect(nearestErrorRate(0.012)).toBe(0.01);
     expect(nearestErrorRate(0.004)).toBe(0.005);
     expect(nearestErrorRate(0.09)).toBe(0.02);
-    expect(betsToCents(238, 0.05)).toBe(5950); // $59.50
-    expect(betsToCents(241, 1)).toBe(120500);
+    expect(betsToCents(238, 0.05, 5)).toBe(5950); // $59.50
+    expect(betsToCents(241, 1, 5)).toBe(120500);
   });
 
   it('returns undefined for combinations not in the data', () => {

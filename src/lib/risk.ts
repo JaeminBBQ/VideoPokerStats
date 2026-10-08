@@ -1,7 +1,7 @@
 /**
  * Exact risk of ruin for video poker by dynamic programming (no Monte Carlo).
  *
- * Model. The bankroll is a whole number of bets (one bet = a max-bet hand, 5 coins). Before
+ * Model. The bankroll is a whole number of bets (one bet = a max-bet hand (coins per machine, D16)). Before
  * each hand, a bankroll below 1 bet is broke (ruined). Otherwise the player pays 1 bet and gets
  * back `pays[k]` bets with probability `probs[k]`. Hands are independent.
  *

@@ -1,7 +1,4 @@
-import { payout, type Card, type GameDef } from '../engine/index.ts';
-
-/** Coins per hand: the trainer always plays max bet. */
-export const MAX_COINS = 5;
+import { maxCoinsAt, payout, type Card, type GameDef } from '../engine/index.ts';
 
 /** Tier credit rate: 1 point per $2 of coin-in (owner's casino rule, D13). */
 export const CENTS_PER_POINT = 200;
@@ -31,19 +28,21 @@ export interface HandOutcome {
 /** Dollars per coin (0.05) → cents per coin (5). */
 export const denomCents = (denomination: number): number => Math.round(denomination * 100);
 
-export const betCents = (denomination: number): number => MAX_COINS * denomCents(denomination);
+/** A max bet in cents. The trainer always plays max bet; how many coins that is depends on the machine (D16). */
+export const betCents = (denomination: number, maxCoins: number): number => maxCoins * denomCents(denomination);
 
 export function startSession(startCents: number, now: number): Session {
   if (!Number.isInteger(startCents) || startCents <= 0) throw new Error(`startSession: bad bankroll ${startCents}`);
   return { startedAt: now, startCents, balanceCents: startCents, hands: 0, coinInCents: 0, wonCents: 0, theoReturnCents: 0 };
 }
 
-export const canAfford = (s: Session, denomination: number): boolean => s.balanceCents >= betCents(denomination);
+export const canAfford = (s: Session, game: GameDef, denomination: number): boolean =>
+  s.balanceCents >= betCents(denomination, maxCoinsAt(game, denomination));
 
 /** What a final hand pays at max bet and this denomination. */
 export function settleHand(game: GameDef, finalHand: readonly Card[], denomination: number): HandOutcome {
   const rowIndex = game.evaluate(finalHand);
-  const bet = betCents(denomination);
+  const bet = betCents(denomination, maxCoinsAt(game, denomination));
   return { betCents: bet, winCents: payout(game, finalHand) * bet, rowIndex };
 }
 

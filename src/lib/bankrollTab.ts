@@ -1,4 +1,4 @@
-import { GAME_LIST, type GameDef } from '../engine/index.ts';
+import { GAME_LIST, offerAt, type GameDef } from '../engine/index.ts';
 import { bankrollBets, betsToCents, nearestErrorRate, riskFor, RISK } from './riskData.ts';
 import { errorRate, type TotalsEntry } from './stats.ts';
 
@@ -29,16 +29,18 @@ export function rateLabel(rate: number): string {
 }
 
 /**
- * Compare-table rows: every catalog game with risk data, one cell per `RISK.horizons` column,
+ * Compare-table rows: every catalog game offered at `denomination` that has risk data, each at its own
+ * max bet, one cell per `RISK.horizons` column,
  * sorted by the 2,000-hand column (cheapest first); ties break on game id for stability.
  */
 export function compareRows(denomination: number, errorRate: number, target: number): CompareRow[] {
   const rows: CompareRow[] = [];
   for (const game of GAME_LIST) {
-    if (!riskFor(game.id)) continue;
+    const offer = offerAt(game, denomination);
+    if (!offer || !riskFor(game.id)) continue;
     const cells: CompareCell[] = RISK.horizons.map((hands) => {
       const bets = bankrollBets(game.id, errorRate, hands, target) ?? 0;
-      return { hands, bets, cents: betsToCents(bets, denomination) };
+      return { hands, bets, cents: betsToCents(bets, denomination, offer.maxCoins) };
     });
     rows.push({ game, cells });
   }
