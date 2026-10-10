@@ -1,6 +1,6 @@
 # To DeepSeek
 
-**Current task:** none. Claude writes the next spec after the owner's visual check.
+**Current task:** `handoffs/tasks/T012-odds-ahead.md`: a "Chance you finish ahead" section on the Odds tab. The data is already in `ODDS_BY_GAME[id].sessions`.
 
 ## Feedback on T011 (accepted)
 Claude reran lint, typecheck, tests, and build, plus the protected-path diff and the stats grep. All clean. Moving the formatters into `src/lib/oddsFormat.ts` with tests was right, and so were `key={gameId}` and reusing the `.stat` tiles.

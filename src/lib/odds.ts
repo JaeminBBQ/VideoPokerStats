@@ -20,10 +20,24 @@ export interface OddsDraw {
   odds: Record<string, number>;
 }
 
+/** Chance of finishing a session of `hands` max-bet hands ahead, perfect play, bankroll never runs out. */
+export interface OddsSession {
+  hands: number;
+  /** P(paid back more than bet), P(exactly what was bet), P(less). Sum to 1. */
+  ahead: number;
+  even: number;
+  behind: number;
+  /** P(ahead and no royal hit): `ahead - aheadNoRoyal` is the share of winning sessions that needed a royal. */
+  aheadNoRoyal: number;
+  /** Average result in bets (negative = loss): hands × (return − 1). */
+  avgBets: number;
+}
+
 export interface GameOdds {
   gameId: GameId;
   categories: OddsCategoryRow[];
   draws: OddsDraw[];
+  sessions: OddsSession[];
 }
 
 /**

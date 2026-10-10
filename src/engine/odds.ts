@@ -167,3 +167,72 @@ export function drawExamples(game: GameDef): DrawExample[] {
 export function exampleHand(e: DrawExample): { hand: Card[]; mask: number } {
   return { hand: parseHand(e.hand), mask: (1 << e.hold) - 1 };
 }
+
+/** Session lengths for the "chance you're ahead" table: 100 hands, then 1/2/4/8/20/40 hours at 600 hands/hour. */
+export const SESSION_HANDS = [100, 600, 1200, 2400, 4800, 12000, 24000];
+
+export interface SessionOdds {
+  hands: number;
+  /** P(total paid > hands bet), P(= hands bet), P(< hands bet). */
+  ahead: number;
+  even: number;
+  behind: number;
+  /** P(ahead and no royal in the session): how much of `ahead` survives without the jackpot. */
+  aheadNoRoyal: number;
+}
+
+/**
+ * Exact chance of finishing ahead / even / behind after `hands` max-bet hands, in bet units, given the
+ * per-hand final-outcome distribution (`probs[i]` pays `pays[i]` per coin; the last entry is no pay).
+ * Exact DP over the running total paid. Pays are non-negative, so once the total exceeds the largest
+ * checkpoint the session is ahead at every checkpoint: those totals are lumped into one absorbing
+ * bucket, which keeps the state space at max(checkpoints) + 2. The bankroll is assumed to cover every
+ * hand (no ruin; that is the Bankroll tab's job). `royalIndex` rows are dropped in a second pass to get
+ * P(ahead and no royal).
+ */
+export function sessionOdds(pays: readonly number[], probs: readonly number[], checkpoints: readonly number[], royalIndex: number): SessionOdds[] {
+  const run = (p: readonly number[]) => {
+    // Merge rows with equal pays; drop impossible ones.
+    const byPay = new Map<number, number>();
+    pays.forEach((v, i) => {
+      if (!Number.isInteger(v) || v < 0) throw new Error(`pay ${v} is not a non-negative integer`);
+      if (p[i] > 0) byPay.set(v, (byPay.get(v) ?? 0) + p[i]);
+    });
+    const steps = [...byPay.entries()];
+    const maxPay = Math.max(...steps.map(([v]) => v));
+    const last = Math.max(...checkpoints);
+    const cap = last + 1; // bucket `cap` = total > last
+    let cur = new Float64Array(cap + 1);
+    let next = new Float64Array(cap + 1);
+    cur[0] = 1;
+    let reach = 0; // highest index with mass below the cap
+    const out = new Map<number, { ahead: number; even: number; behind: number }>();
+    for (let hand = 1; hand <= last; hand++) {
+      next.fill(0);
+      for (const [v, q] of steps) {
+        const top = Math.min(reach, cap - 1);
+        for (let t = 0; t <= top; t++) {
+          const m = cur[t];
+          if (m === 0) continue;
+          const u = t + v;
+          next[u < cap ? u : cap] += m * q;
+        }
+        next[cap] += cur[cap] * q;
+      }
+      reach = Math.min(cap - 1, reach + maxPay);
+      [cur, next] = [next, cur];
+      if (checkpoints.includes(hand)) {
+        let behind = 0;
+        for (let t = 0; t < hand; t++) behind += cur[t];
+        const even = cur[hand];
+        let ahead = cur[cap];
+        for (let t = hand + 1; t < cap; t++) ahead += cur[t];
+        out.set(hand, { ahead, even, behind });
+      }
+    }
+    return out;
+  };
+  const all = run(probs);
+  const noRoyal = run(probs.map((q, i) => (i === royalIndex ? 0 : q)));
+  return checkpoints.map((hands) => ({ hands, ...all.get(hands)!, aheadNoRoyal: noRoyal.get(hands)!.ahead }));
+}

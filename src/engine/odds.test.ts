@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { parseHand } from './cards.ts';
+import { mulberry32, parseHand } from './cards.ts';
 import { GAMES, GAME_LIST } from './games.ts';
-import { byCategory, dealtCounts, drawExamples, drawOdds, exampleHand, oddsCategories } from './odds.ts';
+import { byCategory, dealtCounts, drawExamples, drawOdds, exampleHand, oddsCategories, sessionOdds } from './odds.ts';
 
 const job = GAMES['job-8-5'];
 const cats = oddsCategories(job);
@@ -72,5 +72,60 @@ describe('drawExamples', () => {
         for (const t of e.targets) expect(byCat[gc.findIndex((c) => c.key === t)], `${game.id} ${e.label} → ${t}`).toBeGreaterThan(0);
       }
     }
+  });
+});
+
+describe('sessionOdds', () => {
+  // A toy game: no pay 60%, pays 1 (push) 25%, pays 2 10%, pays 9 4%, pays 50 1%.
+  const pays = [50, 9, 2, 1, 0];
+  const probs = [0.01, 0.04, 0.1, 0.25, 0.6];
+
+  /** Independent check: plain uncapped convolution of the total paid. */
+  function bruteForce(hands: number) {
+    let dist = new Map<number, number>([[0, 1]]);
+    for (let h = 0; h < hands; h++) {
+      const next = new Map<number, number>();
+      for (const [t, m] of dist) pays.forEach((v, i) => next.set(t + v, (next.get(t + v) ?? 0) + m * probs[i]));
+      dist = next;
+    }
+    let ahead = 0, even = 0, behind = 0;
+    for (const [t, m] of dist) if (t > hands) ahead += m; else if (t === hands) even += m; else behind += m;
+    return { ahead, even, behind };
+  }
+
+  it('matches an uncapped convolution at every checkpoint', () => {
+    const got = sessionOdds(pays, probs, [1, 2, 7, 30, 60], 0);
+    for (const g of got) {
+      const want = bruteForce(g.hands);
+      expect(g.ahead).toBeCloseTo(want.ahead, 12);
+      expect(g.even).toBeCloseTo(want.even, 12);
+      expect(g.behind).toBeCloseTo(want.behind, 12);
+    }
+  });
+
+  it('drops the royal row for aheadNoRoyal', () => {
+    const [one] = sessionOdds(pays, probs, [1], 0);
+    expect(one.ahead).toBeCloseTo(0.15, 12);
+    expect(one.aheadNoRoyal).toBeCloseTo(0.14, 12);
+  });
+
+  it('agrees with a simulation (sampled cross-check only)', () => {
+    const hands = 200;
+    const [exact] = sessionOdds(pays, probs, [hands], 0);
+    const rand = mulberry32(7);
+    const sessions = 20000;
+    let ahead = 0;
+    for (let s = 0; s < sessions; s++) {
+      let total = 0;
+      for (let h = 0; h < hands; h++) {
+        let r = rand();
+        let i = 0;
+        while (r >= probs[i]) r -= probs[i++];
+        total += pays[i];
+      }
+      if (total > hands) ahead++;
+    }
+    const sd = Math.sqrt((exact.ahead * (1 - exact.ahead)) / sessions);
+    expect(Math.abs(ahead / sessions - exact.ahead)).toBeLessThan(4 * sd);
   });
 });

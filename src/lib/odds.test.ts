@@ -11,6 +11,12 @@ describe('odds data', () => {
       expect(sum('dealt')).toBeCloseTo(1, 9);
       expect(sum('perfect')).toBeCloseTo(1, 9);
       expect(o!.draws.length).toBeGreaterThan(0);
+      expect(o!.sessions.map((x) => x.hands)).toEqual([100, 600, 1200, 2400, 4800, 12000, 24000]);
+      for (const x of o!.sessions) {
+        expect(x.ahead + x.even + x.behind).toBeCloseTo(1, 9);
+        expect(x.aheadNoRoyal).toBeLessThanOrEqual(x.ahead);
+        expect(x.avgBets).toBeLessThan(0);
+      }
     }
   });
 });

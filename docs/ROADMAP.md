@@ -11,4 +11,4 @@
 
 **M4: Assist.** T009 (DeepSeek, done): Assist tab. Type in a hand and get the engine's hold (D15). Camera detection and glasses output are shelved.
 
-**M5: Odds.** Owner request (D17): exact odds per hand category on the deal, by what you hold, and under perfect play. Engine + data (Claude, done): `src/engine/odds.ts`, `npm run odds`, `src/odds/*.json`. T011 (DeepSeek): Odds tab UI.
+**M5: Odds.** Owner request (D17): exact odds per hand category on the deal, by what you hold, and under perfect play. Engine + data (Claude, done): `src/engine/odds.ts`, `npm run odds`, `src/odds/*.json`. T011 (DeepSeek, done): Odds tab UI. T011a (Claude, done): exact chance of finishing a session ahead (D18). T012 (DeepSeek): "Chance you finish ahead" section.
