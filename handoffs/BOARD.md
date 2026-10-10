@@ -19,6 +19,7 @@
 | T010a | Suit colors fixed everywhere (`isRedSuit`: ♦♥ red); odds engine `src/engine/odds.ts` + `npm run odds` → `src/odds/*.json`, loader `src/lib/odds.ts` (D17) | Claude | done | T010 |
 | T011 | Odds tab: per-game hand odds on the deal / under perfect play / by what you hold | DeepSeek | done | T010a |
 | T011a | Exact chance of finishing a session ahead (`sessionOdds`, 100 hands–40 h, ahead w/o royal, avg bets) in `src/odds/*.json` (D18) | Claude | done | T011 |
-| T012 | Odds tab: "Chance you finish ahead" section (stacked bars: no-royal vs royal share) | DeepSeek | ready | T011a |
+| T011b | Goal odds (+$5…triple before broke): exact ladder + banded solvers, blackjack/craps/roulette comparison, `goalTable` (D19) | Claude | done | T011a |
+| T012 | Odds tab: "Chance you finish ahead" (stacked bars) + "Reach a goal" table vs blackjack/craps/roulette | DeepSeek | ready | T011b |
 
 Only `ready` tasks have full specs in `tasks/`. Claude writes the next spec after reviewing the previous task. See `docs/ROADMAP.md`.

@@ -38,6 +38,8 @@ export interface GameOdds {
   categories: OddsCategoryRow[];
   draws: OddsDraw[];
   sessions: OddsSession[];
+  /** Net result of one hand in bets under perfect play (pays − 1) and its probability; feeds `goalProbability`. */
+  perHand: { net: number; p: number }[];
 }
 
 /**

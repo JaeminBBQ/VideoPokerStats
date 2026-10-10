@@ -21,6 +21,7 @@ scripts/gen-chart.ts        npm run chart -- <id>: writes src/charts/<id>.json (
 src/charts/<id>.json        generated charts (never hand-edited)
 scripts/gen-odds.ts         npm run odds [-- <id>]: writes src/odds/<id>.json (dealt / perfect-play / draw odds, src/engine/odds.ts)
 src/odds/<id>.json          generated hand odds for the Odds tab (never hand-edited; loaded by src/lib/odds.ts)
+src/engine/goals.ts         exact P(reach a goal before broke): ladder + banded solvers; TABLE_GAMES (blackjack/craps/roulette); src/lib/goals.ts builds the comparison table
 ```
 
 ## Engine

@@ -62,12 +62,18 @@ for (const game of games) {
     cats[0].outcomes[0],
   ).map((x) => ({ ...x, avgBets: x.hands * (ret - 1) }));
 
+  // Per-hand net result under perfect play (rows with equal pays merged), for goal odds (src/engine/goals.ts).
+  const perHand = [...new Set(keys.map((_, i) => game.rows[i]?.pays ?? 0))]
+    .sort((x, y) => x - y)
+    .map((pays) => ({ net: pays - 1, p: d.best.reduce((acc, v, i) => acc + ((game.rows[i]?.pays ?? 0) === pays ? v : 0), 0) }));
+
   const out = {
     generatedBy: 'node scripts/gen-odds.ts',
     gameId: game.id,
     categories: cats.map((c, i) => ({ key: c.key, label: c.label, dealt: dealt[i], perfect: perfect[i] })),
     draws,
     sessions,
+    perHand,
   };
   writeFileSync(`${OUT_DIR}/${game.id}.json`, `${JSON.stringify(out, null, 2)}\n`);
 

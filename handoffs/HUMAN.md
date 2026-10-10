@@ -4,7 +4,7 @@ Items Claude needs from the user. Claude adds items; the user answers inline or 
 
 ## Open
 - [ ] **Hand T012 to DeepSeek** (after committing T011 + T011a; one commit is fine): tell it "read handoffs/TO_DEEPSEEK.md".
-- [ ] **Commit T011:** `git add -A && git commit -m "T011: Odds tab; T011a: exact chance of finishing ahead (D18)" && git push`
+- [ ] **Commit T011:** `git add -A && git commit -m "T011: Odds tab; T011a/b: exact chance of finishing ahead, goal odds vs blackjack/craps/roulette (D18, D19)" && git push`
 - [ ] **Check the Odds tab** (`npm run dev`): JoB 8/5 → Royal: 4 to a Royal 1 in 47 … discard all 1 in 383,485; perfect 1 in 40,170 (about every 67 hours). Four of a Kind: trips 1 in 23.5, perfect "about every 42 minutes". Deuces 16/13 → Four Deuces: 3 deuces 1 in 23.5. At 375px: do the five tabs wrapping to two rows look OK?
 - [ ] **Check suit colors:** ♦/♥ red, ♣/♠ black on the Trainer, Assist (slots, suit pad, result), and Chart tabs.
 - [ ] **Check the GSR tab:** JoB 9/5 should show 5¢ only, with the paytable at "× 20 coins" and a $1.00 bet. The $1 games should show a $10 bet. Switching games should snap the denomination.
