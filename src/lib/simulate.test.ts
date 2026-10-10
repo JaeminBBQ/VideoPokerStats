@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ODDS_BY_GAME } from './odds.ts';
-import { COMP_RATE_PER_MULTIPLIER, exactFor, leaveAdvice, returnAndBreakEven, runMany, runSession, type SimParams } from './simulate.ts';
+import { COMP_RATE_PER_MULTIPLIER, compRatePerMultiplier, exactFor, leaveAdvice, returnAndBreakEven, runMany, runSession, type SimParams } from './simulate.ts';
 
 const rows = ODDS_BY_GAME['gsr-job-9-5']!.perRow;
 const base: SimParams = {
@@ -53,5 +53,12 @@ describe('simulator', () => {
     for (const x of perHand) expect(x).toBeCloseTo(0.984498 - 1, 5);
     // Quitting while ahead raises the chance of leaving a winner over playing it out.
     expect(adv[1].odds!.pAhead).toBeGreaterThan(adv[0].odds!.pAhead);
+  });
+});
+
+describe('comps by venue', () => {
+  it('GSR 0.05% and Legends Bay 1/6% of coin-in per 1×', () => {
+    expect(compRatePerMultiplier('GSR')).toBe(0.0005);
+    expect(compRatePerMultiplier('Legends Bay')).toBeCloseTo(1 / 600, 15);
   });
 });

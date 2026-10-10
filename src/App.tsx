@@ -56,6 +56,7 @@ import DrillPanel from './components/DrillPanel.tsx';
 import GamePicker from './components/GamePicker.tsx';
 import MiniCard from './components/MiniCard.tsx';
 import OddsTab from './components/OddsTab.tsx';
+import SimulatorTab from './components/SimulatorTab.tsx';
 import Paytable from './components/Paytable.tsx';
 import SessionLog from './components/SessionLog.tsx';
 import StatsPanel from './components/StatsPanel.tsx';
@@ -89,7 +90,7 @@ function sanitizeSettings(s: Settings): Settings {
 }
 
 type Phase = 'preparing' | 'ready' | 'dealt' | 'graded' | 'error';
-type Tab = 'trainer' | 'chart' | 'bankroll' | 'assist' | 'odds';
+type Tab = 'trainer' | 'chart' | 'bankroll' | 'assist' | 'odds' | 'simulator';
 
 /** What the hand currently out in Drill mode is about. */
 interface DrillCtx {
@@ -467,6 +468,13 @@ export default function App() {
         <button type="button" className={`tab${tab === 'odds' ? ' active' : ''}`} onClick={() => setTab('odds')}>
           Odds
         </button>
+        <button
+          type="button"
+          className={`tab${tab === 'simulator' ? ' active' : ''}`}
+          onClick={() => setTab('simulator')}
+        >
+          Simulator
+        </button>
       </nav>
 
       <header className="header">
@@ -518,6 +526,18 @@ export default function App() {
             key={gameId}
             game={game}
             gameId={gameId}
+            bet={betCents(denomination, maxCoins)}
+            denomination={denomination}
+            maxCoins={maxCoins}
+          />
+        </main>
+      ) : tab === 'simulator' ? (
+        <main>
+          <SimulatorTab
+            key={gameId}
+            game={game}
+            gameId={gameId}
+            engine={engine}
             bet={betCents(denomination, maxCoins)}
             denomination={denomination}
             maxCoins={maxCoins}

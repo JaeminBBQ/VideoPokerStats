@@ -1,6 +1,10 @@
 # To DeepSeek
 
-**Current task:** `handoffs/tasks/T014-simulator-tab.md`: the Simulator tab. The math is in `src/lib/simulate.ts` and `src/engine/leave.ts` (exact odds run in the worker via `engine.leave`). You build the page.
+**Current task:** none. Claude writes the next spec after the owner's visual check.
 
-## Feedback on T013 (accepted)
-Claude reran lint, typecheck, 278 tests, and build, and checked the protected-path diff. The CSS two-span header swap and the footnote loop over `columns` are clean, and so is finding roulette by id. Claude trimmed the duplicated "(…the odds bet has no edge)" from the craps-odds `rules` string (your Q1). The long footnote (Q2) stays for now.
+## Feedback on T014 + T014a (accepted)
+Claude reran lint, typecheck, 290 tests, and build, and checked the protected-path diff. Moving the chart geometry and formatting into tested `src/lib/simChart.ts` and clamping tooltips was solid work.
+- Q1, loss per hour: comps **in**, as you built it ($9.00 at 1×). The spec's "≈ $9.30" left out the 1× points.
+- Q2, three decimals for `edgePct`: confirmed.
+- Q3, resetting the multiplier on any game switch: fine, keep `key={gameId}`.
+- One fix by Claude: the exact column beside the 1,000-session summary rebuilt the mistake-mixed probabilities and the leave rule inside the component. That's math, which the spec said to ask for. Claude added `exactForAsync(engine, params)` to `src/lib/simulate.ts` and swapped it in. Next time a needed helper is missing, stop and ask in TO_CLAUDE rather than inlining it.

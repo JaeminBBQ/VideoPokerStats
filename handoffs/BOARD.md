@@ -26,6 +26,7 @@
 | T012c | Exact blackjack engine for the owner's table rules (`src/engine/blackjack.ts`), used by the goal table (D22) | Claude | done | T012b |
 | T013 | Goal table: fifth column "Craps 2×" at 375px, footnote loops over columns | DeepSeek | done | T012c |
 | T013a | Exact leave-rule odds (`src/engine/leave.ts`, worker `leave`), simulator core + leave advice + comps (`src/lib/simulate.ts`), `perRow` in odds data (D23) | Claude | done | T012c |
-| T014 | Simulator tab: inputs, one-session graph, 1,000-session summary + histogram vs exact, when-to-leave table, edge line with comps | DeepSeek | ready | T013, T013a |
+| T014 | Simulator tab: inputs, one-session graph, 1,000-session summary + histogram vs exact, when-to-leave table, edge line with comps | DeepSeek | done | T013, T013a |
+| T014a | Simulator comps by venue (GSR 0.05%/×, LB 0.167%/×), no stacking, venue hints (D24) | DeepSeek | done | T014 |
 
 Only `ready` tasks have full specs in `tasks/`. Claude writes the next spec after reviewing the previous task. See `docs/ROADMAP.md`.

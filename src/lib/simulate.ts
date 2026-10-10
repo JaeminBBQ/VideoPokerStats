@@ -1,4 +1,4 @@
-import { mulberry32, type EngineClient } from '../engine/index.ts';
+import { mulberry32, type EngineClient, type Venue } from '../engine/index.ts';
 import { leaveOdds, type LeaveOdds, type LeaveRule } from '../engine/leave.ts';
 import type { GameOdds } from './odds.ts';
 
@@ -10,8 +10,17 @@ import type { GameOdds } from './odds.ts';
  * show "simulated vs exact".
  */
 
-/** Owner (D23): 1 point per $2 coin-in, 1,000 points = $1, so 0.05% of coin-in comes back at 1×. */
+/** GSR (D23): 1 point per $2 of video poker, 1,000 points = $1, so 0.05% of coin-in comes back at 1×. */
 export const COMP_RATE_PER_MULTIPLIER = 0.0005;
+
+/**
+ * Free play per dollar of video poker coin-in at 1×, by venue (D24). GSR: 1 point per $2, 1,000 points = $1
+ * (owner confirmed). Legends Bay: 1 point per $6 (legendsbaycasino.com/rewards), 100 points = $1 (owner),
+ * so 1/600.
+ */
+export function compRatePerMultiplier(venue: Venue): number {
+  return venue === 'Legends Bay' ? 1 / 600 : COMP_RATE_PER_MULTIPLIER;
+}
 
 export interface SimParams {
   rows: GameOdds['perRow'];
@@ -203,6 +212,13 @@ function exactInputs(params: SimParams): { pays: number[]; probs: number[]; star
 export function exactFor(params: SimParams): LeaveOdds | null {
   const { pays, probs, startBets, rule } = exactInputs(params);
   return leaveOdds(pays, probs, startBets, rule);
+}
+
+/** `exactFor` computed in the engine worker (null when too large to compute). */
+export async function exactForAsync(engine: EngineClient, params: SimParams): Promise<LeaveOdds | null> {
+  const { pays, probs, startBets, rule } = exactInputs(params);
+  const [odds] = await engine.leave(pays, probs, startBets, [rule]);
+  return odds;
 }
 
 /** Return per dollar bet at this mistake rate, and the comps needed to break even. */
