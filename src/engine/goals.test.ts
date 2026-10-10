@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { OWNER_RULES, blackjackOdds } from './blackjack.ts';
 import { mulberry32 } from './cards.ts';
-import { TABLE_GAMES, banded, edgeOf, goalProbability, ladder, type Outcome } from './goals.ts';
+import { TABLE_GAMES, banded, edgeOf, goalProbability, goalProbabilityTiered, ladder, type Outcome } from './goals.ts';
 
 const steps = (outcomes: Outcome[]) => new Map(outcomes.map((o) => [o.net, o.p]));
 const roulette = TABLE_GAMES.find((g) => g.id === 'roulette')!.outcomes;
@@ -45,7 +46,8 @@ describe('goalProbability', () => {
   });
 
   it('blackjack: half-bet scale, sane bounds, and a simulation cross-check (sampled check only)', () => {
-    expect(edgeOf(blackjack)).toBeCloseTo(-0.00277282, 6);
+    expect(edgeOf(blackjack)).toBeCloseTo(blackjackOdds(OWNER_RULES).ev, 12);
+    expect(edgeOf(blackjack)).toBeCloseTo(-0.005117, 5);
     const exact = goalProbability(blackjack, 20, 10);
     // Close to a fair coin's 2/3 but a little lower (house edge).
     expect(exact).toBeLessThan(2 / 3);
@@ -78,5 +80,40 @@ describe('goalProbability', () => {
 
   it('craps has its exact edge', () => {
     expect(edgeOf(craps)).toBeCloseTo(-7 / 495, 15);
+  });
+});
+
+describe('craps with 2× odds', () => {
+  const g = TABLE_GAMES.find((x) => x.id === 'craps-odds')!;
+
+  it('sums to 1, keeps the pass line edge per line bet, and is 0.606% of all money bet', () => {
+    expect(g.outcomes.reduce((a, o) => a + o.p, 0)).toBeCloseTo(1, 15);
+    expect(edgeOf(g.outcomes)).toBeCloseTo(-7 / 495, 15);
+    expect(-edgeOf(g.outcomes) / g.avgWagerBets!).toBeCloseTo(3 / 495, 15);
+  });
+
+  it('a single tier is the same as goalProbability', () => {
+    expect(goalProbabilityTiered([{ coverBets: 1, outcomes: craps }], 20, 10)).toBeCloseTo(goalProbability(craps, 20, 10), 12);
+    expect(goalProbabilityTiered([{ coverBets: 1, outcomes: blackjack }], 12, 9)).toBeCloseTo(goalProbability(blackjack, 12, 9), 12);
+  });
+
+  it('line + odds while covering 3 units, line only below: matches a simulation (sampled check only)', () => {
+    const exact = goalProbabilityTiered(g.tiers!, 100 / 3, 100 / 3); // $100 at $3, double
+    const pick = (os: Outcome[], u: number) => {
+      let i = 0;
+      while (i < os.length - 1 && u >= os[i].p) u -= os[i++].p;
+      return os[i].net;
+    };
+    const rand = mulberry32(2024);
+    const runs = 20000;
+    let hits = 0;
+    for (let r = 0; r < runs; r++) {
+      // The solver works in fifths of a bet (6:5 odds pay 2.4): $100 / $3 = 33.33 → 33.2 bets, goal 33.4.
+      let bank = 33.2;
+      while (bank >= 1 - 1e-9 && bank < 66.6 - 1e-9) bank += pick(bank >= 3 - 1e-9 ? g.outcomes : craps, rand());
+      if (bank >= 66.6 - 1e-9) hits++;
+    }
+    const sd = Math.sqrt((exact * (1 - exact)) / runs);
+    expect(Math.abs(hits / runs - exact)).toBeLessThan(4 * sd);
   });
 });

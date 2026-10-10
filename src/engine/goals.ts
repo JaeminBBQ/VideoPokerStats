@@ -15,6 +15,10 @@
  *            matrix is diagonally dominant, so no pivoting is needed.
  */
 
+import { OWNER_RULES, blackjackOdds } from './blackjack.ts';
+
+const OWNER_BLACKJACK = blackjackOdds(OWNER_RULES);
+
 /** One round's result: net win in bets (−1 = lost the bet, 1.5 = blackjack at 3:2) and its probability. */
 export interface Outcome {
   net: number;
@@ -55,6 +59,30 @@ export function goalProbability(outcomes: readonly Outcome[], startBets: number,
   return scale === 1 && minStep === -1 ? ladder(steps, start, target) : banded(steps, scale, start, target);
 }
 
+/** A betting tier: play `outcomes` while the bankroll covers `coverBets` (in units of the base bet). */
+export interface Tier {
+  coverBets: number;
+  outcomes: Outcome[];
+}
+
+/**
+ * `goalProbability` when what you bet depends on what you can cover (e.g. craps: line + 2× odds while the
+ * bankroll covers 3 units, line only below that). Ruin is below the smallest tier's cover.
+ */
+export function goalProbabilityTiered(tiers: readonly Tier[], startBets: number, goalBets: number): number {
+  const scale = scaleFor(tiers.flatMap((t) => t.outcomes));
+  const start = Math.floor(startBets * scale + 1e-9);
+  const target = start + Math.ceil(goalBets * scale - 1e-9);
+  const lo = Math.min(...tiers.map((t) => Math.round(t.coverBets * scale)));
+  if (start < lo) return 0;
+  if (target <= start) return 1;
+  return bandedTiered(
+    tiers.map((t) => ({ min: Math.round(t.coverBets * scale), steps: integerSteps(t.outcomes, scale) })),
+    start,
+    target,
+  );
+}
+
 /** Bankroll in whole bets; ruin at 0, goal at ≥ target. Requires every loss to be exactly −1. */
 export function ladder(steps: ReadonlyMap<number, number>, start: number, target: number): number {
   const down = steps.get(-1) ?? 0;
@@ -80,17 +108,28 @@ export function ladder(steps: ReadonlyMap<number, number>, start: number, target
 
 /** Bankroll in 1/scale-bet units; ruin below `scale` units (can't cover a bet), goal at ≥ target. */
 export function banded(steps: ReadonlyMap<number, number>, scale: number, start: number, target: number): number {
-  const lo = scale; // lowest playable bankroll
+  return bandedTiered([{ min: scale, steps }], start, target);
+}
+
+/**
+ * `banded` with a betting policy that depends on the bankroll: each state plays the tier with the highest
+ * `min` (in units) it can cover. Ruin is below the lowest tier's `min`.
+ */
+function bandedTiered(tiers: readonly { min: number; steps: ReadonlyMap<number, number> }[], start: number, target: number): number {
+  const sorted = [...tiers].sort((x, y) => y.min - x.min);
+  const lo = sorted[sorted.length - 1].min; // lowest playable bankroll
+  const stepsAt = (s: number) => sorted.find((t) => s >= t.min)!.steps;
   const n = target - lo; // transient states lo..target-1
-  const L = Math.max(0, -Math.min(...steps.keys()));
-  const U = Math.max(0, Math.max(...steps.keys()));
+  const keys = sorted.flatMap((t) => [...t.steps.keys()]);
+  const L = Math.max(0, -Math.min(...keys));
+  const U = Math.max(0, Math.max(...keys));
   const W = L + U + 1;
   const A = new Float64Array(n * W); // A[i][j] at i*W + (j - i + L)
   const b = new Float64Array(n);
   const at = (i: number, j: number) => i * W + (j - i + L);
   for (let i = 0; i < n; i++) {
     A[at(i, i)] += 1;
-    for (const [d, q] of steps) {
+    for (const [d, q] of stepsAt(i + lo)) {
       const s = i + lo + d;
       if (s >= target) b[i] += q;
       else if (s >= lo) A[at(i, s - lo)] -= q;
@@ -127,43 +166,48 @@ export interface TableGame {
   source: string;
   /** Table minimum per round, in cents (owner's word for Reno, D20). */
   minBetCents: number;
+  /** Net result per decision, in units of the base (line) bet, at the full policy. */
   outcomes: Outcome[];
+  /** Bankroll-dependent policy (best tier first is not required); when absent, `outcomes` at cover 1. */
+  tiers?: Tier[];
+  /** Average total wagered per decision, in base bets (1 when there is nothing beyond the base bet). The
+   * house edge per dollar wagered is −edge / avgWagerBets. */
+  avgWagerBets?: number;
 }
 
+const PASS_LINE: Outcome[] = [
+  { net: 1, p: 244 / 495 },
+  { net: -1, p: 251 / 495 },
+];
+
 /**
- * Comparison games, flat-betting one unit per round (the table minimum, or the video poker bet if larger). Roulette and craps are exact from their rules.
- * Blackjack's per-hand net-win distribution (basic strategy, doubles, splits, surrender) is the published
- * table; nothing here claims a local casino offers these rules.
+ * Pass line with 2× odds behind every point, per decision, in line-bet units. Come-out: win 8/36, lose 4/36.
+ * Point 4/10 (6/36): makes it 1/3, odds pay 2:1 → +1 +4; 5/9 (8/36): 2/5, 3:2 → +1 +3; 6/8 (10/36): 5/11,
+ * 6:5 → +1 +2.4. Missing a point loses line + odds (−3).
+ */
+const PASS_2X_ODDS: Outcome[] = [
+  { net: 1, p: 8 / 36 },
+  { net: -1, p: 4 / 36 },
+  { net: 5, p: (6 / 36) * (1 / 3) },
+  { net: 4, p: (8 / 36) * (2 / 5) },
+  { net: 3.4, p: (10 / 36) * (5 / 11) },
+  { net: -3, p: (6 / 36) * (2 / 3) + (8 / 36) * (3 / 5) + (10 / 36) * (6 / 11) },
+];
+
+/**
+ * Comparison games, flat-betting one unit per round (the table minimum, or the video poker bet if larger).
+ * Roulette and craps are exact from their rules. Blackjack is computed exactly (infinite deck, basic
+ * strategy) for the rules the owner reported at their $15 tables (D22).
  */
 export const TABLE_GAMES: TableGame[] = [
   {
     id: 'blackjack',
     name: 'Blackjack',
     short: 'Blackjack',
-    rules: '6 decks, blackjack pays 3:2, dealer stands on soft 17, double any 2 / after split, late surrender; basic strategy (0.28% edge)',
-    source: 'https://wizardofodds.com/games/blackjack/appendix/4/ (net win per hand, "Liberal Strip Rules")',
+    rules: `3:2, dealer stands on all 17s, double any two cards, double after split, split to 4 hands (aces once), no surrender; basic strategy (${(-OWNER_BLACKJACK.ev * 100).toFixed(2)}% edge, infinite deck)`,
+    source: 'computed exactly by src/engine/blackjack.ts for the owner\'s table rules (D22)',
     minBetCents: 1500,
-    outcomes: [
-      { net: -8, p: 0.00000019 },
-      { net: -7, p: 0.00000235 },
-      { net: -6, p: 0.00001785 },
-      { net: -5, p: 0.00008947 },
-      { net: -4, p: 0.00048248 },
-      { net: -3, p: 0.00207909 },
-      { net: -2, p: 0.04180923 },
-      { net: -1, p: 0.40171191 },
-      { net: -0.5, p: 0.04470705 },
-      { net: 0, p: 0.0848329 },
-      { net: 1, p: 0.31697909 },
-      { net: 1.5, p: 0.04529632 },
-      { net: 2, p: 0.05844299 },
-      { net: 3, p: 0.00259645 },
-      { net: 4, p: 0.00076323 },
-      { net: 5, p: 0.00014491 },
-      { net: 6, p: 0.00003774 },
-      { net: 7, p: 0.00000609 },
-      { net: 8, p: 0.00000066 },
-    ],
+    outcomes: OWNER_BLACKJACK.outcomes,
   },
   {
     id: 'craps',
@@ -172,10 +216,7 @@ export const TABLE_GAMES: TableGame[] = [
     rules: 'Pass line, no odds bet: wins 244/495 (1.41% edge)',
     source: 'exact from the dice: P(win) = 8/36 + Σ over points of P(point)·P(point before 7) = 244/495',
     minBetCents: 300,
-    outcomes: [
-      { net: 1, p: 244 / 495 },
-      { net: -1, p: 251 / 495 },
-    ],
+    outcomes: PASS_LINE,
   },
   {
     id: 'roulette',
@@ -188,5 +229,19 @@ export const TABLE_GAMES: TableGame[] = [
       { net: 1, p: 18 / 38 },
       { net: -1, p: 20 / 38 },
     ],
+  },
+  {
+    id: 'craps-odds',
+    name: 'Craps — pass + 2× odds',
+    short: 'Craps 2×',
+    rules: 'Pass line plus 2× odds behind every point (odds pay true odds: 2:1, 3:2, 6:5), dropping to the bare line when the bankroll can\'t cover line + odds (0.61% of all money bet; the odds bet has no edge)',
+    source: 'exact from the dice, same derivation as the pass line; the odds bet pays true odds',
+    minBetCents: 300,
+    outcomes: PASS_2X_ODDS,
+    tiers: [
+      { coverBets: 3, outcomes: PASS_2X_ODDS },
+      { coverBets: 1, outcomes: PASS_LINE },
+    ],
+    avgWagerBets: 1 + 2 * (24 / 36),
   },
 ];

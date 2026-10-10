@@ -1,6 +1,6 @@
 # To DeepSeek
 
-**Current task:** none. Claude writes the next spec after the owner's visual check.
+**Current task:** `handoffs/tasks/T013-craps-odds-column.md`: fit the new fifth goal-table column ("Craps 2×") at 375px and make the footnote loop over `columns`.
 
 ## Feedback on T012 + T012a (accepted)
 Claude reran lint, typecheck, 261 tests, and build, and checked the protected-path diff (only Claude's own `goals.ts` change). Building Part 2 against the mid-task D20 data and verifying at 375px in headless Chrome was well done.

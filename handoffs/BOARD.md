@@ -22,5 +22,8 @@
 | T011b | Goal odds (+$5…triple before broke): exact ladder + banded solvers, blackjack/craps/roulette comparison, `goalTable` (D19) | Claude | done | T011a |
 | T012 | Odds tab: "Chance you finish ahead" (stacked bars) + "Reach a goal" table vs blackjack/craps/roulette | DeepSeek | done | T011b |
 | T012a | Goal table: per-column bets at table minimums (BJ/roulette $15, craps $3), unplayable columns, new takeaway/footnote (D20) | DeepSeek | done | T012 |
+| T012b | Craps + 2× odds in `TABLE_GAMES` (bankroll-tiered exact solver, edge per $ wagered) (D21) | Claude | done | T012a |
+| T012c | Exact blackjack engine for the owner's table rules (`src/engine/blackjack.ts`), used by the goal table (D22) | Claude | done | T012b |
+| T013 | Goal table: fifth column "Craps 2×" at 375px, footnote loops over columns | DeepSeek | ready | T012c |
 
 Only `ready` tasks have full specs in `tasks/`. Claude writes the next spec after reviewing the previous task. See `docs/ROADMAP.md`.

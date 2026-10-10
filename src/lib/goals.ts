@@ -1,4 +1,4 @@
-import { TABLE_GAMES, edgeOf, goalProbability, type Outcome } from '../engine/goals.ts';
+import { TABLE_GAMES, edgeOf, goalProbability, goalProbabilityTiered, type Outcome } from '../engine/goals.ts';
 
 /** Win goals for "reach a goal before going broke": fixed dollar amounts, then doubling and tripling. */
 export const GOALS: { label: string; dollars?: number; multiple?: number }[] = [
@@ -20,7 +20,7 @@ export interface GoalColumn {
   short: string;
   name: string;
   rules: string;
-  /** House edge as a fraction (0.0028 = 0.28%). */
+  /** House edge per dollar wagered, as a fraction (0.0028 = 0.28%); craps with odds counts the odds money. */
   edge: number;
   /** This game's bet per round: the machine's max bet for video poker; for a table game, its minimum or
    * the video poker bet, whichever is larger. */
@@ -63,9 +63,11 @@ export function goalTable(vpName: string, vpPerHand: Outcome[], budgetCents: num
     { id: 'video-poker', short: 'Video poker', name: vpName, rules: 'Perfect play, max bet', outcomes: vpPerHand, minBetCents: 0 },
     ...TABLE_GAMES,
   ];
-  const columns: GoalColumn[] = games.map(({ id, short, name, rules, outcomes, minBetCents }) => {
-    const bet = Math.max(minBetCents, betCents);
-    return { id, short, name, rules, edge: -edgeOf(outcomes), betCents: bet, minBetCents, budgetBets: budgetCents / bet, playable: budgetCents >= bet };
+  const columns: GoalColumn[] = games.map((g) => {
+    const bet = Math.max(g.minBetCents, betCents);
+    const { id, short, name, rules, outcomes, minBetCents } = g;
+    const avgWager = 'avgWagerBets' in g && g.avgWagerBets ? g.avgWagerBets : 1;
+    return { id, short, name, rules, edge: -edgeOf(outcomes) / avgWager, betCents: bet, minBetCents, budgetBets: budgetCents / bet, playable: budgetCents >= bet };
   });
   const rows = GOALS.map(({ label, dollars, multiple }) => {
     const goalCents = dollars !== undefined ? dollars * 100 : budgetCents * (multiple ?? 1);
@@ -73,7 +75,11 @@ export function goalTable(vpName: string, vpPerHand: Outcome[], budgetCents: num
     // Video poker plays whole bets (pays are whole coins); tables may reach half-bet results, so they get
     // the fractional bet counts and goalProbability rounds within their own units.
     const odds = games.map((g, i) =>
-      i === 0 ? goalProbability(g.outcomes, budgetBets, goalBets) : goalProbability(g.outcomes, columns[i].budgetBets, goalCents / columns[i].betCents),
+      i === 0
+        ? goalProbability(g.outcomes, budgetBets, goalBets)
+        : 'tiers' in g && g.tiers
+          ? goalProbabilityTiered(g.tiers, columns[i].budgetBets, goalCents / columns[i].betCents)
+          : goalProbability(g.outcomes, columns[i].budgetBets, goalCents / columns[i].betCents),
     );
     const best = odds.reduce((bi, p, i) => (p > odds[bi] ? i : bi), 0);
     return { label, goalCents, goalBets, odds, best };
