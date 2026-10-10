@@ -16,6 +16,8 @@ export const TEN = 8;
 
 export const rankOf = (c: Card): number => c >> 2;
 export const suitOf = (c: Card): number => c & 3;
+/** Diamonds (1) and hearts (2) are red; clubs (0) and spades (3) are black. */
+export const isRedSuit = (suit: number): boolean => suit === 1 || suit === 2;
 
 export function cardToString(c: Card): string {
   if (c === JOKER) return 'Jk';

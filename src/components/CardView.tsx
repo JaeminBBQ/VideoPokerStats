@@ -1,4 +1,4 @@
-import { JOKER, RANKS, SUIT_SYMBOLS, rankOf, suitOf, type Card } from '../engine/index.ts';
+import { JOKER, RANKS, SUIT_SYMBOLS, isRedSuit, rankOf, suitOf, type Card } from '../engine/index.ts';
 
 export type CardEmphasis = 'normal' | 'correct' | 'dimmed';
 
@@ -13,7 +13,7 @@ interface Props {
 
 export default function CardView({ card, held, emphasis, isWild, disabled, onToggle }: Props) {
   const joker = card === JOKER;
-  const red = joker || suitOf(card) % 2 === 1;
+  const red = joker || isRedSuit(suitOf(card));
   return (
     <div className={`card-slot${held ? ' held' : ''} emphasis-${emphasis}`}>
       <div className="hold-tag">{held ? 'HELD' : ''}</div>

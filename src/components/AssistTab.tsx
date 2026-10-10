@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import {
   EV_EPSILON,
   SUIT_SYMBOLS,
+  isRedSuit,
   cardToString,
   hasChart,
   patternFor,
@@ -156,7 +157,7 @@ export default function AssistTab({ game, gameId, engine, phase }: Props) {
             <button
               key={suit}
               type="button"
-              className={`assist-suit-btn${suit % 2 === 1 ? ' red' : ''}`}
+              className={`assist-suit-btn${isRedSuit(suit) ? ' red' : ''}`}
               disabled={complete || entry.stage !== 'suit' || suitDisabled(entry, suit)}
               onClick={() => setEntry((s) => pickSuit(s, suit))}
               onMouseDown={(e) => e.preventDefault()}

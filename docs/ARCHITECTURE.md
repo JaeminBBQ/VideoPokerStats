@@ -19,6 +19,8 @@ src/components/    thin React components
 scripts/verify-returns.ts   npm run verify [-- ids]: perfect-play return of every starting hand vs published
 scripts/gen-chart.ts        npm run chart -- <id>: writes src/charts/<id>.json (app) + docs/charts/<id>.md (readable)
 src/charts/<id>.json        generated charts (never hand-edited)
+scripts/gen-odds.ts         npm run odds [-- <id>]: writes src/odds/<id>.json (dealt / perfect-play / draw odds, src/engine/odds.ts)
+src/odds/<id>.json          generated hand odds for the Odds tab (never hand-edited; loaded by src/lib/odds.ts)
 ```
 
 ## Engine

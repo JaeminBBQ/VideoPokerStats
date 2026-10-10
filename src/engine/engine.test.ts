@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { deal, mulberry32, parseHand, type Card } from './cards.ts';
+import { SUIT_SYMBOLS, deal, isRedSuit, mulberry32, parseHand, type Card } from './cards.ts';
 import { analyzeHand, buildTables, holdEvs, BINOM, type Tables } from './ev.ts';
 import { GAMES, GAME_LIST, VENUES, gamesAt, maxCoinsAt, offerAt, payout, snapDenomination, type GameDef, type GameId } from './games.ts';
 
@@ -7,6 +7,12 @@ const rowKey = (game: GameDef, hand: string) => {
   const i = game.evaluate(parseHand(hand));
   return i < 0 ? 'nothing' : game.rows[i].key;
 };
+
+describe('suit colors', () => {
+  it('diamonds and hearts are red, clubs and spades black', () => {
+    expect(SUIT_SYMBOLS.filter((_, s) => isRedSuit(s))).toEqual(['♦', '♥']);
+  });
+});
 
 describe('deuces evaluator', () => {
   const g = GAMES['lb-deuces-16-13'];

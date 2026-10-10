@@ -1,4 +1,4 @@
-import { RANKS, SUIT_SYMBOLS, rankOf, suitOf, type Card } from '../engine/index.ts';
+import { RANKS, SUIT_SYMBOLS, isRedSuit, rankOf, suitOf, type Card } from '../engine/index.ts';
 import type { CardEmphasis } from './CardView.tsx';
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 
 /** Tiny non-interactive card face for chart examples (no jokers: chart games deal 52-card decks). */
 export default function MiniCard({ card, wild, emphasis = 'normal' }: Props) {
-  const red = suitOf(card) % 2 === 1;
+  const red = isRedSuit(suitOf(card));
   return (
     <span className={`mini-card${wild ? ' wild' : ''} ${red ? 'red' : 'black'} emphasis-${emphasis}`} aria-hidden>
       <span className="mini-rank">{RANKS[rankOf(card)]}</span>

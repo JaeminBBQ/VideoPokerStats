@@ -11,7 +11,8 @@
     "typecheck": "tsc -b",
     "test": "vitest run",
     "verify": "node scripts/verify-returns.ts",
-    "chart": "node scripts/gen-chart.ts"
+    "chart": "node scripts/gen-chart.ts",
+    "odds": "node scripts/gen-odds.ts"
   },
   "dependencies": {
     "react": "^19.2.8",

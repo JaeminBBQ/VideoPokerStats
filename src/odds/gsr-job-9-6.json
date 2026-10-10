@@ -1,0 +1,286 @@
+{
+  "generatedBy": "node scripts/gen-odds.ts",
+  "gameId": "gsr-job-9-6",
+  "categories": [
+    {
+      "key": "royal",
+      "label": "Royal Flush",
+      "dealt": 0.0000015390771693292702,
+      "perfect": 0.0000247582680375947
+    },
+    {
+      "key": "straight-flush",
+      "label": "Straight Flush",
+      "dealt": 0.000013851694523963431,
+      "perfect": 0.00010930909037147209
+    },
+    {
+      "key": "four-kind",
+      "label": "Four of a Kind",
+      "dealt": 0.00024009603841536616,
+      "perfect": 0.002362545685876868
+    },
+    {
+      "key": "full-house",
+      "label": "Full House",
+      "dealt": 0.0014405762304921968,
+      "perfect": 0.01151220733628651
+    },
+    {
+      "key": "flush",
+      "label": "Flush",
+      "dealt": 0.001965401545233478,
+      "perfect": 0.01101451096803152
+    },
+    {
+      "key": "straight",
+      "label": "Straight",
+      "dealt": 0.003924646781789639,
+      "perfect": 0.01122936724134379
+    },
+    {
+      "key": "three-kind",
+      "label": "Three of a Kind",
+      "dealt": 0.02112845138055222,
+      "perfect": 0.0744486985711364
+    },
+    {
+      "key": "two-pair",
+      "label": "Two Pair",
+      "dealt": 0.0475390156062425,
+      "perfect": 0.12927890248017765
+    },
+    {
+      "key": "jacks-or-better",
+      "label": "Jacks or Better",
+      "dealt": 0.13002123926493675,
+      "perfect": 0.21458503112564406
+    },
+    {
+      "key": "nothing",
+      "label": "No win",
+      "dealt": 0.7937251823806446,
+      "perfect": 0.5454346692330942
+    }
+  ],
+  "draws": [
+    {
+      "label": "4 to a Royal",
+      "hand": "As Ks Qs Js 3d",
+      "hold": 4,
+      "targets": [
+        "royal"
+      ],
+      "odds": {
+        "royal": 0.02127659574468085
+      }
+    },
+    {
+      "label": "3 to a Royal",
+      "hand": "As Ks Qs 7d 3c",
+      "hold": 3,
+      "targets": [
+        "royal"
+      ],
+      "odds": {
+        "royal": 0.0009250693802035153
+      }
+    },
+    {
+      "label": "2 to a Royal",
+      "hand": "As Ks 8d 7c 3h",
+      "hold": 2,
+      "targets": [
+        "royal"
+      ],
+      "odds": {
+        "royal": 0.00006167129201356769
+      }
+    },
+    {
+      "label": "1 Royal card",
+      "hand": "As 8d 7c 5h 3d",
+      "hold": 1,
+      "targets": [
+        "royal"
+      ],
+      "odds": {
+        "royal": 0.000005606481092142517
+      }
+    },
+    {
+      "label": "4 to an open Straight Flush",
+      "hand": "8s 7s 6s 5s Kd",
+      "hold": 4,
+      "targets": [
+        "straight-flush"
+      ],
+      "odds": {
+        "straight-flush": 0.0425531914893617
+      }
+    },
+    {
+      "label": "4 to an inside Straight Flush",
+      "hand": "9s 7s 6s 5s Kd",
+      "hold": 4,
+      "targets": [
+        "straight-flush"
+      ],
+      "odds": {
+        "straight-flush": 0.02127659574468085
+      }
+    },
+    {
+      "label": "3 to a Straight Flush",
+      "hand": "8s 7s 6s Kd 2c",
+      "hold": 3,
+      "targets": [
+        "straight-flush"
+      ],
+      "odds": {
+        "straight-flush": 0.0027752081406105457
+      }
+    },
+    {
+      "label": "Three of a Kind",
+      "hand": "8s 8d 8h Kc 3d",
+      "hold": 3,
+      "targets": [
+        "four-kind",
+        "full-house"
+      ],
+      "odds": {
+        "four-kind": 0.0425531914893617,
+        "full-house": 0.06105457909343201
+      }
+    },
+    {
+      "label": "Two Pair",
+      "hand": "8s 8d 5h 5c Kd",
+      "hold": 4,
+      "targets": [
+        "full-house"
+      ],
+      "odds": {
+        "full-house": 0.0851063829787234
+      }
+    },
+    {
+      "label": "A Pair",
+      "hand": "8s 8d Kc 5h 3d",
+      "hold": 2,
+      "targets": [
+        "four-kind",
+        "full-house",
+        "three-kind"
+      ],
+      "odds": {
+        "four-kind": 0.0027752081406105457,
+        "full-house": 0.010175763182238668,
+        "three-kind": 0.11433857539315449
+      }
+    },
+    {
+      "label": "One card",
+      "hand": "8s Kc 5h 3d 2d",
+      "hold": 1,
+      "targets": [
+        "four-kind",
+        "three-kind"
+      ],
+      "odds": {
+        "four-kind": 0.0002915370167914109,
+        "three-kind": 0.022997785439968603
+      }
+    },
+    {
+      "label": "4 to a Flush",
+      "hand": "Ks 9s 6s 3s 7d",
+      "hold": 4,
+      "targets": [
+        "flush"
+      ],
+      "odds": {
+        "flush": 0.19148936170212766
+      }
+    },
+    {
+      "label": "3 to a Flush",
+      "hand": "Ks 9s 6s 7d 4c",
+      "hold": 3,
+      "targets": [
+        "flush"
+      ],
+      "odds": {
+        "flush": 0.041628122109158186
+      }
+    },
+    {
+      "label": "2 to a Flush",
+      "hand": "Ks 9s 6d 7d 4c",
+      "hold": 2,
+      "targets": [
+        "flush"
+      ],
+      "odds": {
+        "flush": 0.0101140918902251
+      }
+    },
+    {
+      "label": "4 to an open Straight",
+      "hand": "9d 8c 7h 6s Kd",
+      "hold": 4,
+      "targets": [
+        "straight"
+      ],
+      "odds": {
+        "straight": 0.1702127659574468
+      }
+    },
+    {
+      "label": "4 to an inside Straight",
+      "hand": "9d 8c 6h 5s Kd",
+      "hold": 4,
+      "targets": [
+        "straight"
+      ],
+      "odds": {
+        "straight": 0.0851063829787234
+      }
+    },
+    {
+      "label": "3 to a Straight",
+      "hand": "9d 8c 7h Ks 3d",
+      "hold": 3,
+      "targets": [
+        "straight"
+      ],
+      "odds": {
+        "straight": 0.04440333024976873
+      }
+    },
+    {
+      "label": "Nothing (discard all 5)",
+      "hand": "9d 7c 5h 4s 3d",
+      "hold": 0,
+      "targets": [
+        "royal",
+        "straight-flush",
+        "four-kind",
+        "full-house",
+        "flush",
+        "straight",
+        "three-kind"
+      ],
+      "odds": {
+        "royal": 0.0000026076656242523335,
+        "straight-flush": 0.000009126829684883167,
+        "four-kind": 0.00022425924368570067,
+        "full-house": 0.001384670446477989,
+        "flush": 0.001838404265097895,
+        "straight": 0.003745911669238477,
+        "three-kind": 0.020536670623799252
+      }
+    }
+  ]
+}
