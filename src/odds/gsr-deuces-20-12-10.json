@@ -370,5 +370,95 @@
       "net": 799,
       "p": 0.000022688664921110254
     }
+  ],
+  "perRow": [
+    {
+      "key": "natural-royal",
+      "label": "Natural Royal Flush",
+      "category": "royal",
+      "pays": 800,
+      "best": 0.000022688664921110254,
+      "second": 0.000005834079924960172
+    },
+    {
+      "key": "four-deuces",
+      "label": "Four Deuces",
+      "category": "four-deuces",
+      "pays": 200,
+      "best": 0.00018467233060008193,
+      "second": 0.00009841504769170563
+    },
+    {
+      "key": "wild-royal",
+      "label": "Wild Royal Flush",
+      "category": "wild-royal",
+      "pays": 20,
+      "best": 0.0017819316912705534,
+      "second": 0.0008146876396170392
+    },
+    {
+      "key": "five-kind",
+      "label": "Five of a Kind",
+      "category": "five-kind",
+      "pays": 12,
+      "best": 0.002982462071699901,
+      "second": 0.0008415555739209079
+    },
+    {
+      "key": "straight-flush",
+      "label": "Straight Flush",
+      "category": "straight-flush",
+      "pays": 10,
+      "best": 0.005455245708123917,
+      "second": 0.0034910826672050663
+    },
+    {
+      "key": "four-kind",
+      "label": "Four of a Kind",
+      "category": "four-kind",
+      "pays": 4,
+      "best": 0.06085502283281648,
+      "second": 0.04874047320757485
+    },
+    {
+      "key": "full-house",
+      "label": "Full House",
+      "category": "full-house",
+      "pays": 4,
+      "best": 0.02610987431580195,
+      "second": 0.01654401878388166
+    },
+    {
+      "key": "flush",
+      "label": "Flush",
+      "category": "flush",
+      "pays": 3,
+      "best": 0.021242621057064832,
+      "second": 0.014401662632872852
+    },
+    {
+      "key": "straight",
+      "label": "Straight",
+      "category": "straight",
+      "pays": 2,
+      "best": 0.05818059230807038,
+      "second": 0.04089261812472629
+    },
+    {
+      "key": "three-kind",
+      "label": "Three of a Kind",
+      "category": "three-kind",
+      "pays": 1,
+      "best": 0.2667766854681905,
+      "second": 0.28062886704998385
+    },
+    {
+      "key": "nothing",
+      "label": "No win",
+      "category": "nothing",
+      "pays": 0,
+      "best": 0.5564082035514403,
+      "second": 0.5935407851926008
+    }
   ]
 }

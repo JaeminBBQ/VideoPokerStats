@@ -390,5 +390,103 @@
       "net": 799,
       "p": 0.000024853348862469753
     }
+  ],
+  "perRow": [
+    {
+      "key": "royal",
+      "label": "Royal Flush",
+      "category": "royal",
+      "pays": 800,
+      "best": 0.000024853348862469753,
+      "second": 0.0000040463721086455305
+    },
+    {
+      "key": "straight-flush",
+      "label": "Straight Flush",
+      "category": "straight-flush",
+      "pays": 50,
+      "best": 0.00010763726763449803,
+      "second": 0.00004469578612614912
+    },
+    {
+      "key": "four-aces",
+      "label": "Four Aces",
+      "category": "four-kind",
+      "pays": 80,
+      "best": 0.00020050469875173115,
+      "second": 0.00008765675460845667
+    },
+    {
+      "key": "four-2-4",
+      "label": "Four 2s–4s",
+      "category": "four-kind",
+      "pays": 40,
+      "best": 0.0005272518302003917,
+      "second": 0.00021731989665509048
+    },
+    {
+      "key": "four-5-k",
+      "label": "Four 5s–Ks",
+      "category": "four-kind",
+      "pays": 25,
+      "best": 0.0016390998155470825,
+      "second": 0.0006872980200664651
+    },
+    {
+      "key": "full-house",
+      "label": "Full House",
+      "category": "full-house",
+      "pays": 6,
+      "best": 0.011406914266495894,
+      "second": 0.005577474032825108
+    },
+    {
+      "key": "flush",
+      "label": "Flush",
+      "category": "flush",
+      "pays": 5,
+      "best": 0.010899558820258844,
+      "second": 0.004947056017784505
+    },
+    {
+      "key": "straight",
+      "label": "Straight",
+      "category": "straight",
+      "pays": 4,
+      "best": 0.011274926565970893,
+      "second": 0.006876342836537554
+    },
+    {
+      "key": "three-kind",
+      "label": "Three of a Kind",
+      "category": "three-kind",
+      "pays": 3,
+      "best": 0.07453068751972101,
+      "second": 0.061981786152621544
+    },
+    {
+      "key": "two-pair",
+      "label": "Two Pair",
+      "category": "two-pair",
+      "pays": 2,
+      "best": 0.12925389720691954,
+      "second": 0.13916119399865604
+    },
+    {
+      "key": "jacks-or-better",
+      "label": "Jacks or Better",
+      "category": "jacks-or-better",
+      "pays": 1,
+      "best": 0.21517582552546993,
+      "second": 0.19857470064696814
+    },
+    {
+      "key": "nothing",
+      "label": "No win",
+      "category": "nothing",
+      "pays": 0,
+      "best": 0.5449588431341678,
+      "second": 0.5818404294850423
+    }
   ]
 }

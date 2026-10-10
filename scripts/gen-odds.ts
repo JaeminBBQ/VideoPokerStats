@@ -29,6 +29,7 @@ interface DistGame {
   gameId: string;
   rows: { key: string; pays: number }[];
   best: number[];
+  second: number[];
 }
 const dist = (JSON.parse(readFileSync(DIST, 'utf8')) as { games: DistGame[] }).games;
 
@@ -67,6 +68,17 @@ for (const game of games) {
     .sort((x, y) => x - y)
     .map((pays) => ({ net: pays - 1, p: d.best.reduce((acc, v, i) => acc + ((game.rows[i]?.pays ?? 0) === pays ? v : 0), 0) }));
 
+  // Per paytable row (plus no pay): category, pays, P under perfect play and under the best non-tied
+  // mistake hold. Feeds the simulator (mistake rate mixes the two) and its big-hand markers.
+  const perRow = keys.map((key, i) => ({
+    key,
+    label: game.rows[i]?.label ?? 'No win',
+    category: cats.find((c) => c.outcomes.includes(i))!.key,
+    pays: game.rows[i]?.pays ?? 0,
+    best: d.best[i],
+    second: d.second[i],
+  }));
+
   const out = {
     generatedBy: 'node scripts/gen-odds.ts',
     gameId: game.id,
@@ -74,6 +86,7 @@ for (const game of games) {
     draws,
     sessions,
     perHand,
+    perRow,
   };
   writeFileSync(`${OUT_DIR}/${game.id}.json`, `${JSON.stringify(out, null, 2)}\n`);
 

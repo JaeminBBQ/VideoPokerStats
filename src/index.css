@@ -1738,6 +1738,11 @@ select {
   overflow-wrap: break-word;
 }
 
+/* The phone-width shorthand ("$3 min") is hidden until the ≤640px media query swaps the two spans. */
+.odds-goal-head-bet-short {
+  display: none;
+}
+
 .odds-goal-table th:first-child,
 .odds-goal-table td:first-child {
   text-align: left;
@@ -1816,5 +1821,31 @@ select {
   .compare-table th,
   .compare-table td {
     padding: 4px 3px;
+  }
+
+  /* The goal table must fit 375px (six columns) without horizontal page scroll. */
+  .odds-goal-table {
+    font-size: 11.5px;
+  }
+
+  .odds-goal-table th,
+  .odds-goal-table td {
+    padding: 4px 2px;
+  }
+
+  .odds-goal-head-bet {
+    font-size: 10px;
+  }
+
+  .odds-goal-head-bet-full {
+    display: none;
+  }
+
+  .odds-goal-head-bet-short {
+    display: inline;
+  }
+
+  .odds-goal-goal-sub {
+    font-size: 10px;
   }
 }

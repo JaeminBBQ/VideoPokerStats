@@ -22,6 +22,8 @@ src/charts/<id>.json        generated charts (never hand-edited)
 scripts/gen-odds.ts         npm run odds [-- <id>]: writes src/odds/<id>.json (dealt / perfect-play / draw odds, src/engine/odds.ts)
 src/odds/<id>.json          generated hand odds for the Odds tab (never hand-edited; loaded by src/lib/odds.ts)
 src/engine/blackjack.ts     exact infinite-deck blackjack: basic strategy + per-round net distribution for given rules (D22)
+src/engine/leave.ts         exact session odds under a leave rule (win goal / loss limit / time), worker request `leave` (D23)
+src/lib/simulate.ts         Simulator tab: seeded session simulator over exact per-row odds, leave advice, comps break-even
 src/engine/goals.ts         exact P(reach a goal before broke): ladder + banded solvers; TABLE_GAMES (blackjack/craps/roulette); src/lib/goals.ts builds the comparison table
 ```
 

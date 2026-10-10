@@ -234,7 +234,7 @@ export const TABLE_GAMES: TableGame[] = [
     id: 'craps-odds',
     name: 'Craps — pass + 2× odds',
     short: 'Craps 2×',
-    rules: 'Pass line plus 2× odds behind every point (odds pay true odds: 2:1, 3:2, 6:5), dropping to the bare line when the bankroll can\'t cover line + odds (0.61% of all money bet; the odds bet has no edge)',
+    rules: 'Pass line plus 2× odds behind every point (odds pay true odds: 2:1, 3:2, 6:5), dropping to the bare line when the bankroll can\'t cover line + odds (0.61% of all money bet)',
     source: 'exact from the dice, same derivation as the pass line; the odds bet pays true odds',
     minBetCents: 300,
     outcomes: PASS_2X_ODDS,

@@ -3,6 +3,9 @@
 Items Claude needs from the user. Claude adds items; the user answers inline or in chat.
 
 ## Open
+- [ ] *(players club questions, decide whether Sunday is positive)* At the GSR Infinity Rewards desk: (1) Does **Multiplier Sunday's 5×** stack with your **Premier 2×** (10×) or replace it (5×)? (2) Is **Thursday's 4×** instead of the 2× or on top of it? (3) Confirm 1,000 points = $1 free play. At Legends Bay: video poker points per $ and what 1,000 points are worth.
+- [ ] **Commit T013 + simulator math:** `git add -A && git commit -m "T013: Craps 2x column; T013a: exact leave odds + simulator core (D23)" && git push`
+- [ ] **Hand T014 to DeepSeek:** "read handoffs/TO_DEEPSEEK.md" (Simulator tab).
 - [ ] **Commit T012:** `git add -A && git commit -m "T012/T012a: chance you finish ahead, goal odds at table minimums; T012b/c: craps with 2x odds, exact blackjack for your table rules (D20-D22)" && git push`
 - [ ] **Then hand T013 to DeepSeek:** "read handoffs/TO_DEEPSEEK.md" (fits the Craps 2× column).
 - [ ] **Check the Odds tab:** GSR JoB 9/5 with a $100 budget. Goal table headers: $1.00 · $15.00 (min) · $3.00 (min) · $15.00 (min). Double row: 17% / **45%** / 27% / 30%. A $10 budget at Legends Bay 5¢ should show "—" for blackjack and roulette. The ahead bars: JoB 8/5 at 8 hours ≈ 15%, mostly gold. Check 375px.

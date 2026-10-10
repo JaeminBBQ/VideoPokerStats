@@ -378,5 +378,119 @@
       "net": 799,
       "p": 0.000023769953976660067
     }
+  ],
+  "perRow": [
+    {
+      "key": "natural-royal",
+      "label": "Royal Flush (no deuces)",
+      "category": "royal",
+      "pays": 800,
+      "best": 0.000023769953976660067,
+      "second": 0.0000057775807037713035
+    },
+    {
+      "key": "four-deuces-ace",
+      "label": "Four Deuces + Ace",
+      "category": "four-deuces",
+      "pays": 400,
+      "best": 0.000027616378164342114,
+      "second": 0.000008667670594132551
+    },
+    {
+      "key": "four-deuces",
+      "label": "Four Deuces",
+      "category": "four-deuces",
+      "pays": 200,
+      "best": 0.00015585790297860874,
+      "second": 0.00011561926733408056
+    },
+    {
+      "key": "five-aces",
+      "label": "Five Aces",
+      "category": "five-kind",
+      "pays": 80,
+      "best": 0.00033287595115475804,
+      "second": 0.00009144683710084598
+    },
+    {
+      "key": "five-3-5",
+      "label": "Five 3s–5s",
+      "category": "five-kind",
+      "pays": 40,
+      "best": 0.000779244694059851,
+      "second": 0.0001514280925711182
+    },
+    {
+      "key": "five-6-k",
+      "label": "Five 6s–Ks",
+      "category": "five-kind",
+      "pays": 20,
+      "best": 0.0020765121107832467,
+      "second": 0.00045440802825132544
+    },
+    {
+      "key": "wild-royal",
+      "label": "Wild Royal Flush",
+      "category": "wild-royal",
+      "pays": 25,
+      "best": 0.0020756546983339576,
+      "second": 0.0008001034290070655
+    },
+    {
+      "key": "straight-flush",
+      "label": "Straight Flush",
+      "category": "straight-flush",
+      "pays": 9,
+      "best": 0.003973236993956415,
+      "second": 0.003692761801579754
+    },
+    {
+      "key": "four-kind",
+      "label": "Four of a Kind",
+      "category": "four-kind",
+      "pays": 4,
+      "best": 0.06284274991728535,
+      "second": 0.048074937658153856
+    },
+    {
+      "key": "full-house",
+      "label": "Full House",
+      "category": "full-house",
+      "pays": 4,
+      "best": 0.02647570185036579,
+      "second": 0.016582711359043253
+    },
+    {
+      "key": "flush",
+      "label": "Flush",
+      "category": "flush",
+      "pays": 3,
+      "best": 0.023519583986121223,
+      "second": 0.01814085528685264
+    },
+    {
+      "key": "straight",
+      "label": "Straight",
+      "category": "straight",
+      "pays": 1,
+      "best": 0.04005234197392639,
+      "second": 0.03365612569869769
+    },
+    {
+      "key": "three-kind",
+      "label": "Three of a Kind",
+      "category": "three-kind",
+      "pays": 1,
+      "best": 0.2784019359280216,
+      "second": 0.2810842422037587
+    },
+    {
+      "key": "nothing",
+      "label": "No win",
+      "category": "nothing",
+      "pays": 0,
+      "best": 0.5592629176608718,
+      "second": 0.5971409150863518
+    }
   ]
 }

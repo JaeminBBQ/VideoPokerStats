@@ -3,16 +3,18 @@ import type { Card } from './cards.ts';
 import type { HoldEv } from './ev.ts';
 import type { MistakeSignature, SimilarMatch } from './drill.ts';
 import type { GameId } from './games.ts';
+import type { LeaveOdds, LeaveRule } from './leave.ts';
 
 export type EngineRequest =
   | { id: number; type: 'prepare'; gameId: GameId }
   | { id: number; type: 'analyze'; gameId: GameId; hand: Card[] }
-  | { id: number; type: 'similar'; gameId: GameId; signature: MistakeSignature };
+  | { id: number; type: 'similar'; gameId: GameId; signature: MistakeSignature }
+  | { id: number; type: 'leave'; pays: number[]; probs: number[]; startBets: number; rules: LeaveRule[] };
 
 type WithoutId<T> = T extends unknown ? Omit<T, 'id'> : never;
 
 export type EngineResponse =
-  | { id: number; ok: true; holds: HoldEv[]; similar?: { hand: Card[]; match: SimilarMatch } }
+  | { id: number; ok: true; holds: HoldEv[]; similar?: { hand: Card[]; match: SimilarMatch }; leave?: (LeaveOdds | null)[] }
   | { id: number; ok: false; error: string };
 
 export class EngineClient {
@@ -55,6 +57,14 @@ export class EngineClient {
    */
   async similar(gameId: GameId, signature: MistakeSignature): Promise<{ hand: Card[]; match: SimilarMatch }> {
     return (await this.send({ type: 'similar', gameId, signature })).similar!;
+  }
+
+  /**
+   * Exact leave-rule odds (src/engine/leave.ts) for several rules, off the main thread: can take up to a
+   * second for long, cheap-bet sessions. One entry per rule; null when too large to compute.
+   */
+  async leave(pays: number[], probs: number[], startBets: number, rules: LeaveRule[]): Promise<(LeaveOdds | null)[]> {
+    return (await this.send({ type: 'leave', pays, probs, startBets, rules })).leave!;
   }
 
   terminate(): void {

@@ -382,5 +382,87 @@
       "net": 799,
       "p": 0.0000247582680375947
     }
+  ],
+  "perRow": [
+    {
+      "key": "royal",
+      "label": "Royal Flush",
+      "category": "royal",
+      "pays": 800,
+      "best": 0.0000247582680375947,
+      "second": 0.000004231286039020212
+    },
+    {
+      "key": "straight-flush",
+      "label": "Straight Flush",
+      "category": "straight-flush",
+      "pays": 50,
+      "best": 0.00010930909037147209,
+      "second": 0.00005122230253239566
+    },
+    {
+      "key": "four-kind",
+      "label": "Four of a Kind",
+      "category": "four-kind",
+      "pays": 25,
+      "best": 0.002362545685876868,
+      "second": 0.0009932314852284692
+    },
+    {
+      "key": "full-house",
+      "label": "Full House",
+      "category": "full-house",
+      "pays": 9,
+      "best": 0.01151220733628651,
+      "second": 0.005454325581304325
+    },
+    {
+      "key": "flush",
+      "label": "Flush",
+      "category": "flush",
+      "pays": 6,
+      "best": 0.01101451096803152,
+      "second": 0.0058079740248878796
+    },
+    {
+      "key": "straight",
+      "label": "Straight",
+      "category": "straight",
+      "pays": 4,
+      "best": 0.01122936724134379,
+      "second": 0.006061285148724182
+    },
+    {
+      "key": "three-kind",
+      "label": "Three of a Kind",
+      "category": "three-kind",
+      "pays": 3,
+      "best": 0.0744486985711364,
+      "second": 0.061985156036692364
+    },
+    {
+      "key": "two-pair",
+      "label": "Two Pair",
+      "category": "two-pair",
+      "pays": 2,
+      "best": 0.12927890248017765,
+      "second": 0.1391216852836326
+    },
+    {
+      "key": "jacks-or-better",
+      "label": "Jacks or Better",
+      "category": "jacks-or-better",
+      "pays": 1,
+      "best": 0.21458503112564406,
+      "second": 0.19757462764671868
+    },
+    {
+      "key": "nothing",
+      "label": "No win",
+      "category": "nothing",
+      "pays": 0,
+      "best": 0.5454346692330942,
+      "second": 0.58294626120424
+    }
   ]
 }

@@ -378,5 +378,87 @@
       "net": 799,
       "p": 0.000024675108210663005
     }
+  ],
+  "perRow": [
+    {
+      "key": "royal",
+      "label": "Royal Flush",
+      "category": "royal",
+      "pays": 800,
+      "best": 0.000024675108210663005,
+      "second": 0.000006764258502085488
+    },
+    {
+      "key": "straight-flush",
+      "label": "Straight Flush",
+      "category": "straight-flush",
+      "pays": 50,
+      "best": 0.00010808424666242389,
+      "second": 0.00005561843631133262
+    },
+    {
+      "key": "four-kind",
+      "label": "Four of a Kind",
+      "category": "four-kind",
+      "pays": 80,
+      "best": 0.002358159387131938,
+      "second": 0.0010545461141314655
+    },
+    {
+      "key": "full-house",
+      "label": "Full House",
+      "category": "full-house",
+      "pays": 7,
+      "best": 0.011482848565991096,
+      "second": 0.005616347753335758
+    },
+    {
+      "key": "flush",
+      "label": "Flush",
+      "category": "flush",
+      "pays": 5,
+      "best": 0.010861285850739843,
+      "second": 0.0053532670038568915
+    },
+    {
+      "key": "straight",
+      "label": "Straight",
+      "category": "straight",
+      "pays": 4,
+      "best": 0.01305665234701548,
+      "second": 0.006749862345087634
+    },
+    {
+      "key": "three-kind",
+      "label": "Three of a Kind",
+      "category": "three-kind",
+      "pays": 3,
+      "best": 0.07400913996589979,
+      "second": 0.06403774665258352
+    },
+    {
+      "key": "two-pair",
+      "label": "Two Pair",
+      "category": "two-pair",
+      "pays": 1,
+      "best": 0.12824972238163326,
+      "second": 0.11570264241623628
+    },
+    {
+      "key": "jacks-or-better",
+      "label": "Jacks or Better",
+      "category": "jacks-or-better",
+      "pays": 1,
+      "best": 0.21153920400978282,
+      "second": 0.21995282655226464
+    },
+    {
+      "key": "nothing",
+      "label": "No win",
+      "category": "nothing",
+      "pays": 0,
+      "best": 0.5483102281369326,
+      "second": 0.5814703784676905
+    }
   ]
 }

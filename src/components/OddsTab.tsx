@@ -62,6 +62,7 @@ export default function OddsTab({ game, gameId, bet, denomination, maxCoins }: P
   const fourHour = odds.sessions.find((s) => s.hands === 2400);
   const denomLabel = DENOM_LABELS[denomination] ?? `$${denomination}`;
   const takeaway = goalData && goalData.ok ? goalTakeaway(goalData) : null;
+  const rouletteCol = goalData && goalData.ok ? goalData.columns.find((c) => c.id === 'roulette') : undefined;
 
   return (
     <section className="panel odds-panel">
@@ -191,7 +192,7 @@ export default function OddsTab({ game, gameId, bet, denomination, maxCoins }: P
           <>
             Tables bet their minimum ({goalData.columns
               .filter((c) => c.minBetCents > 0)
-              .map((c) => `${c.id} $${c.minBetCents / 100}`)
+              .map((c) => `${c.short} $${c.minBetCents / 100}`)
               .join(', ')}) or the video poker bet if that&apos;s bigger.
           </>
         )}
@@ -203,15 +204,24 @@ export default function OddsTab({ game, gameId, bet, denomination, maxCoins }: P
             <thead>
               <tr>
                 <th>Goal</th>
-                {goalData.columns.map((c) => (
-                  <th key={c.id}>
-                    {c.short}
-                    <div className="odds-goal-head-bet">
-                      {formatCents(c.betCents)}/hand
-                      {c.betCents === c.minBetCents && c.minBetCents > 0 ? ' (min)' : ''}
-                    </div>
-                  </th>
-                ))}
+                {goalData.columns.map((c) => {
+                  const atMin = c.betCents === c.minBetCents && c.minBetCents > 0;
+                  const whole = c.betCents % 100 === 0 ? `$${c.betCents / 100}` : formatCents(c.betCents);
+                  return (
+                    <th key={c.id}>
+                      {c.short}
+                      <div className="odds-goal-head-bet">
+                        <span className="odds-goal-head-bet-full">
+                          {formatCents(c.betCents)}/hand{atMin ? ' (min)' : ''}
+                        </span>
+                        <span className="odds-goal-head-bet-short">
+                          {whole}
+                          {atMin ? ' min' : '/hand'}
+                        </span>
+                      </div>
+                    </th>
+                  );
+                })}
               </tr>
             </thead>
             <tbody>
@@ -247,12 +257,18 @@ export default function OddsTab({ game, gameId, bet, denomination, maxCoins }: P
               </p>
             ))}
           <p className="odds-footnote">
-            Play until you reach the goal or can&apos;t cover a bet. No time limit. Exact, not simulated. Video poker: this paytable, perfect play. Blackjack:{' '}
-            {goalData.columns[1].rules}. Craps: {goalData.columns[2].rules}. Roulette:{' '}
-            {goalData.columns[3].rules}. Blackjack assumes you can always afford a double or split. Tables
-            bet their minimum or the video poker bet if that&apos;s bigger. Goals round up to the smallest
-            win each game can reach: whole bets in video poker, half a bet in blackjack. At{' '}
-            {formatCents(goalData.columns[3].betCents)} roulette, one win covers a +$5 goal.
+            Play until you reach the goal or can&apos;t cover a bet. No time limit. Exact, not simulated.
+            Video poker: this paytable, perfect play.{' '}
+            {goalData.columns.slice(1).map((c) => (
+              <span key={c.id}>
+                {c.short}: {c.rules}.{' '}
+              </span>
+            ))}
+            Craps 2× counts the odds money in its house edge; the odds bet itself has no edge, so taking
+            odds adds swing, not expected loss. Blackjack assumes you can always afford a double or split.
+            Tables bet their minimum or the video poker bet if that&apos;s bigger. Goals round up to the
+            smallest win each game can reach: whole bets in video poker, half a bet in blackjack.{' '}
+            {rouletteCol && `At ${formatCents(rouletteCol.betCents)} roulette, one win covers a +$5 goal.`}
           </p>
         </>
       ) : goalData ? (

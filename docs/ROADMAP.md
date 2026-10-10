@@ -12,3 +12,5 @@
 **M4: Assist.** T009 (DeepSeek, done): Assist tab. Type in a hand and get the engine's hold (D15). Camera detection and glasses output are shelved.
 
 **M5: Odds.** Owner request (D17): exact odds per hand category on the deal, by what you hold, and under perfect play. Engine + data (Claude, done): `src/engine/odds.ts`, `npm run odds`, `src/odds/*.json`. T011 (DeepSeek, done): Odds tab UI. T011a (Claude, done): exact chance of finishing a session ahead (D18). T011b (Claude, done): goal odds vs blackjack/craps/roulette (D19). T012 (DeepSeek): both sections.
+
+**M6: Simulator.** Owner request (D23): when video poker has an edge (comps), dynamic sessions, a run simulator with a graph, and when-to-leave advice. T013a (Claude, done): exact leave odds + simulator core. T014 (DeepSeek): Simulator tab.
