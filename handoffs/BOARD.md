@@ -17,6 +17,6 @@
 | T009 | Assist tab: enter 5 cards (5 ranks then 5 suits), engine says what to hold; ties shown as ties; no stats (D15) | DeepSeek | done | T008 |
 | T010 | GSR: 5 photographed paytables verified, `offers` (denomination + max coins per machine), charts, risk data, per-game max bet in bankroll/UI (D16) | Claude | done | T009 |
 | T010a | Suit colors fixed everywhere (`isRedSuit`: ♦♥ red); odds engine `src/engine/odds.ts` + `npm run odds` → `src/odds/*.json`, loader `src/lib/odds.ts` (D17) | Claude | done | T010 |
-| T011 | Odds tab: per-game hand odds on the deal / under perfect play / by what you hold | DeepSeek | ready | T010a |
+| T011 | Odds tab: per-game hand odds on the deal / under perfect play / by what you hold | DeepSeek | done | T010a |
 
 Only `ready` tasks have full specs in `tasks/`. Claude writes the next spec after reviewing the previous task. See `docs/ROADMAP.md`.

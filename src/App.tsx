@@ -55,6 +55,7 @@ import ChartTab from './components/ChartTab.tsx';
 import DrillPanel from './components/DrillPanel.tsx';
 import GamePicker from './components/GamePicker.tsx';
 import MiniCard from './components/MiniCard.tsx';
+import OddsTab from './components/OddsTab.tsx';
 import Paytable from './components/Paytable.tsx';
 import SessionLog from './components/SessionLog.tsx';
 import StatsPanel from './components/StatsPanel.tsx';
@@ -88,7 +89,7 @@ function sanitizeSettings(s: Settings): Settings {
 }
 
 type Phase = 'preparing' | 'ready' | 'dealt' | 'graded' | 'error';
-type Tab = 'trainer' | 'chart' | 'bankroll' | 'assist';
+type Tab = 'trainer' | 'chart' | 'bankroll' | 'assist' | 'odds';
 
 /** What the hand currently out in Drill mode is about. */
 interface DrillCtx {
@@ -463,6 +464,9 @@ export default function App() {
         >
           Assist
         </button>
+        <button type="button" className={`tab${tab === 'odds' ? ' active' : ''}`} onClick={() => setTab('odds')}>
+          Odds
+        </button>
       </nav>
 
       <header className="header">
@@ -507,6 +511,10 @@ export default function App() {
       ) : tab === 'assist' ? (
         <main>
           <AssistTab game={game} gameId={gameId} engine={engine} phase={phase} />
+        </main>
+      ) : tab === 'odds' ? (
+        <main>
+          <OddsTab key={gameId} game={game} gameId={gameId} />
         </main>
       ) : (
         <>
