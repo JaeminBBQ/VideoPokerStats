@@ -514,7 +514,14 @@ export default function App() {
         </main>
       ) : tab === 'odds' ? (
         <main>
-          <OddsTab key={gameId} game={game} gameId={gameId} />
+          <OddsTab
+            key={gameId}
+            game={game}
+            gameId={gameId}
+            bet={betCents(denomination, maxCoins)}
+            denomination={denomination}
+            maxCoins={maxCoins}
+          />
         </main>
       ) : (
         <>

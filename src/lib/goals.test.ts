@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { goalProbability } from '../engine/goals.ts';
+import { TABLE_GAMES, goalProbability } from '../engine/goals.ts';
 import { ODDS_BY_GAME } from './odds.ts';
 import { GOALS, MAX_BUDGET_BETS, goalTable } from './goals.ts';
 
@@ -14,9 +14,31 @@ describe('goalTable', () => {
     expect(t.rows.map((r) => r.label)).toEqual(GOALS.map((g) => g.label));
     expect(t.rows.map((r) => r.goalBets)).toEqual([5, 10, 15, 25, 50, 100, 200]);
     expect(t.rows[0].odds[0]).toBeCloseTo(goalProbability(job95, 100, 5), 15);
+    expect(t.rows[0].odds[2]).toBeCloseTo(goalProbability(TABLE_GAMES[1].outcomes, 100 / 3, 5 / 3), 15);
     expect(t.columns[0].edge).toBeCloseTo(1 - 0.984498, 5);
     expect(t.columns[3].edge).toBeCloseTo(2 / 38, 12);
     for (const r of t.rows) expect(r.odds[r.best]).toBe(Math.max(...r.odds));
+  });
+
+  it('bets each table its minimum, or the video poker bet if larger', () => {
+    const t = goalTable('JoB 9/5', job95, 10000, 100); // $100, $1 video poker
+    if (!t.ok) throw new Error('expected a table');
+    expect(t.columns.map((c) => c.betCents)).toEqual([100, 1500, 300, 1500]);
+    expect(t.columns[1].budgetBets).toBeCloseTo(100 / 15, 12);
+    // +$5 at $15 blackjack: any result of at least +0.5 bet. Same as asking for +$7.50.
+    expect(t.rows[0].odds[1]).toBeCloseTo(goalProbability(TABLE_GAMES[0].outcomes, 100 / 15, 0.5), 15);
+    // Roulette at $15: +$5 needs one winning spin, the same as +$15.
+    expect(t.rows[0].odds[3]).toBeCloseTo(t.rows[2].odds[3], 15);
+    const big = goalTable('DWBP', job95, 10000, 1000); // $10 video poker
+    if (!big.ok) throw new Error('expected a table');
+    expect(big.columns.map((c) => c.betCents)).toEqual([1000, 1500, 1000, 1500]);
+  });
+
+  it('marks tables the budget cannot cover as unplayable with 0 odds', () => {
+    const t = goalTable('x', job95, 1000, 25); // $10 budget at 25¢
+    if (!t.ok) throw new Error('expected a table');
+    expect(t.columns.map((c) => c.playable)).toEqual([true, false, true, false]);
+    expect(t.rows.every((r) => r.odds[1] === 0 && r.odds[3] === 0)).toBe(true);
   });
 
   it('rounds goals up to whole bets and floors the budget', () => {

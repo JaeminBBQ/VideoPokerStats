@@ -1,21 +1,48 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { parseHand, type GameDef, type GameId } from '../engine/index.ts';
+import { formatCents } from '../lib/bankroll.ts';
+import { GOALS, goalTable, type GoalTable } from '../lib/goals.ts';
 import { ODDS_BY_GAME, oneIn } from '../lib/odds.ts';
-import { pace, percent2, withArticle } from '../lib/oddsFormat.ts';
+import { pct, pace, percent2, sessionLabel, signedBets, withArticle } from '../lib/oddsFormat.ts';
+import { DENOM_LABELS } from '../lib/storage.ts';
 import { isWildCard } from '../lib/wild.ts';
 import MiniCard from './MiniCard.tsx';
 
 interface Props {
   game: GameDef;
   gameId: GameId;
+  /** Current max bet in cents (denomination × maxCoins, per-machine). */
+  bet: number;
+  denomination: number;
+  maxCoins: number;
 }
 
 /** Categories too ordinary to headline the picker; they still appear in the table. */
 const NOT_HEADLINE = new Set(['nothing', 'three-kind', 'two-pair', 'jacks-or-better']);
 
-export default function OddsTab({ game, gameId }: Props) {
+/** Index of the "Double" row in `GOALS` (and so in `GoalTable.rows`). */
+const DOUBLE_INDEX = GOALS.findIndex((g) => g.multiple === 1);
+
+type GoalTableOk = Extract<GoalTable, { ok: true }>;
+
+/** The takeaway above the goal table, from whichever column is best at doubling. */
+function goalTakeaway(table: GoalTableOk): string {
+  const best = table.columns[table.rows[DOUBLE_INDEX].best];
+  return best.id === 'video-poker'
+    ? 'Video poker gives you the best shot at doubling here (the royal does the heavy lifting).'
+    : `${best.short} gives you the best shot at doubling. Bigger bets reach a goal in fewer rounds, so the house edge has less time to work on you.`;
+}
+
+export default function OddsTab({ game, gameId, bet, denomination, maxCoins }: Props) {
   const odds = ODDS_BY_GAME[gameId];
   const [selectedKey, setSelectedKey] = useState<string>(() => odds?.categories[0]?.key ?? '');
+  // Not persisted: the goal table is a scratch comparison.
+  const [budgetDollars, setBudgetDollars] = useState('100');
+  const budgetCents = (Number.parseInt(budgetDollars, 10) || 0) * 100;
+  const goalData = useMemo(
+    () => (odds ? goalTable(game.name, odds.perHand, budgetCents, bet) : null),
+    [odds, game.name, budgetCents, bet],
+  );
 
   if (!odds) {
     return (
@@ -32,6 +59,9 @@ export default function OddsTab({ game, gameId }: Props) {
     (d) => d.targets.includes(selected.key) && Number.isFinite(d.odds[selected.key]),
   );
   const perfectPace = pace(selected.perfect);
+  const fourHour = odds.sessions.find((s) => s.hands === 2400);
+  const denomLabel = DENOM_LABELS[denomination] ?? `$${denomination}`;
+  const takeaway = goalData && goalData.ok ? goalTakeaway(goalData) : null;
 
   return (
     <section className="panel odds-panel">
@@ -89,6 +119,149 @@ export default function OddsTab({ game, gameId }: Props) {
           {perfectPace !== null && <div className="odds-hours">{perfectPace} at 600 hands/hour</div>}
         </div>
       </div>
+
+      <h3>Chance you finish ahead</h3>
+      {fourHour && (
+        <p className="odds-ahead-headline">
+          Play perfectly for 4 hours and you finish ahead <strong>{pct(fourHour.ahead)}</strong> of the
+          time. Without a royal, only <strong>{pct(fourHour.aheadNoRoyal)}</strong>.
+        </p>
+      )}
+      <div className="odds-ahead-legend">
+        <span className="odds-ahead-legend-item">
+          <span className="odds-ahead-swatch green" />
+          ahead, no royal needed
+        </span>
+        <span className="odds-ahead-legend-item">
+          <span className="odds-ahead-swatch gold" />
+          ahead because of a royal
+        </span>
+      </div>
+      <div className="odds-ahead-rows">
+        {odds.sessions.map((s) => (
+          <div className="odds-ahead-row" key={s.hands}>
+            <div className="odds-ahead-label">
+              {sessionLabel(s.hands)}
+              {s.hands >= 600 && (
+                <div className="odds-ahead-sub">{s.hands.toLocaleString('en-US')} hands</div>
+              )}
+            </div>
+            <div className="odds-ahead-bar">
+              <div className="odds-ahead-track">
+                <div className="odds-ahead-seg green" style={{ width: `${(s.aheadNoRoyal * 100).toFixed(3)}%` }} />
+                <div
+                  className="odds-ahead-seg gold"
+                  style={{ width: `${((s.ahead - s.aheadNoRoyal) * 100).toFixed(3)}%` }}
+                />
+              </div>
+            </div>
+            <div className="odds-ahead-value">
+              {pct(s.ahead)}
+              <div className="odds-ahead-sub">avg {signedBets(s.avgBets)} bets</div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p className="odds-footnote">
+        Exact, not simulated. Perfect play at max bet, 600 hands/hour, and enough bankroll to finish the
+        session (whether you&apos;d go broke first is the Bankroll tab). 1 bet = one max-bet hand. Longer
+        isn&apos;t always worse: a royal pays 800 bets, so once a session is long enough for one royal to
+        cover the losses, the chance of being ahead can bump up. Break-even sessions count as not ahead.
+      </p>
+
+      <h3>Reach a goal before you go broke</h3>
+      <label className="odds-goal-label" htmlFor="odds-budget">
+        Starting budget
+      </label>
+      <div className="odds-goal-input-row">
+        <span className="odds-goal-dollar">$</span>
+        <input
+          id="odds-budget"
+          className="odds-goal-input"
+          inputMode="numeric"
+          value={budgetDollars}
+          onChange={(e) => setBudgetDollars(e.target.value.replace(/[^0-9]/g, ''))}
+          aria-label="Starting budget in whole dollars"
+        />
+      </div>
+      <p className="odds-goal-sub">
+        Video poker bets {formatCents(bet)} a hand ({maxCoins} coins × {denomLabel}): {goalData?.budgetBets ?? 0}{' '}
+        bets.{' '}
+        {goalData && goalData.ok && (
+          <>
+            Tables bet their minimum ({goalData.columns
+              .filter((c) => c.minBetCents > 0)
+              .map((c) => `${c.id} $${c.minBetCents / 100}`)
+              .join(', ')}) or the video poker bet if that&apos;s bigger.
+          </>
+        )}
+      </p>
+      {goalData && goalData.ok && takeaway !== null && <p className="odds-goal-takeaway">{takeaway}</p>}
+      {goalData && goalData.ok ? (
+        <>
+          <table className="odds-goal-table">
+            <thead>
+              <tr>
+                <th>Goal</th>
+                {goalData.columns.map((c) => (
+                  <th key={c.id}>
+                    {c.short}
+                    <div className="odds-goal-head-bet">
+                      {formatCents(c.betCents)}/hand
+                      {c.betCents === c.minBetCents && c.minBetCents > 0 ? ' (min)' : ''}
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {goalData.rows.map((r, i) => (
+                <tr key={r.label}>
+                  <td>
+                    <div className="odds-goal-goal-label">{r.label}</div>
+                    <div className="odds-goal-goal-sub">
+                      {GOALS[i].multiple !== undefined && <div>+{formatCents(r.goalCents)}</div>}
+                      <div>{r.goalBets} bets</div>
+                    </div>
+                  </td>
+                  {r.odds.map((p, ci) => (
+                    <td key={ci} className={ci === r.best ? 'best' : ''}>
+                      {goalData.columns[ci].playable ? pct(p) : '—'}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+              <tr className="odds-goal-edge">
+                <td>House edge</td>
+                {goalData.columns.map((c) => (
+                  <td key={c.id}>{`${(c.edge * 100).toFixed(2)}%`}</td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+          {goalData.columns
+            .filter((c) => !c.playable)
+            .map((c) => (
+              <p className="odds-goal-sub" key={c.id}>
+                {c.short}: your budget is under the {formatCents(c.betCents)} bet.
+              </p>
+            ))}
+          <p className="odds-footnote">
+            Play until you reach the goal or can&apos;t cover a bet. No time limit. Exact, not simulated. Video poker: this paytable, perfect play. Blackjack:{' '}
+            {goalData.columns[1].rules}. Craps: {goalData.columns[2].rules}. Roulette:{' '}
+            {goalData.columns[3].rules}. Blackjack assumes you can always afford a double or split. Tables
+            bet their minimum or the video poker bet if that&apos;s bigger. Goals round up to the smallest
+            win each game can reach: whole bets in video poker, half a bet in blackjack. At{' '}
+            {formatCents(goalData.columns[3].betCents)} roulette, one win covers a +$5 goal.
+          </p>
+        </>
+      ) : goalData ? (
+        <p className="odds-goal-sub">
+          {goalData.reason === 'below-one-bet'
+            ? `Your budget doesn't cover one ${formatCents(bet)} bet.`
+            : "That's over 5,000 bets. Try a smaller budget."}
+        </p>
+      ) : null}
 
       <h3>Every hand at a glance</h3>
       <table className="odds-table">

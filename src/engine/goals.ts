@@ -125,11 +125,13 @@ export interface TableGame {
   short: string;
   rules: string;
   source: string;
+  /** Table minimum per round, in cents (owner's word for Reno, D20). */
+  minBetCents: number;
   outcomes: Outcome[];
 }
 
 /**
- * Comparison games, flat-betting one unit per round. Roulette and craps are exact from their rules.
+ * Comparison games, flat-betting one unit per round (the table minimum, or the video poker bet if larger). Roulette and craps are exact from their rules.
  * Blackjack's per-hand net-win distribution (basic strategy, doubles, splits, surrender) is the published
  * table; nothing here claims a local casino offers these rules.
  */
@@ -140,6 +142,7 @@ export const TABLE_GAMES: TableGame[] = [
     short: 'Blackjack',
     rules: '6 decks, blackjack pays 3:2, dealer stands on soft 17, double any 2 / after split, late surrender; basic strategy (0.28% edge)',
     source: 'https://wizardofodds.com/games/blackjack/appendix/4/ (net win per hand, "Liberal Strip Rules")',
+    minBetCents: 1500,
     outcomes: [
       { net: -8, p: 0.00000019 },
       { net: -7, p: 0.00000235 },
@@ -168,6 +171,7 @@ export const TABLE_GAMES: TableGame[] = [
     short: 'Craps',
     rules: 'Pass line, no odds bet: wins 244/495 (1.41% edge)',
     source: 'exact from the dice: P(win) = 8/36 + Σ over points of P(point)·P(point before 7) = 244/495',
+    minBetCents: 300,
     outcomes: [
       { net: 1, p: 244 / 495 },
       { net: -1, p: 251 / 495 },
@@ -179,6 +183,7 @@ export const TABLE_GAMES: TableGame[] = [
     short: 'Roulette',
     rules: 'Double-zero wheel, even-money bet: wins 18/38 (5.26% edge)',
     source: 'exact: 18 winning pockets of 38',
+    minBetCents: 1500,
     outcomes: [
       { net: 1, p: 18 / 38 },
       { net: -1, p: 20 / 38 },

@@ -22,11 +22,21 @@ export interface GoalColumn {
   rules: string;
   /** House edge as a fraction (0.0028 = 0.28%). */
   edge: number;
+  /** This game's bet per round: the machine's max bet for video poker; for a table game, its minimum or
+   * the video poker bet, whichever is larger. */
+  betCents: number;
+  /** Table minimum (0 for video poker). */
+  minBetCents: number;
+  /** Budget in this game's bets (fractional for tables: spare change below a bet can't be bet). */
+  budgetBets: number;
+  /** False when the budget can't cover one bet here; its odds are 0. */
+  playable: boolean;
 }
 
 export interface GoalRow {
   label: string;
-  /** Profit needed, in dollars and in whole bets (rounded up: the goal is "at least"). */
+  /** Profit needed, in dollars, and in whole video poker bets (rounded up: the goal is "at least"). Table
+   * games round up to their own smallest reachable result (half a bet for blackjack). */
   goalCents: number;
   goalBets: number;
   /** P(reach the goal before the budget can't cover a bet), one per column. */
@@ -40,22 +50,31 @@ export type GoalTable =
   | { ok: false; reason: 'below-one-bet' | 'too-many-bets'; budgetBets: number };
 
 /**
- * The comparison table: this video poker game at perfect play (first column) against flat betting the
- * same dollar amount per round at blackjack, craps, and roulette. Integer cents throughout.
+ * The comparison table: this video poker game at perfect play (first column) against flat betting at
+ * blackjack, craps, and roulette. Each table bets its minimum, or the video poker bet if that is larger,
+ * so a $1 video poker hand faces a $15 blackjack hand (D20). `budgetBets`/`ok: false` refer to the video poker
+ * bet. Integer cents throughout.
  */
 export function goalTable(vpName: string, vpPerHand: Outcome[], budgetCents: number, betCents: number): GoalTable {
   const budgetBets = Math.floor(budgetCents / betCents);
   if (budgetBets < 1) return { ok: false, reason: 'below-one-bet', budgetBets };
   if (budgetBets > MAX_BUDGET_BETS) return { ok: false, reason: 'too-many-bets', budgetBets };
   const games = [
-    { id: 'video-poker', short: 'Video poker', name: vpName, rules: 'Perfect play, max bet', outcomes: vpPerHand },
+    { id: 'video-poker', short: 'Video poker', name: vpName, rules: 'Perfect play, max bet', outcomes: vpPerHand, minBetCents: 0 },
     ...TABLE_GAMES,
   ];
-  const columns = games.map(({ id, short, name, rules, outcomes }) => ({ id, short, name, rules, edge: -edgeOf(outcomes) }));
+  const columns: GoalColumn[] = games.map(({ id, short, name, rules, outcomes, minBetCents }) => {
+    const bet = Math.max(minBetCents, betCents);
+    return { id, short, name, rules, edge: -edgeOf(outcomes), betCents: bet, minBetCents, budgetBets: budgetCents / bet, playable: budgetCents >= bet };
+  });
   const rows = GOALS.map(({ label, dollars, multiple }) => {
     const goalCents = dollars !== undefined ? dollars * 100 : budgetCents * (multiple ?? 1);
     const goalBets = Math.ceil(goalCents / betCents);
-    const odds = games.map((g) => goalProbability(g.outcomes, budgetBets, goalBets));
+    // Video poker plays whole bets (pays are whole coins); tables may reach half-bet results, so they get
+    // the fractional bet counts and goalProbability rounds within their own units.
+    const odds = games.map((g, i) =>
+      i === 0 ? goalProbability(g.outcomes, budgetBets, goalBets) : goalProbability(g.outcomes, columns[i].budgetBets, goalCents / columns[i].betCents),
+    );
     const best = odds.reduce((bi, p, i) => (p > odds[bi] ? i : bi), 0);
     return { label, goalCents, goalBets, odds, best };
   });

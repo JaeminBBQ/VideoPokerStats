@@ -3,8 +3,8 @@
 Items Claude needs from the user. Claude adds items; the user answers inline or in chat.
 
 ## Open
-- [ ] **Hand T012 to DeepSeek** (after committing T011 + T011a; one commit is fine): tell it "read handoffs/TO_DEEPSEEK.md".
-- [ ] **Commit T011:** `git add -A && git commit -m "T011: Odds tab; T011a/b: exact chance of finishing ahead, goal odds vs blackjack/craps/roulette (D18, D19)" && git push`
+- [ ] **Commit T012:** `git add -A && git commit -m "T012/T012a: chance you finish ahead, goal odds vs blackjack/craps/roulette at table minimums (D20)" && git push`
+- [ ] **Check the Odds tab:** GSR JoB 9/5 with a $100 budget. Goal table headers: $1.00 · $15.00 (min) · $3.00 (min) · $15.00 (min). Double row: 17% / **45%** / 27% / 30%. A $10 budget at Legends Bay 5¢ should show "—" for blackjack and roulette. The ahead bars: JoB 8/5 at 8 hours ≈ 15%, mostly gold. Check 375px.
 - [ ] **Check the Odds tab** (`npm run dev`): JoB 8/5 → Royal: 4 to a Royal 1 in 47 … discard all 1 in 383,485; perfect 1 in 40,170 (about every 67 hours). Four of a Kind: trips 1 in 23.5, perfect "about every 42 minutes". Deuces 16/13 → Four Deuces: 3 deuces 1 in 23.5. At 375px: do the five tabs wrapping to two rows look OK?
 - [ ] **Check suit colors:** ♦/♥ red, ♣/♠ black on the Trainer, Assist (slots, suit pad, result), and Chart tabs.
 - [ ] **Check the GSR tab:** JoB 9/5 should show 5¢ only, with the paytable at "× 20 coins" and a $1.00 bet. The $1 games should show a $10 bet. Switching games should snap the denomination.
@@ -19,6 +19,7 @@ Items Claude needs from the user. Claude adds items; the user answers inline or 
 - [ ] *(next casino visit)* **Legends Bay #12139:** photograph the paytables you haven't shot (Joker Poker, Double Bonus, Double Double Bonus, Deuces Wild Bonus Poker, Super Bonus Deuces Wild, Double Joker, Aces & Faces, Triple Double, Super Aces) and the same games at 25¢ and $1.
 
 ## Done
+- [x] T011 + T011a/b committed (2026-10-10). T012 + T012a verified by Claude (2026-10-10).
 - [x] T010a committed (2026-10-10). T011 verified by Claude (2026-10-10).
 - [x] T010 GSR committed and pushed (2026-10-08). Owner: GSR tier points are also 1 per $2 (already how the app counts them).
 - [x] T009 verified by Claude (2026-10-07).
