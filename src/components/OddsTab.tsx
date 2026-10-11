@@ -193,7 +193,7 @@ export default function OddsTab({ game, gameId, bet, denomination, maxCoins }: P
             Tables bet their minimum ({goalData.columns
               .filter((c) => c.minBetCents > 0)
               .map((c) => `${c.short} $${c.minBetCents / 100}`)
-              .join(', ')}) or the video poker bet if that&apos;s bigger.
+              .join(', ')}).
           </>
         )}
       </p>
@@ -212,11 +212,11 @@ export default function OddsTab({ game, gameId, bet, denomination, maxCoins }: P
                       {c.short}
                       <div className="odds-goal-head-bet">
                         <span className="odds-goal-head-bet-full">
-                          {formatCents(c.betCents)}/hand{atMin ? ' (min)' : ''}
+                          {formatCents(c.betCents)}/{c.unit}{atMin ? ' (min)' : ''}
                         </span>
                         <span className="odds-goal-head-bet-short">
                           {whole}
-                          {atMin ? ' min' : '/hand'}
+                          {atMin ? ' min' : `/${c.unit}`}
                         </span>
                       </div>
                     </th>
@@ -266,7 +266,7 @@ export default function OddsTab({ game, gameId, bet, denomination, maxCoins }: P
             ))}
             Craps 2× counts the odds money in its house edge; the odds bet itself has no edge, so taking
             odds adds swing, not expected loss. Blackjack assumes you can always afford a double or split.
-            Tables bet their minimum or the video poker bet if that&apos;s bigger. Goals round up to the
+            Tables always bet their minimum. Goals round up to the
             smallest win each game can reach: whole bets in video poker, half a bet in blackjack.{' '}
             {rouletteCol && `At ${formatCents(rouletteCol.betCents)} roulette, one win covers a +$5 goal.`}
           </p>

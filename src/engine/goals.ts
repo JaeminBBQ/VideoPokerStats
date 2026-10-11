@@ -162,6 +162,8 @@ export interface TableGame {
   name: string;
   /** Short column header for phone width. */
   short: string;
+  /** What one round is called: "hand" (blackjack), "bet" (craps), "spin" (roulette). */
+  unit: string;
   rules: string;
   source: string;
   /** Table minimum per round, in cents (owner's word for Reno, D20). */
@@ -195,7 +197,7 @@ const PASS_2X_ODDS: Outcome[] = [
 ];
 
 /**
- * Comparison games, flat-betting one unit per round (the table minimum, or the video poker bet if larger).
+ * Comparison games, flat-betting their table minimum every round (D25).
  * Roulette and craps are exact from their rules. Blackjack is computed exactly (infinite deck, basic
  * strategy) for the rules the owner reported at their $15 tables (D22).
  */
@@ -204,6 +206,7 @@ export const TABLE_GAMES: TableGame[] = [
     id: 'blackjack',
     name: 'Blackjack',
     short: 'Blackjack',
+    unit: 'hand',
     rules: `3:2, dealer stands on all 17s, double any two cards, double after split, split to 4 hands (aces once), no surrender; basic strategy (${(-OWNER_BLACKJACK.ev * 100).toFixed(2)}% edge, infinite deck)`,
     source: 'computed exactly by src/engine/blackjack.ts for the owner\'s table rules (D22)',
     minBetCents: 1500,
@@ -213,6 +216,7 @@ export const TABLE_GAMES: TableGame[] = [
     id: 'craps',
     name: 'Craps — pass line',
     short: 'Craps',
+    unit: 'bet',
     rules: 'Pass line, no odds bet: wins 244/495 (1.41% edge)',
     source: 'exact from the dice: P(win) = 8/36 + Σ over points of P(point)·P(point before 7) = 244/495',
     minBetCents: 300,
@@ -222,6 +226,7 @@ export const TABLE_GAMES: TableGame[] = [
     id: 'roulette',
     name: 'Roulette — red/black',
     short: 'Roulette',
+    unit: 'spin',
     rules: 'Double-zero wheel, even-money bet: wins 18/38 (5.26% edge)',
     source: 'exact: 18 winning pockets of 38',
     minBetCents: 1500,
@@ -234,6 +239,7 @@ export const TABLE_GAMES: TableGame[] = [
     id: 'craps-odds',
     name: 'Craps — pass + 2× odds',
     short: 'Craps 2×',
+    unit: 'bet',
     rules: 'Pass line plus 2× odds behind every point (odds pay true odds: 2:1, 3:2, 6:5), dropping to the bare line when the bankroll can\'t cover line + odds (0.61% of all money bet)',
     source: 'exact from the dice, same derivation as the pass line; the odds bet pays true odds',
     minBetCents: 300,

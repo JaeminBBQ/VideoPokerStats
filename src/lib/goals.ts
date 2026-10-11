@@ -18,12 +18,13 @@ export interface GoalColumn {
   id: string;
   /** Short header for phone width. */
   short: string;
+  /** What one round is called: "hand", "bet" (craps), "spin" (roulette). */
+  unit: string;
   name: string;
   rules: string;
   /** House edge per dollar wagered, as a fraction (0.0028 = 0.28%); craps with odds counts the odds money. */
   edge: number;
-  /** This game's bet per round: the machine's max bet for video poker; for a table game, its minimum or
-   * the video poker bet, whichever is larger. */
+  /** This game's bet per round: the machine's max bet for video poker; a table game's minimum (D25). */
   betCents: number;
   /** Table minimum (0 for video poker). */
   minBetCents: number;
@@ -51,8 +52,8 @@ export type GoalTable =
 
 /**
  * The comparison table: this video poker game at perfect play (first column) against flat betting at
- * blackjack, craps, and roulette. Each table bets its minimum, or the video poker bet if that is larger,
- * so a $1 video poker hand faces a $15 blackjack hand (D20). `budgetBets`/`ok: false` refer to the video poker
+ * blackjack, craps, and roulette. Each table always bets its minimum (D25, amends D20), so a $1 video poker
+ * hand faces a $15 blackjack hand and a $3 craps bet. `budgetBets`/`ok: false` refer to the video poker
  * bet. Integer cents throughout.
  */
 export function goalTable(vpName: string, vpPerHand: Outcome[], budgetCents: number, betCents: number): GoalTable {
@@ -60,14 +61,15 @@ export function goalTable(vpName: string, vpPerHand: Outcome[], budgetCents: num
   if (budgetBets < 1) return { ok: false, reason: 'below-one-bet', budgetBets };
   if (budgetBets > MAX_BUDGET_BETS) return { ok: false, reason: 'too-many-bets', budgetBets };
   const games = [
-    { id: 'video-poker', short: 'Video poker', name: vpName, rules: 'Perfect play, max bet', outcomes: vpPerHand, minBetCents: 0 },
+    { id: 'video-poker', short: 'Video poker', unit: 'hand', name: vpName, rules: 'Perfect play, max bet', outcomes: vpPerHand, minBetCents: 0 },
     ...TABLE_GAMES,
   ];
   const columns: GoalColumn[] = games.map((g) => {
-    const bet = Math.max(g.minBetCents, betCents);
-    const { id, short, name, rules, outcomes, minBetCents } = g;
+    // Tables always bet their minimum: what the owner would actually do (D25, amends D20).
+    const bet = g.id === 'video-poker' ? betCents : g.minBetCents;
+    const { id, short, unit, name, rules, outcomes, minBetCents } = g;
     const avgWager = 'avgWagerBets' in g && g.avgWagerBets ? g.avgWagerBets : 1;
-    return { id, short, name, rules, edge: -edgeOf(outcomes) / avgWager, betCents: bet, minBetCents, budgetBets: budgetCents / bet, playable: budgetCents >= bet };
+    return { id, short, unit, name, rules, edge: -edgeOf(outcomes) / avgWager, betCents: bet, minBetCents, budgetBets: budgetCents / bet, playable: budgetCents >= bet };
   });
   const rows = GOALS.map(({ label, dollars, multiple }) => {
     const goalCents = dollars !== undefined ? dollars * 100 : budgetCents * (multiple ?? 1);

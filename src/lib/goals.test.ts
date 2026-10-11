@@ -21,7 +21,7 @@ describe('goalTable', () => {
     for (const r of t.rows) expect(r.odds[r.best]).toBe(Math.max(...r.odds));
   });
 
-  it('bets each table its minimum, or the video poker bet if larger', () => {
+  it('bets each table its minimum, whatever the video poker bet', () => {
     const t = goalTable('JoB 9/5', job95, 10000, 100); // $100, $1 video poker
     if (!t.ok) throw new Error('expected a table');
     expect(t.columns.map((c) => c.betCents)).toEqual([100, 1500, 300, 1500, 300]);
@@ -32,7 +32,8 @@ describe('goalTable', () => {
     expect(t.rows[0].odds[3]).toBeCloseTo(t.rows[2].odds[3], 15);
     const big = goalTable('DWBP', job95, 10000, 1000); // $10 video poker
     if (!big.ok) throw new Error('expected a table');
-    expect(big.columns.map((c) => c.betCents)).toEqual([1000, 1500, 1000, 1500, 1000]);
+    expect(big.columns.map((c) => c.betCents)).toEqual([1000, 1500, 300, 1500, 300]);
+    expect(big.columns.map((c) => c.unit)).toEqual(['hand', 'hand', 'bet', 'spin', 'bet']);
   });
 
   it('marks tables the budget cannot cover as unplayable with 0 odds', () => {

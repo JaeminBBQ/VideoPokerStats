@@ -3,7 +3,7 @@
 Items Claude needs from the user. Claude adds items; the user answers inline or in chat.
 
 ## Open
-- [ ] **Commit T014:** `git add -A && git commit -m "T014/T014a: Simulator tab (session graph, 1,000-run summary vs exact, when to leave, comps by venue) (D23, D24)" && git push`
+- [ ] **Commit T014:** `git add -A && git commit -m "T014/T014a: Simulator tab (D23, D24); D25: goal table tables bet their minimum, per-game round names" && git push`
 - [ ] **Try the Simulator tab** (`npm run dev`): GSR JoB 9/5 at 5¢ ($1 a hand), $100, 4 h, 2×. The edge line should read 98.550%, about 31.0× to break even. Run one session (check the graph and the royal/quad markers), then 1,000 sessions (simulated vs exact should be close). In "When to leave", leave at +25% should have the highest "leave ahead". Switch to Legends Bay JoB 8/5 at 5¢: 97.465% at 1×. Check 375px (six tabs).
 - [ ] **Commit T012:** `git add -A && git commit -m "T012/T012a: chance you finish ahead, goal odds at table minimums; T012b/c: craps with 2x odds, exact blackjack for your table rules (D20-D22)" && git push`
 - [ ] **Then hand T013 to DeepSeek:** "read handoffs/TO_DEEPSEEK.md" (fits the Craps 2× column).
