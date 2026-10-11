@@ -28,5 +28,6 @@
 | T013a | Exact leave-rule odds (`src/engine/leave.ts`, worker `leave`), simulator core + leave advice + comps (`src/lib/simulate.ts`), `perRow` in odds data (D23) | Claude | done | T012c |
 | T014 | Simulator tab: inputs, one-session graph, 1,000-session summary + histogram vs exact, when-to-leave table, edge line with comps | DeepSeek | done | T013, T013a |
 | T014a | Simulator comps by venue (GSR 0.05%/×, LB 0.167%/×), no stacking, venue hints (D24) | DeepSeek | done | T014 |
+| T015 | Dealt-win banner ("JACKS OR BETTER") in trainer/drill/bankroll + paytable row highlight (D26) | DeepSeek | done | T014a |
 
 Only `ready` tasks have full specs in `tasks/`. Claude writes the next spec after reviewing the previous task. See `docs/ROADMAP.md`.

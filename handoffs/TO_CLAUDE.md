@@ -1,15 +1,12 @@
 # To Claude
-**Task:** T014 (simulator tab) + T014a (venue comps)
+**Task:** T015 (dealt-win banner)
 **Status:** done
-**Report:** handoffs/reports/T014-report.md · handoffs/reports/T014a-report.md
-**Updated:** 2026-10-10 16:35
+**Report:** handoffs/reports/T015-report.md
+**Updated:** 2026-10-11 01:58
 
 ## In one paragraph
-T014 built the Simulator tab (sixth tab): inputs, comps edge line, one-session SVG chart with event markers and tooltips, 1,000-session summary vs exact worker odds + histogram, and the "when to leave" table with the best rule highlighted. T014a on top: comps now use `compRatePerMultiplier(game.venue)` (GSR 0.05%/×, Legends Bay 1/600 per ×), multiplier defaults by venue (GSR 2×, LB 1×), venue hint texts, break-even shown to one decimal ("about 31.0×", "about 16.2×"), and the footnote names the venue's points rate. Lint, typecheck, all 290 tests, and the build pass; both tasks' visual-check numbers reproduce exactly (T014's advice table and 100.044%/99.644% edge values; T014a's 98.550%/31.0×, 98.700%, 97.465%/16.2×, 98.132%), and the 1,000-run leave-ahead lands within ±3 points of exact (verified 0.02 gap with a fixed seed).
+The trainer now shows a gold dealt-win banner ("JACKS OR BETTER" etc.) under the cards the moment they're dealt, in trainer, drill, and bankroll play, using `game.evaluate(hand)` on the main thread — no engine changes. The banner and the post-draw `.hand-result` share one reserved slot (`min-height`), so the Deal/Submit buttons never jump. The open paytable highlights the active row in gold: the dealt win while holding, the draw win (`result.outcome.rowIndex`) after the machine's second deal. All acceptance criteria pass: lint, typecheck, 290 tests, build all exit 0; protected-path diff empty. I also verified the four visual-check hands directly against `game.evaluate` (jacks pair → JACKS OR BETTER, tens pair → none, deuce+pair → THREE OF A KIND, lone deuce → none).
 
 ## Needs Claude's attention
-1. **Loss per hour (T014):** your spec formula (600 × bet × (1 − ret − compRate)) shows **$9.00** at the 1× visual-check config; the acceptance's "≈ $9.30" matches it *without* comps. I implemented the spec formula — confirm which you want (one-line change either way).
-2. **`edgePct` is now three decimals everywhere.** Every number in both acceptance tables is 3-decimal (99.644, 100.044, 0.456, 98.550, 97.465, …); T014's "four decimals for percentages under 100" sentence contradicted its own table. Confirm.
-3. **Multiplier reset (T014a):** the tab remounts per game (`key={gameId}`), so the multiplier resets to the venue default on any game switch, not only on venue changes. If you want it preserved within a venue, I'll drop the key and reset on venue change instead.
-4. Your D24 changes (`compRatePerMultiplier` in `src/lib/simulate.ts` + test, DECISIONS/BOARD/HUMAN, the T014a task file) are untouched in the tree; my protected-path diff is empty.
-5. Minor T014 deviations for the skim: hours to the nearest 0.05 h (matches 2.9/1.35/1.05), "You earn about $X an hour" wording when the total ≥ 100%, median's exact cell is "—", advice recomputes on multiplier changes too (lint requirement, same numbers).
+1. Deviations (details in the report): `activeRow` is gated to `tab === 'trainer'` so a leftover trainer hand doesn't highlight the paytable on the Assist/Chart tabs (the Paytable is in the shared header); the reserved slot only exists while a hand is out, so pre-deal layout is unchanged.
+2. The draw-win highlight stays lit until the next deal. If you want it to clear after a few seconds (some machines do), I can add a timeout.

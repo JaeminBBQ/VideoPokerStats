@@ -143,6 +143,18 @@ export default function App() {
   const denomination = snapDenomination(game, settings.denomination);
   const maxCoins = maxCoinsAt(game, denomination);
 
+  // The machine lights up the paying hand's name as soon as the cards land (D26).
+  const dealtRow = phase === 'dealt' && hand ? game.evaluate(hand) : -1;
+  // Paytable highlight: the dealt win while holding, the draw win after the machine's second deal.
+  const activeRow =
+    tab === 'trainer'
+      ? dealtRow >= 0
+        ? dealtRow
+        : result?.outcome && result.outcome.winCents > 0
+          ? result.outcome.rowIndex
+          : undefined
+      : undefined;
+
   const confusions = groupConfusions(history, game);
   const toDrill = confusions.filter((c) => !drillState[gameId]?.[c.key]?.cleared);
   const sessionDrill = drillSessionStats(history, gameId, sessionStart);
@@ -493,7 +505,13 @@ export default function App() {
         )}
         <GamePicker gameId={gameId} onSelect={switchGame} />
         <p className="where">{game.where}</p>
-        <Paytable game={game} maxCoins={maxCoins} open={paytableOpen} onToggle={() => setPaytableOpen((o) => !o)} />
+        <Paytable
+          game={game}
+          maxCoins={maxCoins}
+          open={paytableOpen}
+          activeRow={activeRow}
+          onToggle={() => setPaytableOpen((o) => !o)}
+        />
       </header>
 
       {tab === 'chart' ? (
@@ -626,11 +644,20 @@ export default function App() {
               )}
                 </div>
 
-                {result?.outcome && (
-                  <div className={`hand-result${result.outcome.winCents > 0 ? ' win' : ''}`} aria-live="polite">
-                    {result.outcome.winCents > 0
-                      ? `${game.rows[result.outcome.rowIndex].label} · won ${formatCents(result.outcome.winCents)}`
-                      : 'No win'}
+                {hand && (
+                  <div className="hand-result-slot">
+                    {dealtRow >= 0 && (
+                      <div className="dealt-win" aria-live="polite">
+                        {game.rows[dealtRow].label.toUpperCase()}
+                      </div>
+                    )}
+                    {result?.outcome && (
+                      <div className={`hand-result${result.outcome.winCents > 0 ? ' win' : ''}`} aria-live="polite">
+                        {result.outcome.winCents > 0
+                          ? `${game.rows[result.outcome.rowIndex].label} · won ${formatCents(result.outcome.winCents)}`
+                          : 'No win'}
+                      </div>
+                    )}
                   </div>
                 )}
 

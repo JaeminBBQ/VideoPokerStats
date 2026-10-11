@@ -247,6 +247,12 @@ select {
   font-variant-numeric: tabular-nums;
 }
 
+/* The machine lights up the paying row; gold text on the whole row matches that (D26). */
+.paytable-table tr.active td {
+  color: var(--gold);
+  font-weight: 700;
+}
+
 /* ---------------------------------------------------------------- hand / cards */
 
 .hand {
@@ -1072,10 +1078,23 @@ select {
 
 /* ---------------------------------------------------------------- draw result */
 
+/* Reserved line under the cards: the dealt-win banner and the draw result share this
+   slot so the Deal/Submit buttons never jump when either appears or disappears. */
+.hand-result-slot {
+  min-height: 24px;
+  margin-top: 6px;
+}
+
+.dealt-win {
+  text-align: center;
+  font-size: 15px;
+  color: var(--gold);
+  font-weight: 700;
+}
+
 .hand-result {
   text-align: center;
   font-size: 15px;
-  margin: 6px 0 0;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
 }

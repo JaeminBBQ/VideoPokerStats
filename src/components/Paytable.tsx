@@ -6,9 +6,11 @@ interface Props {
   maxCoins: number;
   open: boolean;
   onToggle: () => void;
+  /** Paytable row index to highlight (the dealt win, or the draw win), if any. */
+  activeRow?: number;
 }
 
-export default function Paytable({ game, maxCoins, open, onToggle }: Props) {
+export default function Paytable({ game, maxCoins, open, onToggle, activeRow }: Props) {
   return (
     <div className="paytable">
       <button type="button" className="paytable-toggle" onClick={onToggle} aria-expanded={open}>
@@ -24,8 +26,8 @@ export default function Paytable({ game, maxCoins, open, onToggle }: Props) {
             </tr>
           </thead>
           <tbody>
-            {game.rows.map((row) => (
-              <tr key={row.key}>
+            {game.rows.map((row, i) => (
+              <tr key={row.key} className={i === activeRow ? 'active' : undefined}>
                 <td>{row.label}</td>
                 <td>{row.pays}</td>
                 <td>{row.pays * maxCoins}</td>
