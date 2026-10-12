@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { leaveOdds, leaveOddsTiered } from '../engine/leave.ts';
 import { ODDS_BY_GAME } from './odds.ts';
-import { exactTable, runTableMany, runTableSession, tableEdge, tableLeaveAdvice, tableModel, type TableSimParams } from './tableSim.ts';
+import { sideBetCostPerRollCents, exactTable, runTableMany, runTableSession, tableEdge, tableLeaveAdvice, tableModel, type TableSimParams } from './tableSim.ts';
 
 describe('leaveOddsTiered (D29)', () => {
   it('matches leaveOdds exactly on video poker (one tier, whole bets)', () => {
@@ -45,20 +45,26 @@ const base: TableSimParams = {
 
 describe('table models', () => {
   it('units per bet and edges', () => {
-    expect(tableModel('bj-table', true).unitsPerBet).toBe(2);
-    expect(tableModel('bj-machine', true).unitsPerBet).toBe(5);
-    expect(tableModel('craps', true).unitsPerBet).toBe(5);
-    expect(tableModel('craps', false).unitsPerBet).toBe(1);
-    expect(tableEdge('bj-table', true).perBet).toBeCloseTo(0.007311, 5);
-    expect(tableEdge('bj-machine', true).perBet).toBeCloseTo(0.020840, 5);
-    expect(tableEdge('craps', false).perBet).toBeCloseTo(7 / 495, 12);
-    expect(tableEdge('craps', true).perBet).toBeCloseTo(7 / 495, 12);
-    expect(tableEdge('craps', true).perWagered).toBeCloseTo(3 / 495, 12);
+    expect(tableModel('bj-table').unitsPerBet).toBe(2);
+    expect(tableModel('bj-machine').unitsPerBet).toBe(5);
+    expect(tableEdge({ game: 'bj-table', crapsOdds: true }).perBet).toBeCloseTo(0.007311, 5);
+    expect(tableEdge({ game: 'bj-machine', crapsOdds: true }).perBet).toBeCloseTo(0.020840, 5);
+    expect(tableEdge({ game: 'bj-machine', crapsOdds: true }).perRound).toBeCloseTo(0.020840, 5);
+    // Craps (D31): per flat bet, per dollar put out (odds at 1× on 4/10, 2× elsewhere), any style.
+    for (const crapsStyle of ['single', 'molly'] as const) {
+      expect(tableEdge({ game: 'craps', crapsOdds: false, crapsStyle }).perBet).toBeCloseTo(7 / 495, 12);
+      expect(tableEdge({ game: 'craps', crapsOdds: true, crapsStyle }).perBet).toBeCloseTo(7 / 495, 12);
+      expect(tableEdge({ game: 'craps', crapsOdds: true, crapsStyle }).perWagered).toBeCloseTo(42 / 6435, 12);
+      expect(tableEdge({ game: 'craps', crapsOdds: false, crapsSide: 'dont', crapsStyle }).perBet).toBeCloseTo(3 / 220, 12);
+      expect(tableEdge({ game: 'craps', crapsOdds: true, crapsSide: 'dont', crapsStyle }).perWagered).toBeCloseTo(3 / 220 / (8 / 3), 12);
+    }
+    // A single line bet resolves every 1 / 0.2962 = 3.376 rolls (557/165); the molly keeps ~2.4× the action.
+    expect(tableEdge({ game: 'craps', crapsOdds: true }).perRound).toBeCloseTo((7 / 495) * (165 / 557), 12);
   });
 
   it('a tier never risks more than it covers', () => {
-    for (const id of ['bj-table', 'bj-machine', 'craps'] as const)
-      for (const t of tableModel(id, true).tiers) expect(Math.min(...t.steps.map(([d]) => d))).toBeGreaterThanOrEqual(-t.coverUnits);
+    for (const id of ['bj-table', 'bj-machine'] as const)
+      for (const t of tableModel(id).tiers) expect(Math.min(...t.steps.map(([d]) => d))).toBeGreaterThanOrEqual(-t.coverUnits);
   });
 });
 
@@ -78,8 +84,8 @@ describe('table simulator', () => {
   it.each([
     ['bj-table', true, 1500, 30000, 15000, null, 240],
     ['bj-machine', true, 300, 10000, null, 5000, 600],
-    ['craps', true, 300, 10000, 10000, null, 120],
-    ['craps', false, 500, 5000, null, null, 120],
+    ['craps', true, 300, 10000, 10000, null, 300],
+    ['craps', false, 500, 5000, null, null, 300],
   ] as const)('%s (odds %s): 4,000 runs agree with the exact odds (sampled check only)', (game, crapsOdds, betCents, budgetCents, winGoalCents, lossLimitCents, maxRounds) => {
     const p: TableSimParams = { game, crapsOdds, betCents, budgetCents, winGoalCents, lossLimitCents, maxRounds };
     const exact = exactTable(p)!;
@@ -94,7 +100,7 @@ describe('table simulator', () => {
   });
 
   it('leave advice: six exact rules', () => {
-    const rows = tableLeaveAdvice({ game: 'craps', crapsOdds: true, betCents: 300, budgetCents: 10000, maxRounds: 120 });
+    const rows = tableLeaveAdvice({ game: 'craps', crapsOdds: true, betCents: 300, budgetCents: 10000, maxRounds: 200 });
     expect(rows).toHaveLength(6);
     for (const r of rows) expect(r.odds).not.toBeNull();
   });
@@ -104,5 +110,29 @@ describe('table simulator', () => {
     const o = exactTable({ ...base, game: 'bj-machine', betCents: 300, budgetCents: 50000, winGoalCents: null, maxRounds: 1800 });
     expect(o).not.toBeNull();
     expect(performance.now() - t0).toBeLessThan(5000);
+  });
+});
+
+describe('craps side bets in the simulator (D32)', () => {
+  it('make the exact odds unavailable and cost what the exact rate says (sampled check only)', () => {
+    const stakes = { small: 100, tall: 100, all: 100 };
+    const base: TableSimParams = { game: 'craps', crapsOdds: false, betCents: 300, budgetCents: 10_000_000, winGoalCents: null, lossLimitCents: null, maxRounds: 30_000, sideBetsCents: stakes };
+    expect(exactTable(base)).toBeNull();
+    expect(tableLeaveAdvice(base).every((r) => r.odds === null)).toBe(true);
+    // Same seeds with and without side bets differ in their dice, so compare each to its exact rate.
+    const runs = 20;
+    let rolls = 0;
+    let net = 0;
+    for (let s = 1; s <= runs; s++) {
+      const r = runTableSession(base, s);
+      rolls += r.rounds;
+      net += r.netCents;
+    }
+    const mainPerRoll = tableEdge({ game: 'craps', crapsOdds: false }).perRound * 300;
+    const expected = -(mainPerRoll + sideBetCostPerRollCents(stakes)) * rolls;
+    // Side bets dominate the swing: per round, stakes of $1 paying 31 / 151 → sd ≈ $12.6; ~100,000 rounds.
+    const sd = 1260 * Math.sqrt(rolls / 6);
+    expect(Math.abs(net - expected)).toBeLessThan(4 * sd);
+    expect(sideBetCostPerRollCents(stakes)).toBeCloseTo((100 * (0.18302881 * 2 + 0.20608668)) / 6, 4);
   });
 });

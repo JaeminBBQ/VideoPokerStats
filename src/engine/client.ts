@@ -3,6 +3,7 @@ import type { Card } from './cards.ts';
 import type { HoldEv } from './ev.ts';
 import type { MistakeSignature, SimilarMatch } from './drill.ts';
 import type { GameId } from './games.ts';
+import type { CrapsRule, CrapsSystem } from './craps.ts';
 import type { LeaveOdds, LeaveRule, StepTier, TieredRule } from './leave.ts';
 
 export type EngineRequest =
@@ -10,7 +11,8 @@ export type EngineRequest =
   | { id: number; type: 'analyze'; gameId: GameId; hand: Card[] }
   | { id: number; type: 'similar'; gameId: GameId; signature: MistakeSignature }
   | { id: number; type: 'leave'; pays: number[]; probs: number[]; startBets: number; rules: LeaveRule[] }
-  | { id: number; type: 'leaveTiered'; tiers: StepTier[]; startUnits: number; unitsPerBet: number; rules: TieredRule[] };
+  | { id: number; type: 'leaveTiered'; tiers: StepTier[]; startUnits: number; unitsPerBet: number; rules: TieredRule[] }
+  | { id: number; type: 'craps'; system: CrapsSystem; startUnits: number; rules: CrapsRule[] };
 
 type WithoutId<T> = T extends unknown ? Omit<T, 'id'> : never;
 
@@ -71,6 +73,11 @@ export class EngineClient {
   /** `leaveOddsTiered` (table games, D29) for several rules, off the main thread. */
   async leaveTiered(tiers: StepTier[], startUnits: number, unitsPerBet: number, rules: TieredRule[]): Promise<(LeaveOdds | null)[]> {
     return (await this.send({ type: 'leaveTiered', tiers, startUnits, unitsPerBet, rules })).leave!;
+  }
+
+  /** `crapsLeaveOdds` (D31) for several rules, off the main thread: a few seconds for long molly sessions. */
+  async craps(system: CrapsSystem, startUnits: number, rules: CrapsRule[]): Promise<(LeaveOdds | null)[]> {
+    return (await this.send({ type: 'craps', system, startUnits, rules })).leave!;
   }
 
   terminate(): void {

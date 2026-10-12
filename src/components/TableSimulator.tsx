@@ -112,7 +112,7 @@ export default function TableSimulator({ engine, gameId }: Props) {
   const pace = paceChoice === 'other' ? paceOther : Number(paceChoice);
   const maxRounds = Math.round(hours * pace);
 
-  const edge = useMemo(() => tableEdge(g.id, crapsOdds), [g.id, crapsOdds]);
+  const edge = useMemo(() => tableEdge({ game: g.id, crapsOdds }), [g.id, crapsOdds]);
   const params = useMemo<TableSimParams | null>(
     () =>
       budgetCents > 0 && maxRounds > 0
@@ -155,7 +155,7 @@ export default function TableSimulator({ engine, gameId }: Props) {
     };
   }, [manyRun, engine]);
 
-  const lossPerHour = pace * betCents * edge.perBet;
+  const lossPerHour = pace * betCents * edge.perRound;
   const chipClass = (active: boolean) => `sim-chip${active ? ' active' : ''}`;
 
   const runOne = () => {

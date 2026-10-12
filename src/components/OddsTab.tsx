@@ -264,7 +264,7 @@ export default function OddsTab({ game, gameId, bet, denomination, maxCoins }: P
                 {c.short}: {c.rules}.{' '}
               </span>
             ))}
-            Craps 2× counts the odds money in its house edge; the odds bet itself has no edge, so taking
+            Craps odds counts the odds money in its house edge; the odds bet itself has no edge, so taking
             odds adds swing, not expected loss. Blackjack assumes you can always afford a double or split.
             Tables always bet their minimum. Goals round up to the
             smallest win each game can reach: whole bets in video poker, half a bet in blackjack.{' '}

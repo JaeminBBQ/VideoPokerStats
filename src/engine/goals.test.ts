@@ -83,13 +83,13 @@ describe('goalProbability', () => {
   });
 });
 
-describe('craps with 2× odds', () => {
+describe('craps with odds (1× on 4/10, 2× on 5/6/8/9)', () => {
   const g = TABLE_GAMES.find((x) => x.id === 'craps-odds')!;
 
-  it('sums to 1, keeps the pass line edge per line bet, and is 0.606% of all money bet', () => {
+  it('sums to 1, keeps the pass line edge per line bet, and is 0.653% of all money bet', () => {
     expect(g.outcomes.reduce((a, o) => a + o.p, 0)).toBeCloseTo(1, 15);
     expect(edgeOf(g.outcomes)).toBeCloseTo(-7 / 495, 15);
-    expect(-edgeOf(g.outcomes) / g.avgWagerBets!).toBeCloseTo(3 / 495, 15);
+    expect(-edgeOf(g.outcomes) / g.avgWagerBets!).toBeCloseTo(42 / 6435, 15);
   });
 
   it('a single tier is the same as goalProbability', () => {

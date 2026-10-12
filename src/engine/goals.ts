@@ -66,7 +66,7 @@ export interface Tier {
 }
 
 /**
- * `goalProbability` when what you bet depends on what you can cover (e.g. craps: line + 2× odds while the
+ * `goalProbability` when what you bet depends on what you can cover (e.g. craps: line + odds while the
  * bankroll covers 3 units, line only below that). Ruin is below the smallest tier's cover.
  */
 export function goalProbabilityTiered(tiers: readonly Tier[], startBets: number, goalBets: number): number {
@@ -183,17 +183,18 @@ export const PASS_LINE: Outcome[] = [
 ];
 
 /**
- * Pass line with 2× odds behind every point, per decision, in line-bet units. Come-out: win 8/36, lose 4/36.
- * Point 4/10 (6/36): makes it 1/3, odds pay 2:1 → +1 +4; 5/9 (8/36): 2/5, 3:2 → +1 +3; 6/8 (10/36): 5/11,
- * 6:5 → +1 +2.4. Missing a point loses line + odds (−3).
+ * Pass line with the owner's bubble craps odds (D31: 1× on 4/10, 2× on 5/6/8/9), per decision, in line-bet
+ * units. Come-out: win 8/36, lose 4/36. Point 4/10 (6/36): makes it 1/3, 1× odds pay 2:1 → +1 +2, misses
+ * −2; 5/9 (8/36): 2/5, 2× at 3:2 → +1 +3, misses −3; 6/8 (10/36): 5/11, 2× at 6:5 → +1 +2.4, misses −3.
  */
-export const PASS_2X_ODDS: Outcome[] = [
+export const PASS_ODDS: Outcome[] = [
   { net: 1, p: 8 / 36 },
   { net: -1, p: 4 / 36 },
-  { net: 5, p: (6 / 36) * (1 / 3) },
+  { net: 3, p: (6 / 36) * (1 / 3) },
   { net: 4, p: (8 / 36) * (2 / 5) },
   { net: 3.4, p: (10 / 36) * (5 / 11) },
-  { net: -3, p: (6 / 36) * (2 / 3) + (8 / 36) * (3 / 5) + (10 / 36) * (6 / 11) },
+  { net: -2, p: (6 / 36) * (2 / 3) },
+  { net: -3, p: (8 / 36) * (3 / 5) + (10 / 36) * (6 / 11) },
 ];
 
 /**
@@ -237,17 +238,17 @@ export const TABLE_GAMES: TableGame[] = [
   },
   {
     id: 'craps-odds',
-    name: 'Craps — pass + 2× odds',
-    short: 'Craps 2×',
+    name: 'Craps — pass + odds',
+    short: 'Craps odds',
     unit: 'bet',
-    rules: 'Pass line plus 2× odds behind every point (odds pay true odds: 2:1, 3:2, 6:5), dropping to the bare line when the bankroll can\'t cover line + odds (0.61% of all money bet)',
+    rules: 'Pass line plus odds at bubble craps limits, 1× on 4/10 and 2× on 5/6/8/9 (true odds: 2:1, 3:2, 6:5), dropping to the bare line when the bankroll can\'t cover line + odds (0.65% of all money bet)',
     source: 'exact from the dice, same derivation as the pass line; the odds bet pays true odds',
     minBetCents: 300,
-    outcomes: PASS_2X_ODDS,
+    outcomes: PASS_ODDS,
     tiers: [
-      { coverBets: 3, outcomes: PASS_2X_ODDS },
+      { coverBets: 3, outcomes: PASS_ODDS },
       { coverBets: 1, outcomes: PASS_LINE },
     ],
-    avgWagerBets: 1 + 2 * (24 / 36),
+    avgWagerBets: 1 + 1 * (6 / 36) + 2 * (18 / 36),
   },
 ];

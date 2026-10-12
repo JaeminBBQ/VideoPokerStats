@@ -17,7 +17,7 @@ describe('goalTable', () => {
     expect(t.rows[0].odds[2]).toBeCloseTo(goalProbability(TABLE_GAMES[1].outcomes, 100 / 3, 5 / 3), 15);
     expect(t.columns[0].edge).toBeCloseTo(1 - 0.984498, 5);
     expect(t.columns[3].edge).toBeCloseTo(2 / 38, 12);
-    expect(t.columns[4].edge).toBeCloseTo(3 / 495, 12);
+    expect(t.columns[4].edge).toBeCloseTo(42 / 6435, 12);
     for (const r of t.rows) expect(r.odds[r.best]).toBe(Math.max(...r.odds));
   });
 
