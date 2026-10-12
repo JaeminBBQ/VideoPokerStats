@@ -28,6 +28,7 @@ import {
   type SessionRun,
   type SimParams,
 } from '../lib/simulate.ts';
+import { DENOM_LABELS } from '../lib/storage.ts';
 
 interface Props {
   game: GameDef;
@@ -37,6 +38,7 @@ interface Props {
   bet: number;
   denomination: number;
   maxCoins: number;
+  onDenominationChange: (d: number) => void;
 }
 
 const HOUR_OPTIONS = [0.5, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10, 12];
@@ -70,6 +72,14 @@ const EVENT_COLORS: Record<string, string> = {
   'straight-flush': '#2dd4bf',
   'four-kind': '#fb923c',
 };
+
+/** What was held before the draw, in the owner's words ('' when a row has no hold data). */
+function heldText(held: string): string {
+  if (held.startsWith('Pat ')) return 'dealt';
+  if (held === 'Discard everything') return 'drew all 5';
+  if (held === '') return '';
+  return `held ${held}`;
+}
 
 const END_ROWS: { key: EndReason; label: string; exact: (o: LeaveOdds) => number }[] = [
   { key: 'win', label: 'Hit the goal', exact: (o) => o.pWin },
@@ -203,7 +213,8 @@ function SessionChart({ run, p }: { run: SessionRun; p: SimParams }) {
           const x = X(e.hand);
           const y = Y(cy);
           const color = EVENT_COLORS[e.category] ?? '#9db3a0';
-          const text = `${e.label} +${formatCents(e.winCents)} at hand ${e.hand}`;
+          const held = heldText(e.held);
+          const text = `${e.label} +${formatCents(e.winCents)} at hand ${e.hand}${held === '' ? '' : ` · ${held}`}`;
           return (
             <g
               key={`${e.hand}-${e.label}`}
@@ -234,6 +245,37 @@ function SessionChart({ run, p }: { run: SessionRun; p: SimParams }) {
         </div>
       )}
     </div>
+  );
+}
+
+/** The biggest hands of the session with what was held, in hand order (markers are tiny on a phone). */
+function BigHands({ events }: { events: SessionRun['events'] }) {
+  if (events.length === 0) {
+    return <p className="sim-big-none">No four of a kind or better this session.</p>;
+  }
+  const top = [...events].sort((a, b) => b.winCents - a.winCents || a.hand - b.hand).slice(0, 8);
+  const more = events.length - top.length;
+  top.sort((a, b) => a.hand - b.hand);
+  return (
+    <ul className="sim-big-hands">
+      {top.map((e) => {
+        const held = heldText(e.held);
+        return (
+          <li key={`${e.hand}-${e.label}`}>
+            <span
+              className="sim-big-dot"
+              style={{ background: EVENT_COLORS[e.category] ?? '#9db3a0' }}
+              aria-hidden="true"
+            />
+            <span>
+              Hand {e.hand} · {e.label} +{formatCents(e.winCents)}
+              {held !== '' && <span className="sim-big-held"> · {held}</span>}
+            </span>
+          </li>
+        );
+      })}
+      {more > 0 && <li className="sim-big-more">+{more} more</li>}
+    </ul>
   );
 }
 
@@ -310,7 +352,15 @@ function endMessage(run: SessionRun, p: SimParams): string {
   }
 }
 
-export default function SimulatorTab({ game, gameId, engine, bet }: Props) {
+export default function SimulatorTab({
+  game,
+  gameId,
+  engine,
+  bet,
+  denomination,
+  maxCoins,
+  onDenominationChange,
+}: Props) {
   const rows = ODDS_BY_GAME[gameId]?.perRow ?? null;
 
   // Inputs: scratch state, not persisted.
@@ -447,6 +497,26 @@ export default function SimulatorTab({ game, gameId, engine, bet }: Props) {
 
       <div className="sim-inputs">
         <div className="sim-control">
+          <span className="sim-label">Denomination</span>
+          <div className="sim-chip-row" role="group" aria-label="Denomination">
+            {game.offers.map((o) => (
+              <button
+                key={o.denomination}
+                type="button"
+                className={chipClass(o.denomination === denomination)}
+                onClick={() => onDenominationChange(o.denomination)}
+              >
+                {DENOM_LABELS[o.denomination]}
+                {!o.confirmed && <span className="denom-unconfirmed">*</span>}
+              </button>
+            ))}
+          </div>
+          <span className="sim-note">
+            {DENOM_LABELS[denomination]} × {maxCoins} coins = {formatCents(bet)} a hand
+          </span>
+        </div>
+
+        <div className="sim-control">
           <span className="sim-label">Budget</span>
           <div className="sim-dollar-row">
             <span className="sim-dollar">$</span>
@@ -581,6 +651,7 @@ export default function SimulatorTab({ game, gameId, engine, bet }: Props) {
       {oneRun !== null && (
         <div className="sim-result">
           <SessionChart run={oneRun.run} p={oneRun.p} />
+          <BigHands events={oneRun.run.events} />
           <p className="sim-end">{endMessage(oneRun.run, oneRun.p)}</p>
           <div className="stats-grid sim-run-stats">
             <div className="stat">

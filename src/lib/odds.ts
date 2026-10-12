@@ -42,7 +42,17 @@ export interface GameOdds {
   perHand: { net: number; p: number }[];
   /** Each paytable row plus "nothing": its category key, pays per coin, and P(final hand) under perfect
    * play (`best`) and when the hand is misplayed with the best non-tied wrong hold (`second`). */
-  perRow: { key: string; label: string; category: string; pays: number; best: number; second: number }[];
+  perRow: {
+    key: string;
+    label: string;
+    category: string;
+    pays: number;
+    best: number;
+    second: number;
+    /** Big rows only (quads and better): what was held before the draw, as joint probabilities
+     * P(this row and this hold); Σ best = `best`, Σ second = `second` (D28). */
+    holds?: { label: string; best: number; second: number }[];
+  }[];
 }
 
 /**

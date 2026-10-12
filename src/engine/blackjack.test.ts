@@ -1,36 +1,40 @@
 import { describe, expect, it } from 'vitest';
 import { mulberry32 } from './cards.ts';
-import { OWNER_RULES, blackjackOdds, dealerOdds, firstAction, strategy, type BlackjackRules } from './blackjack.ts';
+import { MACHINE_RULES, TABLE_RULES, bankrollTiers, blackjackOdds, dealerOdds, firstAction, strategy, type BlackjackRules } from './blackjack.ts';
 
-const LIBERAL: BlackjackRules = { ...OWNER_RULES, surrender: true, resplitAces: true };
+/** D22's rules (dealer stands on all 17s): the published reference values below are for S17. */
+const S17: BlackjackRules = { ...TABLE_RULES, hitSoft17: false };
+const LIBERAL: BlackjackRules = { ...S17, surrender: true, resplitAces: true };
 
 describe('dealerOdds (infinite deck, S17)', () => {
   it('bust rates by upcard (blackjack counted as not bust)', () => {
     const bust = (u: number) => {
-      const d = dealerOdds(u, OWNER_RULES);
+      const d = dealerOdds(u, S17);
       return d.final[5] * (1 - d.bj);
     };
     expect(bust(2)).toBeCloseTo(0.353608, 6);
     expect(bust(5)).toBeCloseTo(0.416404, 6);
     expect(bust(7)).toBeCloseTo(0.262312, 6);
     expect(bust(10)).toBeCloseTo(0.212109, 6);
-    expect(dealerOdds(1, OWNER_RULES).bj).toBeCloseTo(4 / 13, 15);
+    expect(dealerOdds(1, S17).bj).toBeCloseTo(4 / 13, 15);
   });
 });
 
 describe('blackjackOdds', () => {
   it('sums to 1 and its EV matches the outcome distribution', () => {
-    const o = blackjackOdds(OWNER_RULES);
+    const o = blackjackOdds(S17);
     expect(o.outcomes.reduce((a, x) => a + x.p, 0)).toBeCloseTo(1, 12);
     expect(o.ev).toBeCloseTo(-0.005117, 5);
+    expect(blackjackOdds(TABLE_RULES).ev).toBeCloseTo(-0.007311, 5); // H17 (D29)
+    expect(blackjackOdds(MACHINE_RULES).ev).toBeCloseTo(-0.020840, 5); // 6:5 H17 (D29)
   });
 
   it('rule effects match the published sizes', () => {
     const edge = (r: BlackjackRules) => -blackjackOdds(r).ev;
-    const base = edge(OWNER_RULES);
-    expect(edge({ ...OWNER_RULES, hitSoft17: true }) - base).toBeCloseTo(0.0022, 3); // ~0.22%
-    expect(edge({ ...OWNER_RULES, das: false }) - base).toBeCloseTo(0.0014, 3); // ~0.14%
-    expect(edge({ ...OWNER_RULES, bjPays: 1.2 }) - base).toBeCloseTo(0.3 * 2 * (4 / 169) * (1 - 0.0473), 3); // ~1.35%
+    const base = edge(S17);
+    expect(edge(TABLE_RULES) - base).toBeCloseTo(0.0022, 3); // ~0.22%
+    expect(edge({ ...S17, das: false }) - base).toBeCloseTo(0.0014, 3); // ~0.14%
+    expect(edge({ ...S17, bjPays: 1.2 }) - base).toBeCloseTo(0.3 * 2 * (4 / 169) * (1 - 0.0473), 3); // ~1.35%
   });
 
   it('liberal rules land just above the published 6-deck 0.28% (infinite deck costs ~0.07%)', () => {
@@ -40,7 +44,7 @@ describe('blackjackOdds', () => {
   });
 
   it('basic strategy spot checks', () => {
-    const a = (x: number, y: number, u: number) => firstAction(OWNER_RULES, x, y, u);
+    const a = (x: number, y: number, u: number) => firstAction(S17, x, y, u);
     expect(a(10, 6, 10)).toBe('hit');
     expect(a(1, 7, 3)).toBe('double');
     expect(a(10, 2, 4)).toBe('stand');
@@ -52,7 +56,7 @@ describe('blackjackOdds', () => {
   });
 
   it('matches an independent card-by-card simulation of the same strategy (sampled check only)', () => {
-    const rules = OWNER_RULES;
+    const rules = TABLE_RULES;
     const s = strategy(rules);
     const exact = new Map(blackjackOdds(rules).outcomes.map((o) => [o.net, o.p]));
     const rand = mulberry32(31337);
@@ -125,5 +129,21 @@ describe('blackjackOdds', () => {
       const sd = Math.sqrt((p * (1 - p)) / runs);
       expect(Math.abs((got.get(net) ?? 0) / runs - p), `net ${net}`).toBeLessThan(4.5 * sd);
     }
+  });
+});
+
+describe('short-bankroll tiers (D29)', () => {
+  it('each tier never loses more than it covers, sums to 1, and costs a little edge', () => {
+    let prevEv = Infinity;
+    for (const t of bankrollTiers(TABLE_RULES)) {
+      const o = blackjackOdds(t.rules);
+      expect(o.outcomes.reduce((a, x) => a + x.p, 0)).toBeCloseTo(1, 12);
+      expect(Math.min(...o.outcomes.map((x) => x.net))).toBeGreaterThanOrEqual(-t.coverBets);
+      expect(o.ev).toBeLessThanOrEqual(prevEv + 1e-12);
+      prevEv = o.ev;
+    }
+    expect(bankrollTiers(TABLE_RULES).map((t) => t.coverBets)).toEqual([8, 4, 2, 1]);
+    // Hit/stand only is roughly a 2% edge, not 0.7% (doubling and splitting are worth ~1.5%).
+    expect(-blackjackOdds(bankrollTiers(TABLE_RULES)[3].rules).ev).toBeGreaterThan(0.015);
   });
 });

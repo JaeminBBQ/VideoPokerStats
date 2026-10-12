@@ -29,5 +29,9 @@
 | T014 | Simulator tab: inputs, one-session graph, 1,000-session summary + histogram vs exact, when-to-leave table, edge line with comps | DeepSeek | done | T013, T013a |
 | T014a | Simulator comps by venue (GSR 0.05%/×, LB 0.167%/×), no stacking, venue hints (D24) | DeepSeek | done | T014 |
 | T015 | Dealt-win banner ("JACKS OR BETTER") in trainer/drill/bankroll + paytable row highlight (D26) | DeepSeek | done | T014a |
+| T016a | Big hands split by what was held (exact P(row, hold) via the classifier) → `perRow[].holds`; simulator events carry `held` (D28) | Claude | done | T015 |
+| T016 | Simulator: denomination chips + bet line; "held …" on markers and a big-hands list (D28) | DeepSeek | done | T016a |
+| T017a | Tables hit soft 17 (D29); $3 machine BJ 6:5; short-bankroll tiers; exact `leaveOddsTiered` (fractional units) + worker; `src/lib/tableSim.ts` (BJ table/machine, bubble craps ± 2× odds) | Claude | done | T016 |
+| T017 | Simulator: game switch (video poker / BJ $15 / BJ $3 machine / craps $3), shared charts, table inputs incl. pace + Other, edge line, 1 / 1,000 sessions, when to leave | DeepSeek | ready | T017a |
 
 Only `ready` tasks have full specs in `tasks/`. Claude writes the next spec after reviewing the previous task. See `docs/ROADMAP.md`.

@@ -559,6 +559,7 @@ export default function App() {
             bet={betCents(denomination, maxCoins)}
             denomination={denomination}
             maxCoins={maxCoins}
+            onDenominationChange={(d) => setSettings((s) => ({ ...s, denomination: d }))}
           />
         </main>
       ) : (

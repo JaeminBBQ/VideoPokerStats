@@ -15,9 +15,9 @@
  *            matrix is diagonally dominant, so no pivoting is needed.
  */
 
-import { OWNER_RULES, blackjackOdds } from './blackjack.ts';
+import { TABLE_RULES, blackjackOdds } from './blackjack.ts';
 
-const OWNER_BLACKJACK = blackjackOdds(OWNER_RULES);
+const TABLE_BLACKJACK = blackjackOdds(TABLE_RULES);
 
 /** One round's result: net win in bets (−1 = lost the bet, 1.5 = blackjack at 3:2) and its probability. */
 export interface Outcome {
@@ -177,7 +177,7 @@ export interface TableGame {
   avgWagerBets?: number;
 }
 
-const PASS_LINE: Outcome[] = [
+export const PASS_LINE: Outcome[] = [
   { net: 1, p: 244 / 495 },
   { net: -1, p: 251 / 495 },
 ];
@@ -187,7 +187,7 @@ const PASS_LINE: Outcome[] = [
  * Point 4/10 (6/36): makes it 1/3, odds pay 2:1 → +1 +4; 5/9 (8/36): 2/5, 3:2 → +1 +3; 6/8 (10/36): 5/11,
  * 6:5 → +1 +2.4. Missing a point loses line + odds (−3).
  */
-const PASS_2X_ODDS: Outcome[] = [
+export const PASS_2X_ODDS: Outcome[] = [
   { net: 1, p: 8 / 36 },
   { net: -1, p: 4 / 36 },
   { net: 5, p: (6 / 36) * (1 / 3) },
@@ -207,10 +207,10 @@ export const TABLE_GAMES: TableGame[] = [
     name: 'Blackjack',
     short: 'Blackjack',
     unit: 'hand',
-    rules: `3:2, dealer stands on all 17s, double any two cards, double after split, split to 4 hands (aces once), no surrender; basic strategy (${(-OWNER_BLACKJACK.ev * 100).toFixed(2)}% edge, infinite deck)`,
-    source: 'computed exactly by src/engine/blackjack.ts for the owner\'s table rules (D22)',
+    rules: `3:2, dealer hits soft 17, double any two cards, double after split, split to 4 hands (aces once), no surrender; basic strategy (${(-TABLE_BLACKJACK.ev * 100).toFixed(2)}% edge, infinite deck)`,
+    source: 'computed exactly by src/engine/blackjack.ts for the owner\'s table rules (D22, D29)',
     minBetCents: 1500,
-    outcomes: OWNER_BLACKJACK.outcomes,
+    outcomes: TABLE_BLACKJACK.outcomes,
   },
   {
     id: 'craps',

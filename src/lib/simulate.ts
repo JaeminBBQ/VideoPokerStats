@@ -1,4 +1,5 @@
 import { mulberry32, type EngineClient, type Venue } from '../engine/index.ts';
+import { BIG_CATEGORIES } from '../engine/odds.ts';
 import { leaveOdds, type LeaveOdds, type LeaveRule } from '../engine/leave.ts';
 import type { GameOdds } from './odds.ts';
 
@@ -39,8 +40,6 @@ export interface SimParams {
 
 export type EndReason = 'win' | 'loss-limit' | 'broke' | 'time';
 
-/** Categories worth a marker on the graph. */
-const BIG = new Set(['royal', 'four-deuces', 'wild-royal', 'five-kind', 'straight-flush', 'four-kind']);
 
 export interface SessionRun {
   end: EndReason;
@@ -51,14 +50,16 @@ export interface SessionRun {
   compsCents: number;
   /** Bankroll after each kept hand: min and max per bucket so spikes survive downsampling (≤ ~2 × 300 points). */
   path: { hand: number; cents: number }[];
-  /** Big hands (quads and better): hand number, row label, category, amount won. */
-  events: { hand: number; label: string; category: string; winCents: number }[];
+  /**
+   * Big hands (quads and better): hand number, row label, category, amount won, and what was held before
+   * the draw in chart words ("Three of a Kind", "Pat Royal Flush", "Discard everything"; D28).
+   */
+  events: { hand: number; label: string; category: string; winCents: number; held: string }[];
 }
 
-/** Walker alias table over the rows' mixed probabilities. */
-function sampler(rows: SimParams['rows'], errorRate: number, rand: () => number): () => number {
-  const n = rows.length;
-  const p = rows.map((r) => (1 - errorRate) * r.best + errorRate * r.second);
+/** Walker alias table: draws index i with probability p[i] / Σp. Shared with the table-game simulator. */
+export function aliasSampler(p: readonly number[], rand: () => number): () => number {
+  const n = p.length;
   const total = p.reduce((a, b) => a + b, 0);
   const scaled = p.map((x) => (x / total) * n);
   const prob = new Float64Array(n);
@@ -82,7 +83,55 @@ function sampler(rows: SimParams['rows'], errorRate: number, rand: () => number)
   };
 }
 
+const sampler = (rows: SimParams['rows'], errorRate: number, rand: () => number): (() => number) =>
+  aliasSampler(rows.map((r) => (1 - errorRate) * r.best + errorRate * r.second), rand);
+
 const PATH_BUCKETS = 300;
+
+/**
+ * Downsampled bankroll path for the session graph: min and max per bucket so spikes survive
+ * (≤ ~2 × 300 points). Shared with the table-game simulator.
+ */
+export function pathRecorder(maxRounds: number, startCents: number): {
+  add: (round: number, cents: number) => void;
+  finish: (rounds: number, cents: number) => SessionRun['path'];
+} {
+  const per = Math.max(1, Math.ceil(maxRounds / PATH_BUCKETS));
+  const path: SessionRun['path'] = [{ hand: 0, cents: startCents }];
+  let bLo = Infinity;
+  let bHi = -Infinity;
+  let loHand = 0;
+  let hiHand = 0;
+  return {
+    add(round, cents) {
+      if (cents < bLo) [bLo, loHand] = [cents, round];
+      if (cents > bHi) [bHi, hiHand] = [cents, round];
+      if (round % per === 0) {
+        const pts = loHand <= hiHand ? [[loHand, bLo], [hiHand, bHi]] : [[hiHand, bHi], [loHand, bLo]];
+        for (const [h, c] of pts) if (path[path.length - 1].hand !== h) path.push({ hand: h, cents: c });
+        bLo = Infinity;
+        bHi = -Infinity;
+      }
+    },
+    finish(rounds, cents) {
+      if (path[path.length - 1].hand !== rounds) path.push({ hand: rounds, cents });
+      return path;
+    },
+  };
+}
+
+/**
+ * Picks what was held for a big row, from the exact joint split P(row, hold) mixed at the mistake rate,
+ * so (row, hold) together are drawn from the exact distribution. "" when the row has no split.
+ */
+function heldFor(row: SimParams['rows'][number], errorRate: number, rand: () => number): string {
+  const holds = row.holds;
+  if (!holds?.length) return '';
+  const w = holds.map((h) => (1 - errorRate) * h.best + errorRate * h.second);
+  let u = rand() * w.reduce((a, b) => a + b, 0);
+  for (let i = 0; i < holds.length; i++) if ((u -= w[i]) < 0) return holds[i].label;
+  return holds[holds.length - 1].label;
+}
 
 /** One session. Deterministic for a given `seed`. */
 export function runSession(params: SimParams, seed: number): SessionRun {
@@ -95,32 +144,21 @@ function simulate(params: SimParams, rand: () => number, keepPath: boolean): Ses
   const winLine = winGoalCents === null ? Infinity : budgetCents + winGoalCents;
   // A loss limit that leaves less than one bet is the same as playing until broke (as in leaveOdds).
   const lossLine = lossLimitCents === null || budgetCents - lossLimitCents < betCents ? -Infinity : budgetCents - lossLimitCents;
-  const per = Math.max(1, Math.ceil(maxHands / PATH_BUCKETS));
-  const path: SessionRun['path'] = keepPath ? [{ hand: 0, cents: budgetCents }] : [];
+  const rec = keepPath ? pathRecorder(maxHands, budgetCents) : null;
   const events: SessionRun['events'] = [];
   let bank = budgetCents;
   let hands = 0;
   let end: EndReason = 'time';
-  let bLo = Infinity;
-  let bHi = -Infinity;
-  let loHand = 0;
-  let hiHand = 0;
   if (bank < betCents) end = 'broke';
   while (end !== 'broke' && hands < maxHands) {
     const row = rows[draw()];
     hands++;
     const win = row.pays * betCents;
     bank += win - betCents;
-    if (keepPath) {
-      if (bank < bLo) [bLo, loHand] = [bank, hands];
-      if (bank > bHi) [bHi, hiHand] = [bank, hands];
-      if (hands % per === 0) {
-        const pts = loHand <= hiHand ? [[loHand, bLo], [hiHand, bHi]] : [[hiHand, bHi], [loHand, bLo]];
-        for (const [h, c] of pts) if (path[path.length - 1].hand !== h) path.push({ hand: h, cents: c });
-        bLo = Infinity;
-        bHi = -Infinity;
-      }
-      if (BIG.has(row.category)) events.push({ hand: hands, label: row.label, category: row.category, winCents: win });
+    if (rec) {
+      rec.add(hands, bank);
+      if (BIG_CATEGORIES.has(row.category))
+        events.push({ hand: hands, label: row.label, category: row.category, winCents: win, held: heldFor(row, params.errorRate, rand) });
     }
     if (bank >= winLine) {
       end = 'win';
@@ -137,7 +175,7 @@ function simulate(params: SimParams, rand: () => number, keepPath: boolean): Ses
       break;
     }
   }
-  if (keepPath && path[path.length - 1].hand !== hands) path.push({ hand: hands, cents: bank });
+  const path = rec ? rec.finish(hands, bank) : [];
   const coinInCents = hands * betCents;
   return {
     end,
@@ -234,7 +272,7 @@ export interface LeaveAdviceRow {
   odds: LeaveOdds | null;
 }
 
-const ADVICE_RULES = (b: number): Omit<LeaveAdviceRow, 'odds'>[] => [
+export const ADVICE_RULES = (b: number): Omit<LeaveAdviceRow, 'odds'>[] => [
   { label: 'Play the whole session', winGoalCents: null, lossLimitCents: null },
   { label: 'Leave at +25%', winGoalCents: Math.round(b * 0.25), lossLimitCents: null },
   { label: 'Leave at +50%', winGoalCents: Math.round(b * 0.5), lossLimitCents: null },

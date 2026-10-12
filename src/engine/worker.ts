@@ -3,7 +3,7 @@
 import { analyzeHand, buildTables, type Tables } from './ev.ts';
 import { GAMES } from './games.ts';
 import { findSimilarHand } from './drill.ts';
-import { leaveOdds } from './leave.ts';
+import { leaveOdds, leaveOddsTiered } from './leave.ts';
 import type { EngineRequest, EngineResponse } from './client.ts';
 
 const tables = new Map<string, Tables>();
@@ -23,6 +23,11 @@ self.onmessage = (e: MessageEvent<EngineRequest>) => {
   try {
     if (req.type === 'leave') {
       const leave = req.rules.map((rule) => leaveOdds(req.pays, req.probs, req.startBets, rule));
+      (self as unknown as Worker).postMessage({ id: req.id, ok: true, holds: [], leave } satisfies EngineResponse);
+      return;
+    }
+    if (req.type === 'leaveTiered') {
+      const leave = req.rules.map((rule) => leaveOddsTiered(req.tiers, req.startUnits, req.unitsPerBet, rule));
       (self as unknown as Worker).postMessage({ id: req.id, ok: true, holds: [], leave } satisfies EngineResponse);
       return;
     }

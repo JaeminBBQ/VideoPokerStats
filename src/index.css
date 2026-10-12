@@ -1998,6 +1998,45 @@ select {
   font-variant-numeric: tabular-nums;
 }
 
+.sim-big-hands {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  font-variant-numeric: tabular-nums;
+}
+
+.sim-big-hands li {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.sim-big-dot {
+  flex: none;
+  align-self: center;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.sim-big-held {
+  color: var(--muted);
+}
+
+.sim-big-more {
+  padding-left: 13px;
+  color: var(--muted);
+}
+
+.sim-big-none {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  font-style: italic;
+  color: var(--muted);
+}
+
 .sim-run-stats {
   margin: 8px 0 0;
 }

@@ -29,6 +29,14 @@ function categoryOf(rowKey: string, rowLabel: string): { key: string; label: str
   return { key: rowKey, label: rowLabel };
 }
 
+/** Categories the simulator marks as big hands (quads and better), and splits by what was held (D28). */
+export const BIG_CATEGORIES: ReadonlySet<string> = new Set(['royal', 'four-deuces', 'wild-royal', 'five-kind', 'straight-flush', 'four-kind']);
+
+/** Row indices of `game.rows` whose category is in `BIG_CATEGORIES`. */
+export function bigRows(game: GameDef): number[] {
+  return game.rows.flatMap((r, i) => (BIG_CATEGORIES.has(categoryOf(r.key, r.label).key) ? [i] : []));
+}
+
 /** The game's categories, best first, ending with "nothing" (no pay). */
 export function oddsCategories(game: GameDef): OddsCategory[] {
   const cats: OddsCategory[] = [];

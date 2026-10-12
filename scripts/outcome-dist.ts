@@ -1,12 +1,15 @@
 /**
  * Exact final-outcome distributions per hand for perfect play and for the best non-tied mistake hold,
- * by full enumeration of every starting hand. Writes docs/bankroll/outcome-dist.json.
+ * by full enumeration of every starting hand, with big hands split by the hold that made them. Writes
+ * docs/bankroll/outcome-dist.json.
  *
  *   node scripts/outcome-dist.ts                 # all games
  *   node scripts/outcome-dist.ts job-8-5         # some games
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { GAMES, GAME_LIST, type GameDef } from '../src/engine/games.ts';
+import { patternFor } from '../src/engine/drill.ts';
+import { bigRows } from '../src/engine/odds.ts';
 import { outcomeDistribution } from '../src/engine/outcomes.ts';
 
 const OUT = 'docs/bankroll/outcome-dist.json';
@@ -28,7 +31,12 @@ const check = (ok: boolean, msg: string) => {
 
 for (const game of games) {
   const t0 = performance.now();
-  const { best, second } = outcomeDistribution(game);
+  // Big hands (quads and better) are also split by the hold that made them, for the simulator (D28).
+  const big = bigRows(game);
+  const { best, second, holds } = outcomeDistribution(game, undefined, {
+    rows: big,
+    classify: (held) => patternFor(game, held)?.label ?? fail(`${game.id} has no hold classifier`),
+  });
   const secs = (performance.now() - t0) / 1000;
   const rows = [...game.rows.map(({ key, label, pays }) => ({ key, label, pays })), { key: 'nothing', label: 'No win', pays: 0 }];
   const dot = (p: number[]) => p.reduce((acc, v, i) => acc + v * rows[i].pays, 0);
@@ -51,6 +59,12 @@ for (const game of games) {
     `returnBest ${pct.toFixed(4)}% matches published ${published.toFixed(game.publishedDecimals)}%`,
   );
   check(returnSecond < returnBest, 'returnSecond < returnBest');
+  for (const r of big) {
+    const hs = holds[r];
+    const off = (k: 'best' | 'second', p: number[]) => Math.abs(hs.reduce((a, x) => a + x[k], 0) - p[r]) / Math.max(p[r], 1e-300);
+    check(off('best', best) <= 1e-12 && off('second', second) <= 1e-12, `${rows[r].label}: holds sum to the row (${hs.length} holds)`);
+    console.log(`    ${hs.slice(0, 4).map((x) => `${x.label} ${((x.best / best[r]) * 100).toFixed(1)}%`).join(', ')}`);
+  }
 
   out.push({
     gameId: game.id,
@@ -59,6 +73,7 @@ for (const game of games) {
     rows,
     best,
     second,
+    holds,
     returnBest,
     returnSecond,
     mistakeCostPerHand: returnBest - returnSecond,

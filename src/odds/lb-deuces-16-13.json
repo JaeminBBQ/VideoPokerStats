@@ -378,7 +378,74 @@
       "category": "royal",
       "pays": 800,
       "best": 0.000022668706490405468,
-      "second": 0.000006229374004020813
+      "second": 0.000006229374004020813,
+      "holds": [
+        {
+          "label": "4 to a Royal",
+          "best": 0.000007040459391612619,
+          "second": 6.54926455033732e-7
+        },
+        {
+          "label": "3 to a Royal (with A)",
+          "best": 0.0000036903681987987685,
+          "second": 4.854998286228318e-7
+        },
+        {
+          "label": "3 to a Royal (with A/T)",
+          "best": 0.0000036903681987987685,
+          "second": 3.616333034316694e-7
+        },
+        {
+          "label": "3 to a Royal (with T)",
+          "best": 0.0000034340926294377425,
+          "second": 6.321464044238631e-7
+        },
+        {
+          "label": "Pat Natural Royal Flush",
+          "best": 0.0000015390771693292702,
+          "second": 0
+        },
+        {
+          "label": "3 to a Royal (no T or A)",
+          "best": 0.0000011660538405926664,
+          "second": 1.9647793651011958e-7
+        },
+        {
+          "label": "2 to a Royal (with T)",
+          "best": 9.892236977335586e-7,
+          "second": 0.0000011711793519798867
+        },
+        {
+          "label": "2 to a Royal (no T or A)",
+          "best": 8.72191187725357e-7,
+          "second": 8.249225827098788e-7
+        },
+        {
+          "label": "Discard everything",
+          "best": 2.4687217637671917e-7,
+          "second": 1.591894498617242e-7
+        },
+        {
+          "label": "2 to a Royal (with A)",
+          "best": 0,
+          "second": 0.0000010572790989305421
+        },
+        {
+          "label": "2 to a Royal (with A/T)",
+          "best": 0,
+          "second": 3.570772933096956e-7
+        },
+        {
+          "label": "1 to a Royal (with T)",
+          "best": 0,
+          "second": 2.365501164465709e-7
+        },
+        {
+          "label": "1 to a Royal (no T or A)",
+          "best": 0,
+          "second": 9.249218276029741e-8
+        }
+      ]
     },
     {
       "key": "four-deuces",
@@ -386,7 +453,139 @@
       "category": "four-deuces",
       "pays": 200,
       "best": 0.00017904824674155903,
-      "second": 0.00010461890109586376
+      "second": 0.00010461890109586376,
+      "holds": [
+        {
+          "label": "3 deuces only",
+          "best": 0.00006654052783142716,
+          "second": 0.000007335176296377798
+        },
+        {
+          "label": "2 deuces only",
+          "best": 0.00006204431534230429,
+          "second": 0.00002644763875805784
+        },
+        {
+          "label": "1 deuce only",
+          "best": 0.00002699891598281667,
+          "second": 0.000014890559748650998
+        },
+        {
+          "label": "Pat Four Deuces",
+          "best": 0.00001846892603195124,
+          "second": 0
+        },
+        {
+          "label": "Discard everything",
+          "best": 0.000004995561553059668,
+          "second": 0.000002837151757774586
+        },
+        {
+          "label": "3 deuces + 4 to a Royal",
+          "best": 0,
+          "second": 0.000020564690688059184
+        },
+        {
+          "label": "2 deuces + 3 to a Straight Flush (5 ways)",
+          "best": 0,
+          "second": 0.000006902355334790288
+        },
+        {
+          "label": "3 deuces + 4 to a Straight Flush (5 ways)",
+          "best": 0,
+          "second": 0.000006287293968323827
+        },
+        {
+          "label": "2 deuces + 3 to a Royal (no T or A)",
+          "best": 0,
+          "second": 0.000005484297184325947
+        },
+        {
+          "label": "2 deuces + 3 to a Royal (with T)",
+          "best": 0,
+          "second": 0.000004228546894456921
+        },
+        {
+          "label": "1 deuce + 2 to a Straight Flush (5 ways)",
+          "best": 0,
+          "second": 0.0000028224482705627613
+        },
+        {
+          "label": "1 deuce + 2 to a Royal (with T)",
+          "best": 0,
+          "second": 0.0000015080393503733239
+        },
+        {
+          "label": "3 deuces + 4 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 0.0000011788676190607177
+        },
+        {
+          "label": "3 deuces + 4 to a Straight Flush (4 ways)",
+          "best": 0,
+          "second": 7.859117460404783e-7
+        },
+        {
+          "label": "1 deuce + 2 to a Royal (no T or A)",
+          "best": 0,
+          "second": 7.688267080830766e-7
+        },
+        {
+          "label": "2 deuces + 3 to a Royal (with A)",
+          "best": 0,
+          "second": 6.40688923402564e-7
+        },
+        {
+          "label": "2 deuces + 3 to a Straight Flush (4 ways)",
+          "best": 0,
+          "second": 5.381786956581536e-7
+        },
+        {
+          "label": "3 deuces + 4 to a Straight Flush (2 ways)",
+          "best": 0,
+          "second": 3.9295587302023917e-7
+        },
+        {
+          "label": "1 to a Straight Flush (5 ways)",
+          "best": 0,
+          "second": 3.4483301610689104e-7
+        },
+        {
+          "label": "1 to a Royal (with T)",
+          "best": 0,
+          "second": 2.365501164465709e-7
+        },
+        {
+          "label": "1 deuce + 2 to a Straight Flush (4 ways)",
+          "best": 0,
+          "second": 2.232444959767156e-7
+        },
+        {
+          "label": "1 to a Royal (no T or A)",
+          "best": 0,
+          "second": 9.249218276029741e-8
+        },
+        {
+          "label": "2 deuces + 3 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 5.1255113872205116e-8
+        },
+        {
+          "label": "1 deuce + 2 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 4.556010121973788e-8
+        },
+        {
+          "label": "1 to a Straight Flush (4 ways)",
+          "best": 0,
+          "second": 1.0354568459031336e-8
+        },
+        {
+          "label": "1 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 9.83684003607977e-10
+        }
+      ]
     },
     {
       "key": "wild-royal",
@@ -394,7 +593,149 @@
       "category": "wild-royal",
       "pays": 25,
       "best": 0.0018366109694266711,
-      "second": 0.0008003280440786734
+      "second": 0.0008003280440786734,
+      "holds": [
+        {
+          "label": "2 deuces + 4 to a Royal",
+          "best": 0.00035955462381351885,
+          "second": 0.00007073205714364306
+        },
+        {
+          "label": "1 deuce + 4 to a Royal",
+          "best": 0.00027834374338933605,
+          "second": 0.0000032746322751686598
+        },
+        {
+          "label": "Pat Wild Royal Flush",
+          "best": 0.00018468926031951243,
+          "second": 0
+        },
+        {
+          "label": "2 deuces only",
+          "best": 0.00014158029254539645,
+          "second": 0.00006099928052057655
+        },
+        {
+          "label": "1 deuce + 3 to a Royal (no T or A)",
+          "best": 0.0001283940602498738,
+          "second": 0.00002357735238121435
+        },
+        {
+          "label": "1 deuce only",
+          "best": 0.00012633836777370232,
+          "second": 0.00006967085193750512
+        },
+        {
+          "label": "1 deuce + 3 to a Royal (with T)",
+          "best": 0.00012147461987712612,
+          "second": 0.000028104887439925803
+        },
+        {
+          "label": "1 deuce + 3 to a Royal (with A)",
+          "best": 0.00010635436128482562,
+          "second": 0.00003818505983479281
+        },
+        {
+          "label": "3 deuces only",
+          "best": 0.00005330531842709331,
+          "second": 0.000006036713411615268
+        },
+        {
+          "label": "3 to a Royal (with A)",
+          "best": 0.00005166515478318276,
+          "second": 0.000005003068615192465
+        },
+        {
+          "label": "3 to a Royal (with A/T)",
+          "best": 0.00005166515478318276,
+          "second": 0.000003866913591025253
+        },
+        {
+          "label": "3 to a Royal (with T)",
+          "best": 0.0000480772968121284,
+          "second": 0.00000923446301597562
+        },
+        {
+          "label": "Discard everything",
+          "best": 0.00004023406037009275,
+          "second": 0.00002349349241689208
+        },
+        {
+          "label": "1 deuce + 3 to a Royal (with A/T)",
+          "best": 0.00003715995755734871,
+          "second": 0.000009738471635718971
+        },
+        {
+          "label": "2 to a Royal (with T)",
+          "best": 0.00003363360572294099,
+          "second": 0.00003982009796731615
+        },
+        {
+          "label": "2 to a Royal (no T or A)",
+          "best": 0.000029654500382662135,
+          "second": 0.000028047367812135886
+        },
+        {
+          "label": "4 to a Royal",
+          "best": 0.000028161837566450475,
+          "second": 0.0000020957646561079425
+        },
+        {
+          "label": "3 to a Royal (no T or A)",
+          "best": 0.000016324753768297326,
+          "second": 0.0000027079785162481702
+        },
+        {
+          "label": "3 deuces + 4 to a Royal",
+          "best": 0,
+          "second": 0.00008291368920727048
+        },
+        {
+          "label": "2 deuces + 3 to a Royal (no T or A)",
+          "best": 0,
+          "second": 0.00007678016058056326
+        },
+        {
+          "label": "2 deuces + 3 to a Royal (with T)",
+          "best": 0,
+          "second": 0.000059199656522396906
+        },
+        {
+          "label": "1 deuce + 2 to a Royal (with T)",
+          "best": 0,
+          "second": 0.000051273337912693
+        },
+        {
+          "label": "2 to a Royal (with A)",
+          "best": 0,
+          "second": 0.00003594748936363843
+        },
+        {
+          "label": "1 deuce + 2 to a Royal (no T or A)",
+          "best": 0,
+          "second": 0.000026140108074824606
+        },
+        {
+          "label": "1 to a Royal (with T)",
+          "best": 0,
+          "second": 0.00001608540791836682
+        },
+        {
+          "label": "2 to a Royal (with A/T)",
+          "best": 0,
+          "second": 0.000012140627972529651
+        },
+        {
+          "label": "2 deuces + 3 to a Royal (with A)",
+          "best": 0,
+          "second": 0.000008969644927635894
+        },
+        {
+          "label": "1 to a Royal (no T or A)",
+          "best": 0,
+          "second": 0.000006289468427700224
+        }
+      ]
     },
     {
       "key": "five-kind",
@@ -402,7 +743,169 @@
       "category": "five-kind",
       "pays": 16,
       "best": 0.003129560726755834,
-      "second": 0.0007081506229419164
+      "second": 0.0007081506229419164,
+      "holds": [
+        {
+          "label": "Three of a Kind (1 deuce + 2 natural)",
+          "best": 0.0008754373449372633,
+          "second": 0.00006048103436920203
+        },
+        {
+          "label": "Four of a Kind (2 deuces + 2 natural)",
+          "best": 0.000617726632387816,
+          "second": 0.000011788676190607176
+        },
+        {
+          "label": "Pair",
+          "best": 0.0003946814618539368,
+          "second": 0.00001085469411560255
+        },
+        {
+          "label": "Four of a Kind (1 deuce + 3 natural)",
+          "best": 0.0002766409346062484,
+          "second": 0.0000011788676190607177
+        },
+        {
+          "label": "Pat Five of a Kind",
+          "best": 0.00024009603841536616,
+          "second": 0
+        },
+        {
+          "label": "2 deuces only",
+          "best": 0.0002274958229217824,
+          "second": 0.00009697467544621207
+        },
+        {
+          "label": "1 deuce only",
+          "best": 0.0001816290711571303,
+          "second": 0.00010017285649092488
+        },
+        {
+          "label": "Three of a Kind",
+          "best": 0.00015034833402513502,
+          "second": 0.000011276125051885126
+        },
+        {
+          "label": "3 deuces only",
+          "best": 0.00009547119210596072,
+          "second": 0.00001131456638728928
+        },
+        {
+          "label": "Discard everything",
+          "best": 0.0000527438359323044,
+          "second": 0.00003008935252529504
+        },
+        {
+          "label": "Four of a Kind",
+          "best": 0.000017290058412890524,
+          "second": 0
+        },
+        {
+          "label": "3 deuces + 4 to a Royal",
+          "best": 0,
+          "second": 0.00006218526690545286
+        },
+        {
+          "label": "2 deuces + 3 to a Straight Flush (5 ways)",
+          "best": 0,
+          "second": 0.00006212119801311259
+        },
+        {
+          "label": "1 deuce + 2 to a Straight Flush (5 ways)",
+          "best": 0,
+          "second": 0.00005362651714069247
+        },
+        {
+          "label": "2 deuces + 3 to a Royal (no T or A)",
+          "best": 0,
+          "second": 0.00004935867465893352
+        },
+        {
+          "label": "2 deuces + 3 to a Royal (with T)",
+          "best": 0,
+          "second": 0.0000380569220501123
+        },
+        {
+          "label": "1 deuce + 2 to a Royal (with T)",
+          "best": 0,
+          "second": 0.000028652747657093154
+        },
+        {
+          "label": "3 deuces + 4 to a Straight Flush (5 ways)",
+          "best": 0,
+          "second": 0.000018861881904971483
+        },
+        {
+          "label": "1 deuce + 2 to a Royal (no T or A)",
+          "best": 0,
+          "second": 0.000014607707453578457
+        },
+        {
+          "label": "1 to a Straight Flush (5 ways)",
+          "best": 0,
+          "second": 0.000011724322547634296
+        },
+        {
+          "label": "1 to a Royal (with T)",
+          "best": 0,
+          "second": 0.00000804270395918341
+        },
+        {
+          "label": "2 deuces + 3 to a Royal (with A)",
+          "best": 0,
+          "second": 0.000005766200310623075
+        },
+        {
+          "label": "2 deuces + 3 to a Straight Flush (4 ways)",
+          "best": 0,
+          "second": 0.000004843608260923383
+        },
+        {
+          "label": "1 deuce + 2 to a Straight Flush (4 ways)",
+          "best": 0,
+          "second": 0.000004241645423557596
+        },
+        {
+          "label": "3 deuces + 4 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 0.000003536602857182153
+        },
+        {
+          "label": "1 to a Royal (no T or A)",
+          "best": 0,
+          "second": 0.000003144734213850112
+        },
+        {
+          "label": "3 deuces + 4 to a Straight Flush (4 ways)",
+          "best": 0,
+          "second": 0.0000023577352381214353
+        },
+        {
+          "label": "3 deuces + 4 to a Straight Flush (2 ways)",
+          "best": 0,
+          "second": 0.0000011788676190607177
+        },
+        {
+          "label": "1 deuce + 2 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 8.656419231750197e-7
+        },
+        {
+          "label": "2 deuces + 3 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 4.6129602484984606e-7
+        },
+        {
+          "label": "1 to a Straight Flush (4 ways)",
+          "best": 0,
+          "second": 3.520553276070654e-7
+        },
+        {
+          "label": "1 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 3.344525612267122e-8
+        }
+      ]
     },
     {
       "key": "straight-flush",
@@ -410,7 +913,299 @@
       "category": "straight-flush",
       "pays": 13,
       "best": 0.005762861941764972,
-      "second": 0.0035245635787624846
+      "second": 0.0035245635787624846,
+      "holds": [
+        {
+          "label": "1 deuce + 4 to a Straight Flush (1 way)",
+          "best": 0.0006440546758801721,
+          "second": 0.00002750691111141674
+        },
+        {
+          "label": "Pat Straight Flush",
+          "best": 0.0006033182503770739,
+          "second": 0.00019238464616615878
+        },
+        {
+          "label": "2 deuces only",
+          "best": 0.0005028485456660427,
+          "second": 0.0002156519051084463
+        },
+        {
+          "label": "1 deuce only",
+          "best": 0.0004943407662645219,
+          "second": 0.0002744574667552925
+        },
+        {
+          "label": "1 deuce + 4 to a Straight Flush (2 ways)",
+          "best": 0.0004228205193697774,
+          "second": 0.000007728132169398037
+        },
+        {
+          "label": "1 deuce + 3 to a Straight Flush (3 ways)",
+          "best": 0.00038953886542875886,
+          "second": 0.00008187719690452143
+        },
+        {
+          "label": "2 deuces + 4 to a Straight Flush (2 ways)",
+          "best": 0.00032517098492424796,
+          "second": 0.0000200407495240322
+        },
+        {
+          "label": "1 deuce + 3 to a Straight Flush (4 ways)",
+          "best": 0.0002926667002102912,
+          "second": 0.00010674731715784584
+        },
+        {
+          "label": "2 deuces + 4 to a Straight Flush (3 ways)",
+          "best": 0.0002846965300031633,
+          "second": 0.000013556977619198252
+        },
+        {
+          "label": "2 deuces + 4 to a Straight Flush (4 ways)",
+          "best": 0.00021219617143092916,
+          "second": 0.000026328043492356024
+        },
+        {
+          "label": "1 deuce + 4 to a Straight Flush (3 ways)",
+          "best": 0.00018704699555763387,
+          "second": 0.000011919661481613922
+        },
+        {
+          "label": "Discard everything",
+          "best": 0.0001719672191139396,
+          "second": 0.00009834552097857179
+        },
+        {
+          "label": "3 deuces only",
+          "best": 0.00016430681003633217,
+          "second": 0.000019583724758671703
+        },
+        {
+          "label": "3 to a Straight Flush (1 way)",
+          "best": 0.00015709692401830866,
+          "second": 0.0002043028838946096
+        },
+        {
+          "label": "3 to a Straight Flush (3 ways)",
+          "best": 0.0001364667406847461,
+          "second": 0.000017811152070591274
+        },
+        {
+          "label": "4 to a Straight Flush (1 way)",
+          "best": 0.00011886915158862235,
+          "second": 0.00003061781177282697
+        },
+        {
+          "label": "3 to a Straight Flush (2 ways)",
+          "best": 0.00009097782712316407,
+          "second": 0.00017377619232422208
+        },
+        {
+          "label": "2 deuces + 4 to a Straight Flush (1 way)",
+          "best": 0.00008487846857237167,
+          "second": 0.00025247414841550366
+        },
+        {
+          "label": "1 deuce + 3 to a Royal (with T)",
+          "best": 0.00007867659979383484,
+          "second": 0.000018930222056801088
+        },
+        {
+          "label": "2 deuces + 4 to a Royal",
+          "best": 0.00007230388063572401,
+          "second": 0.000014146411428728612
+        },
+        {
+          "label": "1 deuce + 3 to a Straight Flush (2 ways)",
+          "best": 0.00005986597300273557,
+          "second": 0.00033445670305409575
+        },
+        {
+          "label": "1 deuce + 3 to a Royal (no T or A)",
+          "best": 0.00005638062525942563,
+          "second": 0.000008639334193792795
+        },
+        {
+          "label": "4 to a Straight Flush (2 ways)",
+          "best": 0.00004931596206404002,
+          "second": 0.0000011788676190607177
+        },
+        {
+          "label": "1 deuce + 4 to a Straight Flush (needs the 2 slot)",
+          "best": 0.000037723763809942965,
+          "second": 0.000027768881693430237
+        },
+        {
+          "label": "2 to a Royal (with T)",
+          "best": 0.00003116310923430071,
+          "second": 0.00003878303616330187
+        },
+        {
+          "label": "1 deuce + 4 to a Royal",
+          "best": 0.000027244940529403253,
+          "second": 2.619705820134928e-7
+        },
+        {
+          "label": "3 to a Royal (with T)",
+          "best": 0.00002268038788845076,
+          "second": 0.000004350989666484967
+        },
+        {
+          "label": "2 to a Royal (no T or A)",
+          "best": 0.00001867821774692941,
+          "second": 0.000019071173619949652
+        },
+        {
+          "label": "2 to a Straight Flush (4 ways)",
+          "best": 0.000013645250315311495,
+          "second": 0.00006433086292226988
+        },
+        {
+          "label": "3 to a Royal (no T or A)",
+          "best": 0.000005830269202963331,
+          "second": 8.798794548061878e-7
+        },
+        {
+          "label": "4 to a Straight Flush (needs the 2 slot)",
+          "best": 0.000004715470476242871,
+          "second": 7.859117460404783e-7
+        },
+        {
+          "label": "4 to a Royal",
+          "best": 0.000001375345555570837,
+          "second": 1.63731613758433e-7
+        },
+        {
+          "label": "1 deuce + 2 to a Straight Flush (5 ways)",
+          "best": 0,
+          "second": 0.00025909118361640537
+        },
+        {
+          "label": "2 deuces + 3 to a Straight Flush (5 ways)",
+          "best": 0,
+          "second": 0.00023468008138286979
+        },
+        {
+          "label": "1 deuce + 2 to a Royal (with T)",
+          "best": 0,
+          "second": 0.00008846632654342602
+        },
+        {
+          "label": "2 deuces + 3 to a Royal (with T)",
+          "best": 0,
+          "second": 0.00008457093788913843
+        },
+        {
+          "label": "2 deuces + 3 to a Royal (no T or A)",
+          "best": 0,
+          "second": 0.00007214157277512869
+        },
+        {
+          "label": "1 to a Straight Flush (5 ways)",
+          "best": 0,
+          "second": 0.00006836458861117012
+        },
+        {
+          "label": "2 deuces + 4 to a Straight Flush (needs the 2 slot)",
+          "best": 0,
+          "second": 0.00005894338095303588
+        },
+        {
+          "label": "3 deuces + 4 to a Royal",
+          "best": 0,
+          "second": 0.000055963465582632404
+        },
+        {
+          "label": "2 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 0.00005587804039284539
+        },
+        {
+          "label": "3 deuces + 4 to a Straight Flush (5 ways)",
+          "best": 0,
+          "second": 0.000050298351746590614
+        },
+        {
+          "label": "1 deuce + 3 to a Straight Flush (1 way)",
+          "best": 0,
+          "second": 0.000042849275197163474
+        },
+        {
+          "label": "1 deuce + 2 to a Royal (no T or A)",
+          "best": 0,
+          "second": 0.000031726915486894966
+        },
+        {
+          "label": "1 to a Royal (with T)",
+          "best": 0,
+          "second": 0.00003087434620639947
+        },
+        {
+          "label": "1 deuce + 2 to a Straight Flush (4 ways)",
+          "best": 0,
+          "second": 0.00001719210419526809
+        },
+        {
+          "label": "2 deuces + 3 to a Straight Flush (4 ways)",
+          "best": 0,
+          "second": 0.000015607182174086456
+        },
+        {
+          "label": "3 to a Straight Flush (needs the 2 slot)",
+          "best": 0,
+          "second": 0.00001131883764677863
+        },
+        {
+          "label": "1 to a Royal (no T or A)",
+          "best": 0,
+          "second": 0.000008993201570880191
+        },
+        {
+          "label": "3 deuces + 4 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 0.000008252073333425024
+        },
+        {
+          "label": "2 deuces + 3 to a Royal (with A)",
+          "best": 0,
+          "second": 0.000005766200310623075
+        },
+        {
+          "label": "3 deuces + 4 to a Straight Flush (4 ways)",
+          "best": 0,
+          "second": 0.000005501382222283348
+        },
+        {
+          "label": "1 deuce + 2 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 0.000003303107338430996
+        },
+        {
+          "label": "3 deuces + 4 to a Straight Flush (2 ways)",
+          "best": 0,
+          "second": 0.0000023577352381214353
+        },
+        {
+          "label": "1 to a Straight Flush (4 ways)",
+          "best": 0,
+          "second": 0.0000017254594015918342
+        },
+        {
+          "label": "2 deuces + 3 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 0.0000014351431884217432
+        },
+        {
+          "label": "2 to a Straight Flush (2 ways)",
+          "best": 0,
+          "second": 2.5627556936102554e-7
+        },
+        {
+          "label": "1 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 1.4799266970070537e-7
+        }
+      ]
     },
     {
       "key": "four-kind",
@@ -418,7 +1213,289 @@
       "category": "four-kind",
       "pays": 4,
       "best": 0.06228383473540418,
-      "second": 0.04753928798697854
+      "second": 0.04753928798697854,
+      "holds": [
+        {
+          "label": "Three of a Kind (1 deuce + 2 natural)",
+          "best": 0.01838418424368253,
+          "second": 0.0012701017217532427
+        },
+        {
+          "label": "Pair",
+          "best": 0.012136454952008555,
+          "second": 0.0003337818440547784
+        },
+        {
+          "label": "1 deuce only",
+          "best": 0.006703831956826773,
+          "second": 0.003697302584265325
+        },
+        {
+          "label": "Four of a Kind (2 deuces + 2 natural)",
+          "best": 0.006640561298169022,
+          "second": 0.000154431658096954
+        },
+        {
+          "label": "2 deuces only",
+          "best": 0.005733408427770169,
+          "second": 0.002443472514601799
+        },
+        {
+          "label": "Three of a Kind",
+          "best": 0.0031573150145278346,
+          "second": 0.00023679862608958762
+        },
+        {
+          "label": "Four of a Kind (1 deuce + 3 natural)",
+          "best": 0.0029738900470171704,
+          "second": 0.000017290058412890524
+        },
+        {
+          "label": "Discard everything",
+          "best": 0.002524257745205062,
+          "second": 0.0014371773644658626
+        },
+        {
+          "label": "3 deuces only",
+          "best": 0.0011840785556377252,
+          "second": 0.0001388800022962291
+        },
+        {
+          "label": "2 deuces + 4 to a Royal",
+          "best": 0.0004302866809571619,
+          "second": 0.00007662639523894664
+        },
+        {
+          "label": "1 deuce + 3 to a Straight Flush (3 ways)",
+          "best": 0.0003739573108116085,
+          "second": 0.00008173482158820975
+        },
+        {
+          "label": "2 deuces + 4 to a Straight Flush (2 ways)",
+          "best": 0.00031829425714639375,
+          "second": 0.0000200407495240322
+        },
+        {
+          "label": "2 deuces + 4 to a Straight Flush (3 ways)",
+          "best": 0.00024402559714556852,
+          "second": 0.000012967543809667893
+        },
+        {
+          "label": "1 deuce + 3 to a Straight Flush (4 ways)",
+          "best": 0.00023413336016823294,
+          "second": 0.00009458277013217583
+        },
+        {
+          "label": "1 deuce + 3 to a Royal (no T or A)",
+          "best": 0.0002054304963997981,
+          "second": 0.000037723763809942965
+        },
+        {
+          "label": "1 deuce + 3 to a Royal (with T)",
+          "best": 0.00019435939180340178,
+          "second": 0.00004592458202949578
+        },
+        {
+          "label": "Four of a Kind",
+          "best": 0.00018586812793857315,
+          "second": 0
+        },
+        {
+          "label": "1 deuce + 3 to a Royal (with A)",
+          "best": 0.00017016697805572096,
+          "second": 0.0000610960957356685
+        },
+        {
+          "label": "2 deuces + 4 to a Straight Flush (4 ways)",
+          "best": 0.00015914712857319687,
+          "second": 0.000022398484762153634
+        },
+        {
+          "label": "2 deuces + 4 to a Straight Flush (1 way)",
+          "best": 0.00008487846857237167,
+          "second": 0.0003029689780986044
+        },
+        {
+          "label": "2 to a Royal (with T)",
+          "best": 0.00006133186925948064,
+          "second": 0.00006494193777987962
+        },
+        {
+          "label": "1 deuce + 3 to a Straight Flush (2 ways)",
+          "best": 0.00005986597300273557,
+          "second": 0.00039924316698856303
+        },
+        {
+          "label": "1 deuce + 3 to a Royal (with A/T)",
+          "best": 0.00005945593209175793,
+          "second": 0.000015581554617150354
+        },
+        {
+          "label": "2 to a Royal (no T or A)",
+          "best": 0.00005407585363897213,
+          "second": 0.000047548799637979434
+        },
+        {
+          "label": "2 to a Straight Flush (4 ways)",
+          "best": 0.000010575068994366408,
+          "second": 0.000049856418764759155
+        },
+        {
+          "label": "Pat Four of a Kind",
+          "best": 0,
+          "second": 0.010213316095669037
+        },
+        {
+          "label": "1 deuce + other (4 cards)",
+          "best": 0,
+          "second": 0.010049846452492617
+        },
+        {
+          "label": "other (3 cards)",
+          "best": 0,
+          "second": 0.003057431611369375
+        },
+        {
+          "label": "1 deuce + 2 to a Straight Flush (5 ways)",
+          "best": 0,
+          "second": 0.00225073506240182
+        },
+        {
+          "label": "2 deuces + 3 to a Straight Flush (5 ways)",
+          "best": 0,
+          "second": 0.0017531982550367334
+        },
+        {
+          "label": "other (4 cards)",
+          "best": 0,
+          "second": 0.0017275322567652264
+        },
+        {
+          "label": "2 deuces + 3 to a Royal (no T or A)",
+          "best": 0,
+          "second": 0.0014080292331833466
+        },
+        {
+          "label": "1 deuce + 2 to a Royal (with T)",
+          "best": 0,
+          "second": 0.0012023105691433339
+        },
+        {
+          "label": "2 deuces + 3 to a Royal (with T)",
+          "best": 0,
+          "second": 0.0010740509111920582
+        },
+        {
+          "label": "3 deuces + 4 to a Royal",
+          "best": 0,
+          "second": 0.0007526087358020132
+        },
+        {
+          "label": "1 to a Straight Flush (5 ways)",
+          "best": 0,
+          "second": 0.0006303631147574275
+        },
+        {
+          "label": "1 deuce + 2 to a Royal (no T or A)",
+          "best": 0,
+          "second": 0.00061563542374183
+        },
+        {
+          "label": "1 to a Royal (with T)",
+          "best": 0,
+          "second": 0.00043237483500545244
+        },
+        {
+          "label": "3 deuces + 4 to a Straight Flush (5 ways)",
+          "best": 0,
+          "second": 0.00022005528889133393
+        },
+        {
+          "label": "1 deuce + 2 to a Straight Flush (4 ways)",
+          "best": 0,
+          "second": 0.00017868443897875097
+        },
+        {
+          "label": "1 to a Royal (no T or A)",
+          "best": 0,
+          "second": 0.0001694287749838555
+        },
+        {
+          "label": "2 deuces + 3 to a Royal (with A)",
+          "best": 0,
+          "second": 0.00016401636439105637
+        },
+        {
+          "label": "2 deuces + 3 to a Straight Flush (4 ways)",
+          "best": 0,
+          "second": 0.00013777374608848732
+        },
+        {
+          "label": "2 deuces + 4 to a Straight Flush (needs the 2 slot)",
+          "best": 0,
+          "second": 0.00008841507142955381
+        },
+        {
+          "label": "2 to a Royal (with A)",
+          "best": 0,
+          "second": 0.00006555130413369361
+        },
+        {
+          "label": "1 deuce + 3 to a Straight Flush (1 way)",
+          "best": 0,
+          "second": 0.0000541254002490486
+        },
+        {
+          "label": "2 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 0.0000532990539131756
+        },
+        {
+          "label": "3 deuces + 4 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 0.000042439234286185834
+        },
+        {
+          "label": "1 deuce + 2 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 0.000036468583021339184
+        },
+        {
+          "label": "3 deuces + 4 to a Straight Flush (4 ways)",
+          "best": 0,
+          "second": 0.000028292822857457224
+        },
+        {
+          "label": "2 to a Royal (with A/T)",
+          "best": 0,
+          "second": 0.00002213879218520113
+        },
+        {
+          "label": "1 to a Straight Flush (4 ways)",
+          "best": 0,
+          "second": 0.0000189664630464077
+        },
+        {
+          "label": "3 deuces + 4 to a Straight Flush (2 ways)",
+          "best": 0,
+          "second": 0.000014539367301748852
+        },
+        {
+          "label": "2 deuces + 3 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 0.00001312130915128451
+        },
+        {
+          "label": "1 to a Straight Flush (3 ways)",
+          "best": 0,
+          "second": 0.000001802160867452109
+        },
+        {
+          "label": "2 to a Straight Flush (2 ways)",
+          "best": 0,
+          "second": 2.6481808833972645e-7
+        }
+      ]
     },
     {
       "key": "full-house",

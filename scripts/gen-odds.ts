@@ -30,6 +30,8 @@ interface DistGame {
   rows: { key: string; pays: number }[];
   best: number[];
   second: number[];
+  /** Big rows only (keyed by row index): what was held before the draw, joint probabilities. */
+  holds: Record<string, { label: string; best: number; second: number }[]>;
 }
 const dist = (JSON.parse(readFileSync(DIST, 'utf8')) as { games: DistGame[] }).games;
 
@@ -69,7 +71,8 @@ for (const game of games) {
     .map((pays) => ({ net: pays - 1, p: d.best.reduce((acc, v, i) => acc + ((game.rows[i]?.pays ?? 0) === pays ? v : 0), 0) }));
 
   // Per paytable row (plus no pay): category, pays, P under perfect play and under the best non-tied
-  // mistake hold. Feeds the simulator (mistake rate mixes the two) and its big-hand markers.
+  // mistake hold. Feeds the simulator (mistake rate mixes the two) and its big-hand markers, which also
+  // say what was held before the draw (`holds`, big rows only; D28).
   const perRow = keys.map((key, i) => ({
     key,
     label: game.rows[i]?.label ?? 'No win',
@@ -77,6 +80,7 @@ for (const game of games) {
     pays: game.rows[i]?.pays ?? 0,
     best: d.best[i],
     second: d.second[i],
+    ...(d.holds[String(i)] ? { holds: d.holds[String(i)] } : {}),
   }));
 
   const out = {

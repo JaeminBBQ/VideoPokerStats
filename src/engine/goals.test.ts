@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { OWNER_RULES, blackjackOdds } from './blackjack.ts';
+import { TABLE_RULES, blackjackOdds } from './blackjack.ts';
 import { mulberry32 } from './cards.ts';
 import { TABLE_GAMES, banded, edgeOf, goalProbability, goalProbabilityTiered, ladder, type Outcome } from './goals.ts';
 
@@ -46,8 +46,8 @@ describe('goalProbability', () => {
   });
 
   it('blackjack: half-bet scale, sane bounds, and a simulation cross-check (sampled check only)', () => {
-    expect(edgeOf(blackjack)).toBeCloseTo(blackjackOdds(OWNER_RULES).ev, 12);
-    expect(edgeOf(blackjack)).toBeCloseTo(-0.005117, 5);
+    expect(edgeOf(blackjack)).toBeCloseTo(blackjackOdds(TABLE_RULES).ev, 12);
+    expect(edgeOf(blackjack)).toBeCloseTo(-0.007311, 5);
     const exact = goalProbability(blackjack, 20, 10);
     // Close to a fair coin's 2/3 but a little lower (house edge).
     expect(exact).toBeLessThan(2 / 3);

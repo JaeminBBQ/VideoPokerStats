@@ -17,27 +17,48 @@ export interface BlackjackRules {
   /** Blackjack payout: 1.5 for 3:2, 1.2 for 6:5. */
   bjPays: number;
   hitSoft17: boolean;
-  /** Which first two cards may be doubled: any, or only hard 9–11 / hard 10–11. */
-  double: 'any' | '9-11' | '10-11';
+  /** Which first two cards may be doubled: any, only hard 9–11 / hard 10–11, or none (a short bankroll). */
+  double: 'any' | '9-11' | '10-11' | 'none';
   /** Double after split. */
   das: boolean;
-  /** Most hands a round can split into (4 = split up to three times). */
+  /** Most hands a round can split into (4 = split up to three times; 1 = no splitting). */
   maxHands: number;
   resplitAces: boolean;
   /** Late surrender of the first two cards (half the bet back). */
   surrender: boolean;
 }
 
-/** The owner's $15 tables (D22): 3:2, dealer stands on all 17s, double any two, double after split, no surrender. */
-export const OWNER_RULES: BlackjackRules = {
+/**
+ * The owner's $15 tables: 3:2, dealer hits soft 17 (D29, superseding D22's "stands on all 17s"), double any
+ * two, double after split, split to 4 hands, no surrender.
+ */
+export const TABLE_RULES: BlackjackRules = {
   bjPays: 1.5,
-  hitSoft17: false,
+  hitSoft17: true,
   double: 'any',
   das: true,
   maxHands: 4,
   resplitAces: false,
   surrender: false,
 };
+
+/** The $3 blackjack machine (D29): the table's rules except blackjack pays 6:5 (owner: "same as the table"). */
+export const MACHINE_RULES: BlackjackRules = { ...TABLE_RULES, bjPays: 1.2 };
+
+/**
+ * What a player can still do when the bankroll can't cover a full round (D29): with 8 bets you can split to
+ * 4 hands and double each; with 4, split once and double both; with 2, double but not split; with 1, only
+ * hit or stand. Each tier is the same rules with less allowed, played with its own basic strategy, so a
+ * round never loses more than the bankroll holds. Best tier first.
+ */
+export function bankrollTiers(rules: BlackjackRules): { coverBets: number; rules: BlackjackRules }[] {
+  return [
+    { coverBets: 2 * rules.maxHands, rules },
+    ...(rules.maxHands > 2 ? [{ coverBets: 4, rules: { ...rules, maxHands: 2 } }] : []),
+    { coverBets: 2, rules: { ...rules, maxHands: 1 } },
+    { coverBets: 1, rules: { ...rules, maxHands: 1, double: 'none' as const, surrender: false } },
+  ];
+}
 
 /** Card values 1 (ace) .. 10 and their infinite-deck probabilities. */
 const VALUES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -157,6 +178,7 @@ function upcardPlay(dealer: number[]): UpcardPlay {
 }
 
 function canDouble(rules: BlackjackRules, hard: number, ace: boolean): boolean {
+  if (rules.double === 'none') return false;
   if (rules.double === 'any') return true;
   if (isSoft(hard, ace)) return false;
   return rules.double === '9-11' ? hard >= 9 && hard <= 11 : hard >= 10 && hard <= 11;
@@ -268,7 +290,7 @@ export function strategy(rules: BlackjackRules): Strategy {
     first(a, b, u) {
       const up = upOf(u);
       const best = twoCard(up, rules, a, b, { mayDouble: true, maySurrender: rules.surrender });
-      return a === b && splitPlay(up, rules, a).ev > best.ev ? 'split' : best.action;
+      return a === b && rules.maxHands >= 2 && splitPlay(up, rules, a).ev > best.ev ? 'split' : best.action;
     },
     afterSplit(c, x, u) {
       const aces = c === 1;
@@ -338,7 +360,7 @@ export function blackjackOdds(rules: BlackjackRules): BlackjackOdds {
         const live = p * (1 - dbj);
         const best = twoCard(up, rules, a, b, { mayDouble: true, maySurrender: rules.surrender });
         let sp: SplitPlay | undefined;
-        if (a === b) {
+        if (a === b && rules.maxHands >= 2) {
           sp = splits.get(a) ?? splitPlay(up, rules, a);
           splits.set(a, sp);
         }

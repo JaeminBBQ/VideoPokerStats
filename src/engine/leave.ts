@@ -115,3 +115,129 @@ export function leaveOdds(pays: readonly number[], probs: readonly number[], sta
     expNetBets: expHands * (ret - 1),
   };
 }
+
+/** One bankroll tier of a table game: playable while the bankroll covers `coverUnits`; per-round net steps. */
+export interface StepTier {
+  coverUnits: number;
+  /** Net result of one round in units, and its probability (sums to 1). */
+  steps: readonly (readonly [number, number])[];
+}
+
+export interface TieredRule {
+  /** Leave once up at least this many units (Infinity = no win goal). */
+  winUnits: number;
+  /** Leave once down at least this many units (Infinity = play until no tier is covered). */
+  lossUnits: number;
+  maxRounds: number;
+}
+
+/**
+ * `leaveOdds` for table games (D29): blackjack and craps rounds can win fractions of a bet (3:2, 6:5, odds
+ * pays) and lose more than one bet (doubles, splits, odds), and what you can bet depends on what you have.
+ * The bankroll is tracked in whole `units` (a fraction of the base bet that makes every net whole: 1/2 for
+ * 3:2, 1/5 for 6:5 and craps odds), and each round is played at the best tier the bankroll covers (`tiers`
+ * best first, descending cover). Below the last tier's cover the player is out of money. Exact DP over the
+ * bankroll; nothing sampled. Expected net is summed per round (tiers differ, so Wald's shortcut doesn't
+ * apply). With no win goal and a budget that covers the top tier, mass so far above the start that it can't
+ * fall back to it in the rounds left is lumped (it plays out at the top tier). Returns null past
+ * MAX_LEAVE_WORK. Results are in units; `expNetBets` divides by `unitsPerBet`.
+ */
+export function leaveOddsTiered(tiers: readonly StepTier[], startUnits: number, unitsPerBet: number, rule: TieredRule): LeaveOdds | null {
+  const start = Math.floor(startUnits);
+  const N = rule.maxRounds;
+  const minCover = tiers[tiers.length - 1].coverUnits;
+  const empty = { pWin: 0, pLossLimit: 0, pBroke: 0, pTime: 0, pAhead: 0, expHands: 0, expNetBets: 0 };
+  if (start < minCover) return { ...empty, pBroke: 1 };
+  if (N <= 0) return { ...empty, pTime: 1 };
+
+  const evOf = (t: StepTier) => t.steps.reduce((a, [d, q]) => a + d * q, 0);
+  const evs = tiers.map(evOf);
+  const top = tiers[0];
+  const topLoss = -Math.min(...top.steps.map(([d]) => d));
+  const maxWin = Math.max(...tiers.flatMap((t) => t.steps.map(([d]) => d)));
+  // A loss line that leaves less than the smallest bet is the same as playing until broke.
+  const lossLine = Number.isFinite(rule.lossUnits) ? start - Math.ceil(rule.lossUnits) : -Infinity;
+  const lossIsBroke = lossLine < minCover;
+  const hasGoal = Number.isFinite(rule.winUnits);
+  const hi = hasGoal ? start + Math.max(1, Math.ceil(rule.winUnits)) : start + maxWin * N + 1;
+  const canLump = !hasGoal && start >= top.coverUnits;
+  // Tier index per bankroll (-1 = can't play: out of money, or at/below the loss line).
+  const tierAt = new Int8Array(hi).fill(-1);
+  for (let b = 0; b < hi; b++) {
+    if (!lossIsBroke && b <= lossLine) continue;
+    const t = tiers.findIndex((x) => b >= x.coverUnits);
+    tierAt[b] = t;
+  }
+
+  // Flat per-tier step arrays: the inner loop runs ~10^8 times for long cheap sessions.
+  const ds = tiers.map((t) => Int32Array.from(t.steps, ([d]) => d));
+  const qs = tiers.map((t) => Float64Array.from(t.steps, ([, q]) => q));
+  let cur = new Float64Array(hi);
+  let next = new Float64Array(hi);
+  cur[start] = 1;
+  let lo = start;
+  let up = start; // nonzero support of `cur`: lo..up
+  let pWin = 0;
+  let pLow = 0;
+  let pLump = 0;
+  let expHands = 0;
+  let expNet = 0;
+  let work = 0;
+  for (let n = 0; n < N; n++) {
+    const left = N - n - 1; // rounds after this one
+    let nlo = hi;
+    let nup = -1;
+    for (let b = lo; b <= up; b++) {
+      const m = cur[b];
+      if (m === 0) continue;
+      const t = tierAt[b];
+      expHands += m;
+      expNet += m * evs[t];
+      const td = ds[t];
+      const tq = qs[t];
+      work += td.length;
+      for (let j = 0; j < td.length; j++) {
+        const nb = b + td[j];
+        const mq = m * tq[j];
+        if (nb >= hi) {
+          pWin += mq; // only reachable with a goal (no-goal `hi` is past the largest reachable bankroll)
+        } else if (tierAt[nb] < 0) {
+          pLow += mq;
+        } else if (canLump && nb - topLoss * left > start) {
+          pLump += mq;
+          expHands += mq * left;
+          expNet += mq * left * evs[0];
+        } else {
+          next[nb] += mq;
+          if (nb < nlo) nlo = nb;
+          if (nb > nup) nup = nb;
+        }
+      }
+      cur[b] = 0;
+    }
+    if (work > MAX_LEAVE_WORK) return null;
+    [cur, next] = [next, cur];
+    if (nup < 0) {
+      lo = 1;
+      up = 0;
+      break;
+    }
+    lo = nlo;
+    up = nup;
+  }
+  let pTime = pLump;
+  let aheadAtTime = pLump;
+  for (let b = lo; b <= up; b++) {
+    pTime += cur[b];
+    if (b > start) aheadAtTime += cur[b];
+  }
+  return {
+    pWin,
+    pLossLimit: lossIsBroke ? 0 : pLow,
+    pBroke: lossIsBroke ? pLow : 0,
+    pTime,
+    pAhead: pWin + aheadAtTime,
+    expHands,
+    expNetBets: expNet / unitsPerBet,
+  };
+}

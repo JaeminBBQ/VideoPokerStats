@@ -390,7 +390,104 @@
       "category": "royal",
       "pays": 800,
       "best": 0.000024895000114096203,
-      "second": 0.000003907491459188773
+      "second": 0.000003907491459188773,
+      "holds": [
+        {
+          "label": "3 to a Royal",
+          "best": 0.000010092986173335057,
+          "second": 0.0000013411754796560339
+        },
+        {
+          "label": "4 to a Royal",
+          "best": 0.000007662639523894665,
+          "second": 3.27463227516866e-8
+        },
+        {
+          "label": "Pat Royal Flush",
+          "best": 0.0000015390771693292702,
+          "second": 0
+        },
+        {
+          "label": "Suited AK",
+          "best": 6.979238005598596e-7,
+          "second": 9.254395560259257e-8
+        },
+        {
+          "label": "Suited AQ",
+          "best": 6.95076294233626e-7,
+          "second": 9.510671129620282e-8
+        },
+        {
+          "label": "Suited AJ",
+          "best": 6.91944037274769e-7,
+          "second": 9.653046445931962e-8
+        },
+        {
+          "label": "Suited KQ",
+          "best": 6.361329132805901e-7,
+          "second": 1.568975985754723e-7
+        },
+        {
+          "label": "Suited KJ",
+          "best": 6.330006563217331e-7,
+          "second": 1.5917560363645922e-7
+        },
+        {
+          "label": "Suited QJ",
+          "best": 5.740572753686972e-7,
+          "second": 1.913524251228991e-7
+        },
+        {
+          "label": "Suited JT",
+          "best": 3.394227540870472e-7,
+          "second": 2.2438349850720906e-7
+        },
+        {
+          "label": "Suited QT",
+          "best": 2.801946225013879e-7,
+          "second": 1.808166517158347e-7
+        },
+        {
+          "label": "K only",
+          "best": 2.1628104868801704e-7,
+          "second": 1.3271968122363414e-7
+        },
+        {
+          "label": "Q only",
+          "best": 2.1480552268260507e-7,
+          "second": 2.399930104591988e-7
+        },
+        {
+          "label": "A only",
+          "best": 2.0750555191898796e-7,
+          "second": 1.0450348217277375e-7
+        },
+        {
+          "label": "J only",
+          "best": 2.056935024386575e-7,
+          "second": 3.1928311843423125e-7
+        },
+        {
+          "label": "Suited KT",
+          "best": 1.3668030365921363e-7,
+          "second": 1.623078605953162e-7
+        },
+        {
+          "label": "Discard everything",
+          "best": 7.157896452202476e-8,
+          "second": 3.325201097875557e-8
+        },
+        {
+          "label": "Suited AT",
+          "best": 0,
+          "second": 2.776318668077777e-7
+        },
+        {
+          "label": "other (1 cards)",
+          "best": 0,
+          "second": 6.707171719337548e-8
+        }
+      ]
     },
     {
       "key": "straight-flush",
@@ -398,7 +495,134 @@
       "category": "straight-flush",
       "pays": 50,
       "best": 0.0001072303848669004,
-      "second": 0.000044717726975105974
+      "second": 0.000044717726975105974,
+      "holds": [
+        {
+          "label": "4 to a Straight Flush",
+          "best": 0.000050298351746590614,
+          "second": 0.000015685488598057883
+        },
+        {
+          "label": "Pat Straight Flush",
+          "best": 0.000013851694523963431,
+          "second": 0
+        },
+        {
+          "label": "3 to a Straight Flush (0 high, 1 gap)",
+          "best": 0.000009302803167805228,
+          "second": 0.000004074781552840306
+        },
+        {
+          "label": "3 to a Straight Flush (0 high, no gaps)",
+          "best": 0.000006962152967641195,
+          "second": 0.000007799319827553877
+        },
+        {
+          "label": "3 to a Royal",
+          "best": 0.000004937575969689093,
+          "second": 0.0000012372414987485067
+        },
+        {
+          "label": "3 to a Straight Flush (1 high, 2 gaps)",
+          "best": 0.000004284073267818477,
+          "second": 0.0000010550010938695552
+        },
+        {
+          "label": "3 to a Straight Flush (1 high, 1 gap)",
+          "best": 0.0000037629796101177255,
+          "second": 0.000001939151808165093
+        },
+        {
+          "label": "3 to a Straight Flush (0 high, 2 gaps)",
+          "best": 0.0000024089903519936404,
+          "second": 0.0000040107126605000495
+        },
+        {
+          "label": "3 to a Straight Flush (2 high, 2 gaps)",
+          "best": 0.0000016401636439105637,
+          "second": 1.1105274672311107e-7
+        },
+        {
+          "label": "3 to a Straight Flush (1 high, no gaps)",
+          "best": 0.0000016188073464638116,
+          "second": 0.0000016572486818679653
+        },
+        {
+          "label": "4 to a Royal",
+          "best": 0.0000015063308465775835,
+          "second": 3.27463227516866e-8
+        },
+        {
+          "label": "Suited QJ",
+          "best": 0.0000011481145507373944,
+          "second": 3.374294996586837e-7
+        },
+        {
+          "label": "Suited JT",
+          "best": 0.0000010182682622611417,
+          "second": 5.791827867559178e-7
+        },
+        {
+          "label": "3 to a Straight Flush (2 high, 1 gap)",
+          "best": 9.225920496996921e-7,
+          "second": 8.542518978700852e-7
+        },
+        {
+          "label": "Suited KQ",
+          "best": 6.361329132805901e-7,
+          "second": 1.2813778468051277e-7
+        },
+        {
+          "label": "Suited KJ",
+          "best": 6.330006563217331e-7,
+          "second": 1.315547922719931e-7
+        },
+        {
+          "label": "Suited QT",
+          "best": 5.603892450027759e-7,
+          "second": 3.4881952496361813e-7
+        },
+        {
+          "label": "J only",
+          "best": 5.040862790067931e-7,
+          "second": 9.169746963106675e-7
+        },
+        {
+          "label": "Discard everything",
+          "best": 3.8754681501998356e-7,
+          "second": 1.983893176064815e-7
+        },
+        {
+          "label": "Q only",
+          "best": 3.6453258260019817e-7,
+          "second": 4.940682340226802e-7
+        },
+        {
+          "label": "K only",
+          "best": 1.929832696551965e-7,
+          "second": 1.425824076808615e-7
+        },
+        {
+          "label": "A only",
+          "best": 1.521344970843179e-7,
+          "second": 8.73666713730769e-8
+        },
+        {
+          "label": "Suited KT",
+          "best": 1.3668030365921363e-7,
+          "second": 1.623078605953162e-7
+        },
+        {
+          "label": "other (2 cards)",
+          "best": 0,
+          "second": 0.000002319293902717281
+        },
+        {
+          "label": "other (1 cards)",
+          "best": 0,
+          "second": 4.1462280752076227e-7
+        }
+      ]
     },
     {
       "key": "four-kind",
@@ -406,7 +630,154 @@
       "category": "four-kind",
       "pays": 25,
       "best": 0.0023629285460456412,
-      "second": 0.000996501483834252
+      "second": 0.000996501483834252,
+      "holds": [
+        {
+          "label": "Three of a Kind",
+          "best": 0.0008990830374703073,
+          "second": 0.00006130111619115732
+        },
+        {
+          "label": "Low Pair (22–TT)",
+          "best": 0.0007828577955055929,
+          "second": 0.00002724209302307702
+        },
+        {
+          "label": "High Pair (JJ–AA)",
+          "best": 0.00036034907807853804,
+          "second": 4.869235817859486e-7
+        },
+        {
+          "label": "Pat Four of a Kind",
+          "best": 0.00024009603841536616,
+          "second": 0
+        },
+        {
+          "label": "A only",
+          "best": 0.000012102730251969595,
+          "second": 0.000005823202209990043
+        },
+        {
+          "label": "K only",
+          "best": 0.000011832165378135107,
+          "second": 0.000008647307211506248
+        },
+        {
+          "label": "Q only",
+          "best": 0.000011169887179495464,
+          "second": 0.000015680647837303285
+        },
+        {
+          "label": "J only",
+          "best": 0.000010696062126810189,
+          "second": 0.000020071606138040115
+        },
+        {
+          "label": "Discard everything",
+          "best": 0.000007279261626699029,
+          "second": 0.000003359022008109765
+        },
+        {
+          "label": "KQ unsuited",
+          "best": 0.0000034090345737668865,
+          "second": 5.814607918169047e-7
+        },
+        {
+          "label": "KJ unsuited",
+          "best": 0.0000032757712776991536,
+          "second": 6.777065056436009e-7
+        },
+        {
+          "label": "QJ unsuited",
+          "best": 0.000003190915589177392,
+          "second": 0.0000010985679406609296
+        },
+        {
+          "label": "AK unsuited",
+          "best": 0.000002860604855334292,
+          "second": 1.9419993144913268e-7
+        },
+        {
+          "label": "AQ unsuited",
+          "best": 0.0000027632201389771025,
+          "second": 9.271480598216659e-7
+        },
+        {
+          "label": "AJ unsuited",
+          "best": 0.0000025940782631988256,
+          "second": 0.0000016857237451303015
+        },
+        {
+          "label": "Suited AK",
+          "best": 0.0000013958476011197192,
+          "second": 2.329260174859099e-7
+        },
+        {
+          "label": "Suited AQ",
+          "best": 0.000001390152588467252,
+          "second": 2.380515288731304e-7
+        },
+        {
+          "label": "Suited AJ",
+          "best": 0.000001383888074549538,
+          "second": 2.3919053140362383e-7
+        },
+        {
+          "label": "Suited KQ",
+          "best": 0.0000012722658265611803,
+          "second": 4.094714097123942e-7
+        },
+        {
+          "label": "Suited KJ",
+          "best": 0.0000012660013126434663,
+          "second": 4.123189160386278e-7
+        },
+        {
+          "label": "Suited QJ",
+          "best": 0.0000011481145507373944,
+          "second": 5.023001159476101e-7
+        },
+        {
+          "label": "Suited JT",
+          "best": 6.788455081740944e-7,
+          "second": 4.487669970144181e-7
+        },
+        {
+          "label": "Suited QT",
+          "best": 5.603892450027759e-7,
+          "second": 3.616333034316694e-7
+        },
+        {
+          "label": "Suited KT",
+          "best": 2.7336060731842725e-7,
+          "second": 3.246157211906324e-7
+        },
+        {
+          "label": "other (4 cards)",
+          "best": 0,
+          "second": 0.00044954151873515365
+        },
+        {
+          "label": "other (3 cards)",
+          "best": 0,
+          "second": 0.0003763534873851341
+        },
+        {
+          "label": "other (2 cards)",
+          "best": 0,
+          "second": 0.000013525655049609681
+        },
+        {
+          "label": "other (1 cards)",
+          "best": 0,
+          "second": 0.000005579559214149035
+        },
+        {
+          "label": "Suited AT",
+          "best": 0,
+          "second": 5.552637336155554e-7
+        }
+      ]
     },
     {
       "key": "full-house",

@@ -115,10 +115,30 @@ export interface OutcomeDistribution {
   /** Indexed by row; the extra final element is P(no pay). */
   best: number[];
   second: number[];
+  /**
+   * For each row in `holdsFor`: what was held before the draw, as joint probabilities P(final hand in this
+   * row and the hold was `label`). Per row, Σ best = `best[row]` and Σ second = `second[row]`. Sorted by
+   * `best` descending.
+   */
+  holds: Record<number, { label: string; best: number; second: number }[]>;
 }
 
-/** Exact outcome distributions over every starting hand, for perfect play and for the best non-tied mistake. */
-export function outcomeDistribution(game: GameDef, onProgress?: (fraction: number) => void): OutcomeDistribution {
+export interface HoldBreakdown {
+  /** Row indices to break down (the simulator's big hands). */
+  rows: readonly number[];
+  /** Names a hold (chart vocabulary, e.g. "Three of a Kind"). */
+  classify: (held: readonly Card[]) => string;
+}
+
+/**
+ * Exact outcome distributions over every starting hand, for perfect play and for the best non-tied mistake.
+ * With `breakdown`, also splits the listed rows by the hold that led to them (D28).
+ */
+export function outcomeDistribution(
+  game: GameDef,
+  onProgress?: (fraction: number) => void,
+  breakdown?: HoldBreakdown,
+): OutcomeDistribution {
   const tables = buildTables(game);
   const outcomeTables = buildOutcomeTables(game);
   const k = outcomeTables.length;
@@ -127,6 +147,16 @@ export function outcomeDistribution(game: GameDef, onProgress?: (fraction: numbe
   // at most C(47,5) per hand times C(52,5) hands is about 4e12, well inside 2^53.
   const best = new Float64Array(k * 6);
   const second = new Float64Array(k * 6);
+  // Breakdown accumulators, same exact integer bucketing: row → hold label → counts by hold size.
+  const split = new Map<number, Map<string, { best: Float64Array; second: Float64Array }>>(
+    (breakdown?.rows ?? []).map((r) => [r, new Map()]),
+  );
+  const bucket = (row: number, label: string) => {
+    const m = split.get(row)!;
+    let e = m.get(label);
+    if (!e) m.set(label, (e = { best: new Float64Array(6), second: new Float64Array(6) }));
+    return e;
+  };
   const h = [0, 0, 0, 0, 0];
   for (h[0] = 0; h[0] < n; h[0]++) {
     onProgress?.(h[0] / n);
@@ -148,18 +178,31 @@ export function outcomeDistribution(game: GameDef, onProgress?: (fraction: numbe
             const idx = maskIndices(tables.offsets, h);
             const bs = POPCOUNT[b];
             const ss = POPCOUNT[s];
+            let bLabel: string | null = null;
+            let sLabel: string | null = null;
             for (let i = 0; i < k; i++) {
-              best[i * 6 + bs] += maskCount(outcomeTables[i], idx, b);
-              second[i * 6 + ss] += maskCount(outcomeTables[i], idx, s);
+              const cb = maskCount(outcomeTables[i], idx, b);
+              const cs = maskCount(outcomeTables[i], idx, s);
+              best[i * 6 + bs] += cb;
+              second[i * 6 + ss] += cs;
+              if (breakdown && split.has(i)) {
+                if (cb > 0) bucket(i, (bLabel ??= breakdown.classify(h.filter((_, j) => b & (1 << j))))).best[bs] += cb;
+                if (cs > 0) bucket(i, (sLabel ??= breakdown.classify(h.filter((_, j) => s & (1 << j))))).second[ss] += cs;
+              }
             }
           }
   }
   const hands = BINOM[n][5];
-  const finish = (acc: Float64Array): number[] =>
-    Array.from({ length: k }, (_, i) => {
-      let p = 0;
-      for (let size = 0; size <= 5; size++) p += acc[i * 6 + size] / BINOM[n - 5][5 - size];
-      return p / hands;
-    });
-  return { best: finish(best), second: finish(second) };
+  const prob = (acc: Float64Array, at: number): number => {
+    let p = 0;
+    for (let size = 0; size <= 5; size++) p += acc[at + size] / BINOM[n - 5][5 - size];
+    return p / hands;
+  };
+  const finish = (acc: Float64Array): number[] => Array.from({ length: k }, (_, i) => prob(acc, i * 6));
+  const holds: OutcomeDistribution['holds'] = {};
+  for (const [row, m] of split)
+    holds[row] = [...m]
+      .map(([label, e]) => ({ label, best: prob(e.best, 0), second: prob(e.second, 0) }))
+      .sort((x, y) => y.best - x.best || y.second - x.second);
+  return { best: finish(best), second: finish(second), holds };
 }

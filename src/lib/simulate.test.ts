@@ -62,3 +62,38 @@ describe('comps by venue', () => {
     expect(compRatePerMultiplier('Legends Bay')).toBeCloseTo(1 / 600, 15);
   });
 });
+
+describe('what was held on big hands (D28)', () => {
+  it('every big row splits into holds that sum to the row, perfect play and mistakes', () => {
+    for (const [id, odds] of Object.entries(ODDS_BY_GAME)) {
+      for (const r of odds!.perRow) {
+        const big = ['royal', 'four-deuces', 'wild-royal', 'five-kind', 'straight-flush', 'four-kind'].includes(r.category);
+        expect(r.holds !== undefined, `${id} ${r.key}`).toBe(big);
+        if (!r.holds) continue;
+        for (const k of ['best', 'second'] as const) {
+          const sum = r.holds.reduce((a, h) => a + h[k], 0);
+          expect(Math.abs(sum - r[k]) / r[k], `${id} ${r.key} ${k}`).toBeLessThan(1e-12);
+        }
+      }
+    }
+  });
+
+  it('events carry a hold, drawn in the exact proportions (sampled check only)', () => {
+    // Long sessions with a budget that can't run out: quads are about 1 in 423 hands, so ~950 of them.
+    const p: SimParams = { ...base, budgetCents: 10_000_000, winGoalCents: null, maxHands: 50_000 };
+    const quads = rows.find((r) => r.key === 'four-kind')!;
+    let n = 0;
+    let trips = 0;
+    for (let seed = 1; seed <= 8; seed++)
+      for (const e of runSession(p, seed).events) {
+        expect(e.held).not.toBe('');
+        if (e.category !== 'four-kind') continue;
+        n++;
+        if (e.held === 'Three of a Kind') trips++;
+      }
+    const exact = quads.holds!.find((h) => h.label === 'Three of a Kind')!.best / quads.best;
+    expect(n).toBeGreaterThan(800);
+    // ±0.06 is about 4 standard errors at n ≈ 950.
+    expect(Math.abs(trips / n - exact)).toBeLessThan(0.06);
+  });
+});
