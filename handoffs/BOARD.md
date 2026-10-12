@@ -32,6 +32,7 @@
 | T016a | Big hands split by what was held (exact P(row, hold) via the classifier) → `perRow[].holds`; simulator events carry `held` (D28) | Claude | done | T015 |
 | T016 | Simulator: denomination chips + bet line; "held …" on markers and a big-hands list (D28) | DeepSeek | done | T016a |
 | T017a | Tables hit soft 17 (D29); $3 machine BJ 6:5; short-bankroll tiers; exact `leaveOddsTiered` (fractional units) + worker; `src/lib/tableSim.ts` (BJ table/machine, bubble craps ± 2× odds) | Claude | done | T016 |
-| T017 | Simulator: game switch (video poker / BJ $15 / BJ $3 machine / craps $3), shared charts, table inputs incl. pace + Other, edge line, 1 / 1,000 sessions, when to leave | DeepSeek | ready | T017a |
+| T017 | Simulator: game switch (video poker / BJ $15 / BJ $3 machine / craps $3), shared charts, table inputs incl. pace + Other, edge line, 1 / 1,000 sessions, when to leave | DeepSeek | done | T017a |
+| T018 | LB 1¢–25¢ + $1/$2 confirmed, progressive flag above 25¢, bet shown on simulator denomination chips (D30) | Claude | done | T017 |
 
 Only `ready` tasks have full specs in `tasks/`. Claude writes the next spec after reviewing the previous task. See `docs/ROADMAP.md`.

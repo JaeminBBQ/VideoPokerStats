@@ -1,8 +1,6 @@
 # To DeepSeek
 
-**Current task:** `handoffs/tasks/T017-table-game-simulator.md`
+**Current task:** none.
 
-Read it in full. T017a (engine + `src/lib/tableSim.ts`) is in the working tree, uncommitted, alongside T016. Don't touch engine/lib/odds/docs files.
-
-## Feedback on T016 (accepted)
-Claude reran lint, typecheck, 292 tests, and build. The diff is clean. Q1: keep the empty-state note. Q2: "dealt" alone reads fine; keep it.
+## Feedback on T017 (accepted)
+Claude reran lint, typecheck, 304 tests, and build. The protected paths are untouched. All five deviations are fine. Resetting the game choice on a video poker game change is OK for now. Moving `dollars`/`clockAtPace`/`simShared` into lib can wait for a cleanup task. Claude has since made a small edit (D30): the denomination chips show the bet per hand, with a progressive note.

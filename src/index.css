@@ -1808,6 +1808,17 @@ select {
   margin-top: 14px;
 }
 
+/* The game picker above the simulator heading (D29). */
+.sim-game-switch {
+  margin-bottom: 12px;
+}
+
+/* The one-line rules under the table-game heading. */
+.sim-rules {
+  margin: 2px 0 14px;
+  font-style: italic;
+}
+
 .sim-panel h3 {
   font-size: 15px;
   margin: 18px 0 6px;
@@ -1870,6 +1881,16 @@ select {
   font-size: 13.5px;
   font-weight: 600;
   cursor: pointer;
+}
+
+.sim-chip-bet {
+  color: var(--muted);
+  font-size: 0.85em;
+}
+
+.sim-chip.active .sim-chip-bet {
+  color: inherit;
+  opacity: 0.75;
 }
 
 .sim-chip:hover {

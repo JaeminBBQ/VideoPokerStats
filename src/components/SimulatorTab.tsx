@@ -1,20 +1,9 @@
-import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
-import type { EngineClient, GameDef, GameId, Venue } from '../engine/index.ts';
+import { useEffect, useMemo, useState } from 'react';
+import { offerAt, type EngineClient, type GameDef, type GameId, type Venue } from '../engine/index.ts';
 import type { LeaveOdds } from '../engine/leave.ts';
 import { formatCents } from '../lib/bankroll.ts';
 import { ODDS_BY_GAME } from '../lib/odds.ts';
-import {
-  axisDollars,
-  centsTicks,
-  clockFromHands,
-  edgePct,
-  histogram,
-  hoursText,
-  hourTicks,
-  niceCentsStep,
-  pathCentsAt,
-  pct1,
-} from '../lib/simChart.ts';
+import { clockFromHands, edgePct, hoursText, pct1 } from '../lib/simChart.ts';
 import {
   compRatePerMultiplier,
   exactForAsync,
@@ -22,13 +11,16 @@ import {
   returnAndBreakEven,
   runMany,
   runSession,
-  type EndReason,
   type LeaveAdviceRow,
   type ManyRuns,
   type SessionRun,
   type SimParams,
 } from '../lib/simulate.ts';
 import { DENOM_LABELS } from '../lib/storage.ts';
+import type { TableSimId } from '../lib/tableSim.ts';
+import { Histogram, SessionChart } from './SimCharts.tsx';
+import { END_ROWS, EVENT_COLORS, GOAL_FRACTIONS, heldText, HOUR_OPTIONS, type GoalMode } from './simShared.ts';
+import TableSimulator from './TableSimulator.tsx';
 
 interface Props {
   game: GameDef;
@@ -41,12 +33,16 @@ interface Props {
   onDenominationChange: (d: number) => void;
 }
 
-const HOUR_OPTIONS = [0.5, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10, 12];
 const MISTAKE_OPTIONS = [0, 0.5, 1, 2, 5];
 const MULTIPLIER_OPTIONS = [1, 2, 3, 4, 5, 6, 8, 10, 12];
 
-type GoalMode = 'none' | 'p25' | 'p50' | 'double' | 'custom';
-const GOAL_FRACTIONS: Record<Exclude<GoalMode, 'none' | 'custom'>, number> = { p25: 0.25, p50: 0.5, double: 1 };
+/** The four games on the Simulator tab: the video poker machine plus the three table games (D29). */
+const GAME_CHIPS: { id: 'vp' | TableSimId; label: string }[] = [
+  { id: 'vp', label: 'Video poker' },
+  { id: 'bj-table', label: 'Blackjack $15' },
+  { id: 'bj-machine', label: 'Blackjack $3 machine' },
+  { id: 'craps', label: 'Craps $3' },
+];
 
 /** The owner's tier: GSR Premier 2× everyday, no Legends Bay tier (D24). */
 const DEFAULT_MULTIPLIER: Record<Venue, number> = { GSR: 2, 'Legends Bay': 1 };
@@ -62,191 +58,6 @@ const VENUE_POINTS: Record<Venue, { hint: string; rate: string }> = {
     rate: '1 per $6, 100 = $1',
   },
 };
-
-/** Marker colors by hand category (the ones `simulate.ts` records as events). */
-const EVENT_COLORS: Record<string, string> = {
-  royal: '#e6c15c',
-  'four-deuces': '#4ade80',
-  'wild-royal': '#c084fc',
-  'five-kind': '#60a5fa',
-  'straight-flush': '#2dd4bf',
-  'four-kind': '#fb923c',
-};
-
-/** What was held before the draw, in the owner's words ('' when a row has no hold data). */
-function heldText(held: string): string {
-  if (held.startsWith('Pat ')) return 'dealt';
-  if (held === 'Discard everything') return 'drew all 5';
-  if (held === '') return '';
-  return `held ${held}`;
-}
-
-const END_ROWS: { key: EndReason; label: string; exact: (o: LeaveOdds) => number }[] = [
-  { key: 'win', label: 'Hit the goal', exact: (o) => o.pWin },
-  { key: 'loss-limit', label: 'Hit the loss limit', exact: (o) => o.pLossLimit },
-  { key: 'broke', label: 'Out of money', exact: (o) => o.pBroke },
-  { key: 'time', label: 'Time ran out', exact: (o) => o.pTime },
-];
-
-/** Container width so SVG text stays fixed-size at any screen width. */
-function useChartWidth<T extends HTMLElement>(): [RefObject<T | null>, number] {
-  const ref = useRef<T | null>(null);
-  const [width, setWidth] = useState(0);
-  useEffect(() => {
-    const el = ref.current;
-    if (el === null) return;
-    const update = () => setWidth(el.clientWidth);
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-  return [ref, width];
-}
-
-/** A 5-point star polygon for royal markers. */
-function starPoints(cx: number, cy: number, r: number): string {
-  const pts: string[] = [];
-  for (let k = 0; k < 10; k++) {
-    const ang = (Math.PI / 5) * k - Math.PI / 2;
-    const rad = k % 2 === 0 ? r : r * 0.45;
-    pts.push(`${(cx + rad * Math.cos(ang)).toFixed(1)},${(cy + rad * Math.sin(ang)).toFixed(1)}`);
-  }
-  return pts.join(' ');
-}
-
-/** The bankroll line chart for one simulated session. */
-function SessionChart({ run, p }: { run: SessionRun; p: SimParams }) {
-  const [wrapRef, width] = useChartWidth<HTMLDivElement>();
-  const [tip, setTip] = useState<{ x: number; y: number; text: string } | null>(null);
-  const H = 200;
-  const TOP = 8;
-  const BOTTOM = 22;
-  const RIGHT = 12;
-
-  const goal = p.winGoalCents === null ? null : p.budgetCents + p.winGoalCents;
-  const loss = p.lossLimitCents === null ? null : p.budgetCents - p.lossLimitCents;
-  let lo = p.budgetCents;
-  let hi = p.budgetCents;
-  for (const q of run.path) {
-    if (q.cents < lo) lo = q.cents;
-    if (q.cents > hi) hi = q.cents;
-  }
-  if (goal !== null) {
-    lo = Math.min(lo, goal);
-    hi = Math.max(hi, goal);
-  }
-  if (loss !== null) {
-    lo = Math.min(lo, loss);
-    hi = Math.max(hi, loss);
-  }
-  const pad = Math.max((hi - lo) * 0.05, 100);
-  // A bankroll never goes below 0, so the axis stops there (broke sits on the bottom edge).
-  lo = Math.max(lo - pad, 0);
-  hi += pad;
-  const step = niceCentsStep(hi - lo);
-  const yTicks = centsTicks(lo, hi, step);
-  const xTicks = hourTicks(p.maxHands / 600);
-  const left = Math.min(84, 32 + Math.max(...yTicks.map((v) => axisDollars(v).length)) * 6.2);
-  const plotW = Math.max(width - left - RIGHT, 1);
-  const plotH = H - TOP - BOTTOM;
-  const X = (hand: number) => left + (hand / p.maxHands) * plotW;
-  const Y = (cents: number) => TOP + ((hi - cents) / (hi - lo)) * plotH;
-
-  // Keep the tooltip inside the chart: clamp by its estimated width (~6.2px/char at this font).
-  const showTip = (x: number, y: number, text: string): { x: number; y: number; text: string } => {
-    const half = Math.min((text.length * 6.2 + 18) / 2 / width, 0.45);
-    return { x: Math.min(Math.max(x, half), 1 - half), y: Math.max(y, 0.02), text };
-  };
-
-  if (width < 40) return <div ref={wrapRef} className="sim-chart-wrap" style={{ height: H }} />;
-
-  return (
-    <div ref={wrapRef} className="sim-chart-wrap">
-      <svg width={width} height={H} role="img" aria-label="Session bankroll chart">
-        {yTicks.map((v) => (
-          <g key={v}>
-            <line x1={left} x2={left + plotW} y1={Y(v)} y2={Y(v)} stroke="rgba(255,255,255,0.05)" />
-            <text x={left - 6} y={Y(v) + 3.5} textAnchor="end" className="sim-axis">
-              {axisDollars(v)}
-            </text>
-          </g>
-        ))}
-        {xTicks.map((t) => (
-          <g key={t}>
-            <line x1={X(t * 600)} x2={X(t * 600)} y1={TOP} y2={TOP + plotH} stroke="rgba(255,255,255,0.05)" />
-            <text x={X(t * 600)} y={H - 8} textAnchor="middle" className="sim-axis">
-              {String(t)}h
-            </text>
-          </g>
-        ))}
-        <line x1={left} x2={left + plotW} y1={Y(p.budgetCents)} y2={Y(p.budgetCents)} className="sim-ref" />
-        <text x={left + plotW - 2} y={Y(p.budgetCents) - 3} textAnchor="end" className="sim-ref-label">
-          start {axisDollars(p.budgetCents)}
-        </text>
-        {goal !== null && (
-          <>
-            <line x1={left} x2={left + plotW} y1={Y(goal)} y2={Y(goal)} className="sim-ref goal" />
-            <text x={left + plotW - 2} y={Y(goal) - 3} textAnchor="end" className="sim-ref-label goal">
-              goal {axisDollars(goal)}
-            </text>
-          </>
-        )}
-        {loss !== null && (
-          <>
-            <line x1={left} x2={left + plotW} y1={Y(loss)} y2={Y(loss)} className="sim-ref loss" />
-            <text x={left + plotW - 2} y={Y(loss) - 3} textAnchor="end" className="sim-ref-label loss">
-              loss {axisDollars(loss)}
-            </text>
-          </>
-        )}
-        <polyline
-          points={run.path.map((q) => `${X(q.hand).toFixed(1)},${Y(q.cents).toFixed(1)}`).join(' ')}
-          fill="none"
-          stroke="#e6c15c"
-          strokeWidth={1.6}
-          strokeLinejoin="round"
-        />
-        {run.events.map((e) => {
-          const cy = pathCentsAt(run.path, e.hand);
-          if (cy === null) return null;
-          const x = X(e.hand);
-          const y = Y(cy);
-          const color = EVENT_COLORS[e.category] ?? '#9db3a0';
-          const held = heldText(e.held);
-          const text = `${e.label} +${formatCents(e.winCents)} at hand ${e.hand}${held === '' ? '' : ` · ${held}`}`;
-          return (
-            <g
-              key={`${e.hand}-${e.label}`}
-              className="sim-event"
-              onPointerEnter={(ev) => {
-                if (ev.pointerType === 'mouse') setTip(showTip(x / width, y / H, text));
-              }}
-              onPointerLeave={(ev) => {
-                if (ev.pointerType === 'mouse') setTip(null);
-              }}
-              onClick={() =>
-                setTip((t) => (t !== null && t.text === text ? null : showTip(x / width, y / H, text)))
-              }
-            >
-              <circle cx={x} cy={y} r={10} fill="transparent" />
-              {e.category === 'royal' ? (
-                <polygon points={starPoints(x, y, 6)} fill={color} />
-              ) : (
-                <circle cx={x} cy={y} r={3} fill={color} />
-              )}
-            </g>
-          );
-        })}
-      </svg>
-      {tip !== null && (
-        <div className="sim-tip" style={{ left: `${tip.x * 100}%`, top: `${tip.y * 100}%` }}>
-          {tip.text}
-        </div>
-      )}
-    </div>
-  );
-}
 
 /** The biggest hands of the session with what was held, in hand order (markers are tiny on a phone). */
 function BigHands({ events }: { events: SessionRun['events'] }) {
@@ -279,65 +90,6 @@ function BigHands({ events }: { events: SessionRun['events'] }) {
   );
 }
 
-/** Histogram of 1,000 session results: red below zero, green above. */
-function Histogram({ nets }: { nets: number[] }) {
-  const [wrapRef, width] = useChartWidth<HTMLDivElement>();
-  const H = 140;
-  const TOP = 6;
-  const BOTTOM = 18;
-  const SIDE = 4;
-  const bars = histogram(nets, 20);
-  const first = bars[0];
-  const last = bars[bars.length - 1];
-  const maxCount = Math.max(...bars.map((b) => b.count), 1);
-
-  if (width < 40) return <div ref={wrapRef} className="sim-hist-wrap" style={{ height: H }} />;
-
-  const plotW = Math.max(width - 2 * SIDE, 1);
-  const plotH = H - TOP - BOTTOM;
-  const range = last.to - first.from || 1;
-  const bw = plotW / bars.length;
-  const zeroInRange = first.from <= 0 && last.to >= 0;
-  const zeroX = SIDE + ((0 - first.from) / range) * plotW;
-
-  return (
-    <div ref={wrapRef} className="sim-hist-wrap">
-      <svg width={width} height={H} role="img" aria-label="Histogram of 1,000 session results">
-        {bars.map((b, i) => {
-          const h = (b.count / maxCount) * plotH;
-          const mid = (b.from + b.to) / 2;
-          return (
-            <rect
-              key={i}
-              x={SIDE + i * bw + 0.5}
-              y={TOP + plotH - h}
-              width={bw - 1}
-              height={Math.max(h, b.count > 0 ? 1 : 0)}
-              fill={mid < 0 ? 'rgba(248,113,113,0.72)' : 'rgba(74,222,128,0.72)'}
-            />
-          );
-        })}
-        {zeroInRange && (
-          <line
-            x1={zeroX}
-            x2={zeroX}
-            y1={TOP}
-            y2={TOP + plotH}
-            stroke="rgba(255,255,255,0.4)"
-            strokeDasharray="4 3"
-          />
-        )}
-        <text x={SIDE} y={H - 6} className="sim-axis">
-          {formatCents(first.from)}
-        </text>
-        <text x={SIDE + plotW} y={H - 6} textAnchor="end" className="sim-axis">
-          {formatCents(last.to)}
-        </text>
-      </svg>
-    </div>
-  );
-}
-
 /** What happened to the one session, in the spec's words. */
 function endMessage(run: SessionRun, p: SimParams): string {
   switch (run.end) {
@@ -352,15 +104,9 @@ function endMessage(run: SessionRun, p: SimParams): string {
   }
 }
 
-export default function SimulatorTab({
-  game,
-  gameId,
-  engine,
-  bet,
-  denomination,
-  maxCoins,
-  onDenominationChange,
-}: Props) {
+/** The video poker simulator, exactly as before (T017 moved its charts to SimCharts.tsx). */
+function VideoPokerSimulator(props: Props) {
+  const { game, gameId, engine, bet, denomination, maxCoins, onDenominationChange } = props;
   const rows = ODDS_BY_GAME[gameId]?.perRow ?? null;
 
   // Inputs: scratch state, not persisted.
@@ -450,10 +196,10 @@ export default function SimulatorTab({
 
   if (rows === null || edge === null || params === null) {
     return (
-      <section className="panel sim-panel">
+      <>
         <h2>Simulator — {game.name}</h2>
         <p>Odds for this game are coming; the simulator needs them to draw hands from exact play.</p>
-      </section>
+      </>
     );
   }
 
@@ -479,7 +225,7 @@ export default function SimulatorTab({
   };
 
   return (
-    <section className="panel sim-panel">
+    <>
       <h2>Simulator — {game.name}</h2>
 
       <p className="sim-edge">
@@ -508,12 +254,19 @@ export default function SimulatorTab({
               >
                 {DENOM_LABELS[o.denomination]}
                 {!o.confirmed && <span className="denom-unconfirmed">*</span>}
+                <span className="sim-chip-bet"> · {formatCents(Math.round(o.denomination * o.maxCoins * 100)).replace(/\.00$/, '')}</span>
               </button>
             ))}
           </div>
           <span className="sim-note">
             {DENOM_LABELS[denomination]} × {maxCoins} coins = {formatCents(bet)} a hand
           </span>
+          {offerAt(game, denomination)?.progressive && (
+            <span className="sim-note">
+              Progressive royal at this denomination: simulated at the base 800 per coin, so results are a
+              little low when the meter is up.
+            </span>
+          )}
         </div>
 
         <div className="sim-control">
@@ -650,7 +403,15 @@ export default function SimulatorTab({
       </div>
       {oneRun !== null && (
         <div className="sim-result">
-          <SessionChart run={oneRun.run} p={oneRun.p} />
+          <SessionChart
+            path={oneRun.run.path}
+            events={oneRun.run.events}
+            budgetCents={oneRun.p.budgetCents}
+            winGoalCents={oneRun.p.winGoalCents}
+            lossLimitCents={oneRun.p.lossLimitCents}
+            maxRounds={oneRun.p.maxHands}
+            roundsPerHour={600}
+          />
           <BigHands events={oneRun.run.events} />
           <p className="sim-end">{endMessage(oneRun.run, oneRun.p)}</p>
           <div className="stats-grid sim-run-stats">
@@ -802,6 +563,33 @@ export default function SimulatorTab({
         bet every hand. Points: {VENUE_POINTS[game.venue].rate}. The multiplier assumes it applies to
         redeemable points.
       </p>
+    </>
+  );
+}
+
+export default function SimulatorTab(props: Props) {
+  // The game choice is scratch state (not persisted). Changing the video poker game remounts the tab
+  // (App keys it by gameId), which resets the choice to video poker — fine per the task.
+  const [simGame, setSimGame] = useState<'vp' | TableSimId>('vp');
+  const chipClass = (active: boolean) => `sim-chip${active ? ' active' : ''}`;
+
+  return (
+    <section className="panel sim-panel">
+      <div className="sim-control sim-game-switch">
+        <span className="sim-label">Game</span>
+        <div className="sim-chip-row" role="group" aria-label="Game">
+          {GAME_CHIPS.map((c) => (
+            <button key={c.id} type="button" className={chipClass(c.id === simGame)} onClick={() => setSimGame(c.id)}>
+              {c.label}
+            </button>
+          ))}
+        </div>
+      </div>
+      {simGame === 'vp' ? (
+        <VideoPokerSimulator {...props} />
+      ) : (
+        <TableSimulator key={simGame} engine={props.engine} gameId={simGame} />
+      )}
     </section>
   );
 }

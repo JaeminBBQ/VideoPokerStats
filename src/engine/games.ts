@@ -32,6 +32,11 @@ export interface Offer {
   denomination: number;
   maxCoins: number;
   confirmed: boolean;
+  /**
+   * The royal is a progressive at this denomination (D30): the rest of the paytable is the same, and the
+   * engine pays the base royal (800 per coin), so returns are a slight underestimate when the meter is up.
+   */
+  progressive?: boolean;
 }
 
 export interface GameDef {
@@ -254,11 +259,15 @@ const job95 = bonusGame([{ key: 'four-kind', label: 'Four of a Kind', pays: 25, 
 const job96 = bonusGame([{ key: 'four-kind', label: 'Four of a Kind', pays: 25, quad: () => true }], 9, 6, 4, 2);
 const db975 = bonusGame(quads(160, 80, 50), 9, 7, 5, 1);
 
-/** Legends Bay #12139: photographed at 10¢; the owner confirmed 5¢–25¢ match (D11, D12). */
+/**
+ * Legends Bay #12139: photographed at 10¢. The owner confirmed 1¢–25¢ play the same paytable, and $1 / $2
+ * too (bets of $5 / $10) with a progressive royal above 25¢ (D11, D12, D30). 50¢ and $5 are unconfirmed.
+ */
 const LB_OFFERS: Offer[] = [0.01, 0.05, 0.1, 0.25, 0.5, 1, 2, 5].map((denomination) => ({
   denomination,
   maxCoins: 5,
-  confirmed: denomination >= 0.05 && denomination <= 0.25,
+  confirmed: denomination <= 0.25 || denomination === 1 || denomination === 2,
+  ...(denomination > 0.25 ? { progressive: true } : {}),
 }));
 
 // ---------------------------------------------------------------- catalog
