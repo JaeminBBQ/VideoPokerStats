@@ -1578,6 +1578,46 @@ select {
   line-height: 1.5;
 }
 
+/* The bubble craps side bets reference at the bottom of the Odds tab (D32). */
+.odds-side-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.odds-side-table th,
+.odds-side-table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.odds-side-table thead th {
+  color: var(--muted);
+  text-align: right;
+  font-weight: 600;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.odds-side-table thead th:first-child,
+.odds-side-table thead th:nth-child(2),
+.odds-side-table tbody th {
+  text-align: left;
+}
+
+.odds-side-table tbody th {
+  font-weight: 600;
+}
+
+.odds-side-table tbody td {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.odds-side-table tbody td:nth-child(2) {
+  text-align: left;
+}
+
 /* chance you finish ahead */
 
 .odds-ahead-headline {
@@ -2154,6 +2194,53 @@ select {
   color: var(--gold);
 }
 
+/* The four craps systems compared right under the edge line (D31). */
+.sim-compare-table {
+  width: 100%;
+  max-width: 460px;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 0 0 6px;
+}
+
+.sim-compare-table th,
+.sim-compare-table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sim-compare-table thead th {
+  color: var(--muted);
+  font-weight: 600;
+  text-align: right;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.sim-compare-table thead th:first-child {
+  text-align: left;
+}
+
+.sim-compare-table tbody th {
+  text-align: left;
+  font-weight: 600;
+}
+
+.sim-compare-table td {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.sim-compare-table tr.best td {
+  background: rgba(230, 193, 92, 0.14);
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.sim-compare-table tr.best th {
+  color: var(--gold);
+}
+
 .sim-footnote {
   margin: 12px 0 0;
   font-size: 12px;
@@ -2237,6 +2324,19 @@ select {
   .sim-many-table td,
   .sim-advice-table th,
   .sim-advice-table td {
+    padding: 4px 3px;
+  }
+
+  /* The craps compare and side-bet tables must fit 375px without horizontal page scroll. */
+  .sim-compare-table,
+  .odds-side-table {
+    font-size: 11.5px;
+  }
+
+  .sim-compare-table th,
+  .sim-compare-table td,
+  .odds-side-table th,
+  .odds-side-table td {
     padding: 4px 3px;
   }
 }

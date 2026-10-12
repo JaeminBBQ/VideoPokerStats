@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react';
+import { SIDE_BETS_CONFIRMED } from '../engine/craps.ts';
 import { parseHand, type GameDef, type GameId } from '../engine/index.ts';
 import { formatCents } from '../lib/bankroll.ts';
 import { GOALS, goalTable, type GoalTable } from '../lib/goals.ts';
 import { ODDS_BY_GAME, oneIn } from '../lib/odds.ts';
 import { pct, pace, percent2, sessionLabel, signedBets, withArticle } from '../lib/oddsFormat.ts';
 import { DENOM_LABELS } from '../lib/storage.ts';
+import { SIDE_BET_TABLE } from '../lib/tableSim.ts';
 import { isWildCard } from '../lib/wild.ts';
 import MiniCard from './MiniCard.tsx';
 
@@ -31,6 +33,12 @@ function goalTakeaway(table: GoalTableOk): string {
   return best.id === 'video-poker'
     ? 'Video poker gives you the best shot at doubling here (the royal does the heavy lifting).'
     : `${best.short} gives you the best shot at doubling. Bigger bets reach a goal in fewer rounds, so the house edge has less time to work on you.`;
+}
+
+/** The side-bet chances need a digit more than `oneIn` shows: "1 in 37.95", "1 in 190.2". */
+function sideBetOneIn(p: number): string {
+  const n = 1 / p;
+  return `1 in ${n < 100 ? n.toFixed(2) : n.toFixed(1)}`.replace(/\.0$/, '');
 }
 
 export default function OddsTab({ game, gameId, bet, denomination, maxCoins }: Props) {
@@ -302,6 +310,35 @@ export default function OddsTab({ game, gameId, bet, denomination, maxCoins }: P
         Dealt = in your first 5 cards. Perfect play = the final hand when every hold is the
         engine&apos;s best. Example hands&apos; discards don&apos;t block the draw. Every number is exact
         enumeration, not simulation.
+      </p>
+
+      <h3>Craps side bets (bubble craps)</h3>
+      <table className="odds-side-table">
+        <thead>
+          <tr>
+            <th>Bet</th>
+            <th>Wins if, before a 7</th>
+            <th>Chance</th>
+            <th>Pays</th>
+            <th>House edge</th>
+          </tr>
+        </thead>
+        <tbody>
+          {SIDE_BET_TABLE.map((b) => (
+            <tr key={b.id}>
+              <th>{b.name}</th>
+              <td>{b.numbers.join(' ')}</td>
+              <td>{sideBetOneIn(b.p)}</td>
+              <td>{b.paysFor} for 1</td>
+              <td>{`${(b.edge * 100).toFixed(2)}%`}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p className="odds-footnote">
+        {!SIDE_BETS_CONFIRMED && 'Pays (31 for 1, 151 for 1) are from memory, not yet photographed. '}
+        For comparison: pass line 1.41%, don&apos;t pass 1.36%. Machines paying 34 to 1 and 175 to 1 are
+        about 7.8% and 7.5%.
       </p>
     </section>
   );

@@ -367,8 +367,14 @@ export function crapsLeaveOdds(system: CrapsSystem, startUnits: number, rule: Cr
       // Trim negligible tails at both ends.
       let a0 = lo[s];
       let b0 = hi[s];
-      while (a0 <= b0 && row[a0] < DROP_BELOW) ((out.dropped += row[a0]), (row[a0] = 0), a0++);
-      while (b0 >= a0 && row[b0] < DROP_BELOW) ((out.dropped += row[b0]), (row[b0] = 0), b0--);
+      for (; a0 <= b0 && row[a0] < DROP_BELOW; a0++) {
+        out.dropped += row[a0];
+        row[a0] = 0;
+      }
+      for (; b0 >= a0 && row[b0] < DROP_BELOW; b0--) {
+        out.dropped += row[b0];
+        row[b0] = 0;
+      }
       for (let r = a0; r <= b0; r++) out.expHands += row[r];
       for (let c = 0; c < 3; c++) {
         const a = Math.max(a0, classLo[c]);
@@ -508,7 +514,11 @@ export function allBeforeSeven(numbers: readonly number[]): number {
   for (let mask = 0; mask < 1 << w.length; mask++) {
     let ways = 0;
     let bits = 0;
-    for (let i = 0; i < w.length; i++) if (mask & (1 << i)) ((ways += w[i]), bits++);
+    for (let i = 0; i < w.length; i++) {
+      if (!(mask & (1 << i))) continue;
+      ways += w[i];
+      bits++;
+    }
     total += (bits & 1 ? -1 : 1) * (6 / (6 + ways));
   }
   return total;

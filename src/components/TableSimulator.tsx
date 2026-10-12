@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { SIDE_BETS_CONFIRMED, type CrapsSide, type CrapsStyle } from '../engine/craps.ts';
 import type { EngineClient } from '../engine/index.ts';
 import type { LeaveOdds } from '../engine/leave.ts';
 import { formatCents } from '../lib/bankroll.ts';
@@ -8,9 +9,12 @@ import {
   exactTableAsync,
   runTableMany,
   runTableSession,
+  SIDE_BET_TABLE,
+  sideBetCostPerRollCents,
   tableEdge,
   tableLeaveAdviceAsync,
   tableSimGame,
+  type SideBetId,
   type TableManyRuns,
   type TableRun,
   type TableSimGame,
@@ -61,12 +65,29 @@ function endMessage(run: TableRun, p: TableSimParams, pace: number): string {
   }
 }
 
+/** What the flat bets are called on the edge line: one line bet, or a molly's line plus come bets. */
+function lineLabel(side: CrapsSide, style: CrapsStyle): string {
+  if (style === 'single') return side === 'pass' ? 'pass-line' : "don't pass";
+  return side === 'pass' ? 'pass and come' : "don't pass and don't come";
+}
+
+/** The four craps systems compared under the edge line (D31). */
+const CRAPS_COMPARE: { label: string; side: CrapsSide; style: CrapsStyle }[] = [
+  { label: 'One pass bet', side: 'pass', style: 'single' },
+  { label: 'Pass molly', side: 'pass', style: 'molly' },
+  { label: "One don't bet", side: 'dont', style: 'single' },
+  { label: "Don't molly", side: 'dont', style: 'molly' },
+];
+
 export default function TableSimulator({ engine, gameId }: Props) {
   const g = tableSimGame(gameId);
 
   // Inputs: scratch state, not persisted. `gameId` is fixed per mount (the tab remounts on switch).
   const [betCents, setBetCents] = useState(g.minBetCents);
   const [crapsOdds, setCrapsOdds] = useState(true);
+  const [crapsSide, setCrapsSide] = useState<CrapsSide>('pass');
+  const [crapsStyle, setCrapsStyle] = useState<CrapsStyle>('single');
+  const [sideText, setSideText] = useState<Record<SideBetId, string>>({ small: '', tall: '', all: '' });
   const [budgetText, setBudgetText] = useState(g.minBetCents >= 1500 ? '300' : '100');
   const [goalMode, setGoalMode] = useState<GoalMode>('none');
   const [goalText, setGoalText] = useState('');
@@ -112,21 +133,44 @@ export default function TableSimulator({ engine, gameId }: Props) {
   const pace = paceChoice === 'other' ? paceOther : Number(paceChoice);
   const maxRounds = Math.round(hours * pace);
 
-  const edge = useMemo(() => tableEdge({ game: g.id, crapsOdds }), [g.id, crapsOdds]);
+  /** Side bet stakes in cents; empty and zero inputs are omitted (0 = no side bet). */
+  const sideBetsCents = useMemo<Partial<Record<SideBetId, number>>>(() => {
+    const cents: Partial<Record<SideBetId, number>> = {};
+    for (const id of ['small', 'tall', 'all'] as const) {
+      const c = (Number.parseInt(sideText[id], 10) || 0) * 100;
+      if (c > 0) cents[id] = c;
+    }
+    return cents;
+  }, [sideText]);
+  const sideAny = Object.values(sideBetsCents).length > 0;
+
+  const edge = useMemo(
+    () => tableEdge({ game: g.id, crapsOdds, crapsSide, crapsStyle }),
+    [g.id, crapsOdds, crapsSide, crapsStyle],
+  );
   const params = useMemo<TableSimParams | null>(
     () =>
       budgetCents > 0 && maxRounds > 0
-        ? { game: g.id, crapsOdds, betCents, budgetCents, winGoalCents, lossLimitCents, maxRounds }
+        ? { game: g.id, crapsOdds, crapsSide, crapsStyle, sideBetsCents, betCents, budgetCents, winGoalCents, lossLimitCents, maxRounds }
         : null,
-    [g.id, crapsOdds, betCents, budgetCents, winGoalCents, lossLimitCents, maxRounds],
+    [g.id, crapsOdds, crapsSide, crapsStyle, sideBetsCents, betCents, budgetCents, winGoalCents, lossLimitCents, maxRounds],
   );
 
   // "When to leave": exact odds for six rules, off-thread (same rules as video poker).
-  const adviceKey = `${g.id}|${crapsOdds}|${betCents}|${budgetCents}|${maxRounds}`;
+  const adviceKey = `${g.id}|${crapsOdds}|${crapsSide}|${crapsStyle}|${JSON.stringify(sideBetsCents)}|${betCents}|${budgetCents}|${maxRounds}`;
   useEffect(() => {
     if (budgetCents <= 0 || maxRounds <= 0) return;
     let cancelled = false;
-    tableLeaveAdviceAsync(engine, { game: g.id, crapsOdds, betCents, budgetCents, maxRounds })
+    tableLeaveAdviceAsync(engine, {
+      game: g.id,
+      crapsOdds,
+      crapsSide,
+      crapsStyle,
+      sideBetsCents,
+      betCents,
+      budgetCents,
+      maxRounds,
+    })
       .then((r) => {
         if (!cancelled) setAdviceResult({ key: adviceKey, rows: r, error: null });
       })
@@ -136,7 +180,7 @@ export default function TableSimulator({ engine, gameId }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [engine, g.id, crapsOdds, betCents, budgetCents, maxRounds, adviceKey]);
+  }, [engine, g.id, crapsOdds, crapsSide, crapsStyle, sideBetsCents, betCents, budgetCents, maxRounds, adviceKey]);
 
   // The exact column beside the 1,000-session summary: the same rule, computed by the worker.
   useEffect(() => {
@@ -178,6 +222,9 @@ export default function TableSimulator({ engine, gameId }: Props) {
     if (exactOdds === null) return '—';
     return f(exactOdds);
   };
+  // "—" somewhere for craps: the line under the leave table says which exact odds are missing and why.
+  const adviceHasNull = advice !== null && advice.some((r) => r.odds === null);
+  const exactHasNull = manyRun !== null && !exactLoading && exactOdds === null;
   const runDisabled = budgetCents <= 0 || maxRounds <= 0;
 
   return (
@@ -185,12 +232,53 @@ export default function TableSimulator({ engine, gameId }: Props) {
       <h2>Simulator — {g.name}</h2>
       <p className="sim-note sim-rules">{g.rules}</p>
 
-      <p className="sim-edge">
-        House edge {pct2(edge.perBet)} of each {g.id === 'craps' ? 'pass-line bet' : 'hand'}
-        {g.id === 'craps' && crapsOdds && ` (${pct2(edge.perWagered)} of all money bet, odds included)`}
-        {' → '}about {formatCents(Math.round(lossPerHour))} an hour
-        {g.id !== 'craps' && ` at ${dollars(betCents)} × ${pace}/hour`}
-      </p>
+      {g.id === 'craps' ? (
+        <p className="sim-edge">
+          House edge {pct2(edge.perBet)} of each {lineLabel(crapsSide, crapsStyle)} bet
+          {crapsOdds && ` (${pct2(edge.perWagered)} of all money bet, odds included)`}
+          {' → '}about {formatCents(Math.round(lossPerHour))} an hour
+          {sideAny &&
+            ` + side bets about ${formatCents(Math.round(pace * sideBetCostPerRollCents(sideBetsCents)))} an hour`}
+        </p>
+      ) : (
+        <p className="sim-edge">
+          House edge {pct2(edge.perBet)} of each hand
+          {' → '}about {formatCents(Math.round(lossPerHour))} an hour at {dollars(betCents)} × {pace}/hour
+        </p>
+      )}
+
+      {g.id === 'craps' && (
+        <>
+          <table className="sim-compare-table">
+            <thead>
+              <tr>
+                <th />
+                <th>Edge per bet</th>
+                <th>Per $ out</th>
+                <th>Per hour</th>
+              </tr>
+            </thead>
+            <tbody>
+              {CRAPS_COMPARE.map((c) => {
+                const e = tableEdge({ game: 'craps', crapsOdds, crapsSide: c.side, crapsStyle: c.style });
+                const selected = c.side === crapsSide && c.style === crapsStyle;
+                return (
+                  <tr key={c.label} className={selected ? 'best' : ''}>
+                    <th>{c.label}</th>
+                    <td>{pct2(e.perBet)}</td>
+                    <td>{pct2(e.perWagered)}</td>
+                    <td>{formatCents(Math.round(pace * betCents * e.perRound))}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <p className="sim-note">
+            A molly has the same edge as one bet, on about 2.4× the money. The don&apos;t side is a little
+            cheaper.
+          </p>
+        </>
+      )}
 
       <div className="sim-inputs">
         <div className="sim-control">
@@ -205,17 +293,88 @@ export default function TableSimulator({ engine, gameId }: Props) {
         </div>
 
         {g.id === 'craps' && (
-          <div className="sim-control">
-            <span className="sim-label">2× odds</span>
-            <div className="sim-chip-row" role="group" aria-label="2× odds">
-              <button type="button" className={chipClass(crapsOdds)} onClick={() => setCrapsOdds(true)}>
-                On
-              </button>
-              <button type="button" className={chipClass(!crapsOdds)} onClick={() => setCrapsOdds(false)}>
-                Off
-              </button>
+          <>
+            <div className="sim-control">
+              <span className="sim-label">Bets</span>
+              <div className="sim-chip-row" role="group" aria-label="Bets">
+                <button type="button" className={chipClass(crapsSide === 'pass')} onClick={() => setCrapsSide('pass')}>
+                  Pass
+                </button>
+                <button type="button" className={chipClass(crapsSide === 'dont')} onClick={() => setCrapsSide('dont')}>
+                  Don&apos;t pass
+                </button>
+              </div>
             </div>
-          </div>
+
+            <div className="sim-control">
+              <span className="sim-label">System</span>
+              <div className="sim-chip-row" role="group" aria-label="System">
+                <button
+                  type="button"
+                  className={chipClass(crapsStyle === 'single')}
+                  onClick={() => setCrapsStyle('single')}
+                >
+                  One bet
+                </button>
+                <button
+                  type="button"
+                  className={chipClass(crapsStyle === 'molly')}
+                  onClick={() => setCrapsStyle('molly')}
+                >
+                  3-point molly
+                </button>
+              </div>
+            </div>
+
+            <div className="sim-control">
+              <span className="sim-label">Odds</span>
+              <div className="sim-chip-row" role="group" aria-label="Odds">
+                <button type="button" className={chipClass(crapsOdds)} onClick={() => setCrapsOdds(true)}>
+                  On
+                </button>
+                <button type="button" className={chipClass(!crapsOdds)} onClick={() => setCrapsOdds(false)}>
+                  Off
+                </button>
+              </div>
+              <span className="sim-note">
+                {crapsSide === 'pass'
+                  ? '1× on 4 and 10, 2× on 5, 6, 8, 9'
+                  : 'Lay to win 1× on 4 and 10, 2× on 5, 6, 8, 9'}
+              </span>
+            </div>
+
+            <div className="sim-control">
+              <span className="sim-label">Side bets (per round)</span>
+              {SIDE_BET_TABLE.map((b) => (
+                <div className="sim-dollar-row" key={b.id}>
+                  <span className="sim-dollar">$</span>
+                  <input
+                    className="sim-input"
+                    inputMode="numeric"
+                    value={sideText[b.id]}
+                    onChange={(e) =>
+                      setSideText((s) => ({ ...s, [b.id]: e.target.value.replace(/[^0-9]/g, '') }))
+                    }
+                    aria-label={`${b.name} side bet in whole dollars`}
+                  />
+                  <span className="sim-note">{b.name}</span>
+                </div>
+              ))}
+              {sideAny && (
+                <>
+                  <span className="sim-note">
+                    Side bets are placed at the start and after every 7; they lose on a 7 and pay as soon
+                    as every number is in. Session results with side bets are simulated only.
+                  </span>
+                  {!SIDE_BETS_CONFIRMED && (
+                    <span className="sim-note">
+                      Pays (31 for 1, 151 for 1) are from memory, not yet photographed.
+                    </span>
+                  )}
+                </>
+              )}
+            </div>
+          </>
         )}
 
         <div className="sim-control">
@@ -486,11 +645,30 @@ export default function TableSimulator({ engine, gameId }: Props) {
         <p className="status">Computing…</p>
       )}
 
+      {g.id === 'craps' && (sideAny || adviceHasNull || exactHasNull) && (
+        <p className="sim-note">
+          {sideAny
+            ? "Exact odds aren't available with side bets; the simulated results above still apply."
+            : 'Too long a molly session to compute exactly; the simulated results above still apply.'}
+        </p>
+      )}
+
       <p className="sim-footnote">
-        Each round is drawn from exact odds: blackjack is infinite-deck basic strategy for these rules;
-        craps is exact from the dice. When your bankroll can&apos;t cover a full round you play a smaller
-        one (no split or double in blackjack, no odds in craps). Exact columns are computed, not
-        simulated. No comps: table and machine ratings aren&apos;t modeled.
+        {g.id === 'craps' ? (
+          <>
+            Craps is played roll by roll from exact dice odds. A 3-point molly keeps a line bet and up to
+            two come bets working. Pass-side come odds are off on the come-out roll; lay odds always work.
+            When the session stops (goal, loss limit, or time), you stop betting and the bets already out
+            play to the end, so results are what you&apos;d leave with. If your bankroll can&apos;t cover a
+            bet plus its odds, you bet without odds or skip the come bet.{' '}
+          </>
+        ) : (
+          <>
+            Each round is drawn from exact odds: blackjack is infinite-deck basic strategy for these rules.
+            When your bankroll can&apos;t cover a full round you play a smaller one (no split or double).{' '}
+          </>
+        )}
+        Exact columns are computed, not simulated. No comps: table and machine ratings aren&apos;t modeled.
         {g.id === 'bj-machine' &&
           ' Machine rules other than 6:5 and hitting soft 17 are assumed to match the table.'}
       </p>

@@ -1,5 +1,10 @@
 # To DeepSeek
 
-**Current task:** `handoffs/tasks/T019-craps-systems.md`
+**Current task:** none.
 
-Read it in full. T019a (`src/engine/craps.ts`, `src/lib/tableSim.ts` craps path, worker `craps` request) is in the working tree. Claude already made a two-line edit in `TableSimulator.tsx` (`tableEdge({...})` and `perRound` for $/hour) to keep the build green. Build on it.
+## Feedback on T019 (accepted)
+Claude reran lint, typecheck, 314 tests, and build, and checked that the protected paths are untouched. Claude also fixed the three lint warnings in `src/engine/craps.ts` (they were Claude's).
+- Deviation (`sideBetOneIn`): fine. Two decimals is right for these odds.
+- Q2: keep the notes showing only when a stake is set.
+- Q3: fine. Any "—" deserves the explanation.
+- Q4: leave the odds-limit note visible when Odds is off.
