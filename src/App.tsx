@@ -526,6 +526,7 @@ export default function App() {
             denomination={denomination}
             onDenominationChange={(d) => setSettings((s) => ({ ...s, denomination: d }))}
             totalsEntry={totalsEntry}
+            engine={engine}
             sessionActive={session !== null}
             onStartSession={(cents) => {
               setSettings((s) => ({ ...s, mode: { ...s.mode, [gameId]: 'deal' } }));

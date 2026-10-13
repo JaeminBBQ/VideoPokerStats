@@ -37,7 +37,22 @@ export interface Offer {
    * engine pays the base royal (800 per coin), so returns are a slight underestimate when the meter is up.
    */
   progressive?: boolean;
+  /**
+   * Bets below `maxCoins` that the owner's photo shows the pays for (D34). Every row pays the same per coin
+   * as at max bet except the natural royal, which pays `royalPerCoin` (250 short, 800 full). Bets not listed
+   * aren't offered by the app: their pays aren't photographed.
+   */
+  shortBets?: ShortBet[];
 }
+
+/** A bet below max coins and its royal pay per coin, as photographed (D34). */
+export interface ShortBet {
+  coins: number;
+  royalPerCoin: number;
+}
+
+/** The usual short-bet royal: 250 per coin below max (all photographed machines show it at 1–4 coins). */
+const shortRoyal = (coins: number[]): ShortBet[] => coins.map((c) => ({ coins: c, royalPerCoin: 250 }));
 
 export interface GameDef {
   id: GameId;
@@ -268,7 +283,13 @@ const LB_OFFERS: Offer[] = [0.01, 0.05, 0.1, 0.25, 0.5, 1, 2, 5].map((denominati
   maxCoins: 5,
   confirmed: denomination <= 0.25 || denomination === 1 || denomination === 2,
   ...(denomination > 0.25 ? { progressive: true } : {}),
+  // The photos (10¢) show 1–4 coins at a 250 royal; the owner confirmed 1¢–25¢ is the same machine setup.
+  // Short bets on the progressive denominations aren't photographed.
+  ...(denomination <= 0.25 ? { shortBets: shortRoyal([1, 2, 3, 4]) } : {}),
 }));
+
+/** GSR $1 machines (10 coins max): the photos show 1–4 coins at a 250 royal; 5–9 aren't shown. */
+const GSR_DOLLAR: Offer[] = [{ denomination: 1, maxCoins: 10, confirmed: true, shortBets: shortRoyal([1, 2, 3, 4]) }];
 
 // ---------------------------------------------------------------- catalog
 
@@ -332,7 +353,8 @@ export const GAMES: Record<GameId, GameDef> = {
     proof: 'context/gsr/1.webp',
     name: 'Jacks or Better — 9/5 (5¢)',
     where: 'GSR machine #13013, 5¢, max bet 20 coins (photographed 2026-10-08)',
-    offers: [{ denomination: 0.05, maxCoins: 20, confirmed: true }],
+    // Photo shows 16–19 coins already pay the full 800 royal; 1–15 aren't shown.
+    offers: [{ denomination: 0.05, maxCoins: 20, confirmed: true, shortBets: [16, 17, 18, 19].map((c) => ({ coins: c, royalPerCoin: 800 })) }],
     deckSize: 52,
     ...job95,
     publishedReturn: 0.9845,
@@ -345,7 +367,7 @@ export const GAMES: Record<GameId, GameDef> = {
     proof: 'context/gsr/preview.webp',
     name: 'Jacks or Better — 9/6 ($1)',
     where: 'GSR, $1, max bet 10 coins (photographed 2026-10-08)',
-    offers: [{ denomination: 1, maxCoins: 10, confirmed: true }],
+    offers: GSR_DOLLAR,
     deckSize: 52,
     ...job96,
     publishedReturn: 0.9954,
@@ -358,7 +380,7 @@ export const GAMES: Record<GameId, GameDef> = {
     proof: 'context/gsr/2.webp',
     name: 'Double Bonus — 9/7/5 ($1)',
     where: 'GSR machine #13013, $1, max bet 10 coins (photographed 2026-10-08)',
-    offers: [{ denomination: 1, maxCoins: 10, confirmed: true }],
+    offers: GSR_DOLLAR,
     deckSize: 52,
     ...db975,
     publishedReturn: 0.9911,
@@ -371,7 +393,7 @@ export const GAMES: Record<GameId, GameDef> = {
     proof: 'context/gsr/3.webp',
     name: 'Deuces Wild Bonus Poker ($1)',
     where: 'GSR machine #13013, $1, max bet 10 coins (photographed 2026-10-08)',
-    offers: [{ denomination: 1, maxCoins: 10, confirmed: true }],
+    offers: GSR_DOLLAR,
     deckSize: 52,
     rows: dwbpRows([800, 400, 200, 80, 40, 20, 25, 9, 4, 4, 3, 1, 1]),
     evaluate: dwbpEvaluate,
@@ -385,7 +407,8 @@ export const GAMES: Record<GameId, GameDef> = {
     proof: 'context/gsr/4.webp',
     name: 'Deuces Wild — 20/12/10 (5¢)',
     where: 'GSR, 5¢, max bet 20 coins (photographed 2026-10-08)',
-    offers: [{ denomination: 0.05, maxCoins: 20, confirmed: true }],
+    // Photo (bet 5) shows 2–4 coins at a 250 royal and 5 coins at the full 800; 1 and 6–19 aren't shown.
+    offers: [{ denomination: 0.05, maxCoins: 20, confirmed: true, shortBets: [...shortRoyal([2, 3, 4]), { coins: 5, royalPerCoin: 800 }] }],
     deckSize: 52,
     rows: deucesRows([800, 200, 20, 12, 10, 4, 4, 3, 2, 1]),
     evaluate: deucesEvaluate,

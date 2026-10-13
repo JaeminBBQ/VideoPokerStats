@@ -37,5 +37,6 @@
 | T019a | Craps roll-by-roll engine (`src/engine/craps.ts`): pass/don't × single/3-point molly, owner's 1×/2× odds, exact DP + wind-down, worker; goal-table craps uses 1-2-2 odds (D31); side bets All Small/Tall/Make 'Em All, exact odds + cost, simulated sessions (D32) | Claude | done | T018 |
 | T019 | Craps simulator: Bets / System / Odds controls, edge line wording, compare-systems table, side bets + Odds-tab reference, footnote, "too long" note (D31, D32) | DeepSeek | done | T019a |
 | T020 | Goal table: craps don't + lay odds column (exact, cross-checked vs roll-by-roll), editable table minimums (saved), "Video poker $1" column, sideways scroll at phone width (D33) | Claude | review | T019 |
+| T021 | "How much should I bet?" (Bankroll tab): photographed short bets per offer, win-goal / make-it-last picks, $1 cap, exact goal + survival odds (D34) | Claude | review | T020 |
 
 Only `ready` tasks have full specs in `tasks/`. Claude writes the next spec after reviewing the previous task. See `docs/ROADMAP.md`.

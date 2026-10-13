@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { offerAt, type GameDef, type GameId } from '../engine/index.ts';
+import { offerAt, type EngineClient, type GameDef, type GameId } from '../engine/index.ts';
 import { formatCents } from '../lib/bankroll.ts';
 import { compareRows, mineFromTotals, rateLabel } from '../lib/bankrollTab.ts';
 import { betsToCents, riskFor, RISK } from '../lib/riskData.ts';
 import type { TotalsEntry } from '../lib/stats.ts';
+import BetSize from './BetSize.tsx';
 import { DENOM_LABELS } from '../lib/storage.ts';
 
 /** Short labels for the risk horizons (the parenthetical copy in RISK.md). */
@@ -27,6 +28,7 @@ interface Props {
   totalsEntry: TotalsEntry;
   sessionActive: boolean;
   onStartSession: (cents: number) => void;
+  engine: EngineClient;
 }
 
 export default function BankrollTab({
@@ -37,6 +39,7 @@ export default function BankrollTab({
   totalsEntry,
   sessionActive,
   onStartSession,
+  engine,
 }: Props) {
   const [hands, setHands] = useState(2000); // default session length: ~4 hours
   const [target, setTarget] = useState(0.95);
@@ -85,6 +88,9 @@ export default function BankrollTab({
     <section className="panel bankroll-panel" aria-label="Bankroll calculator">
       <h2>Bankroll — {game.name}</h2>
 
+      <BetSize game={game} gameId={gameId} engine={engine} />
+
+      <h3>How much to bring</h3>
       <div className="bankroll-controls">
         <div className="bankroll-control">
           <span className="bankroll-control-label">Denomination</span>

@@ -2373,3 +2373,24 @@ select {
     min-width: 520px;
   }
 }
+
+/* Bankroll tab: how much should I bet (D34). */
+.betsize {
+  margin-bottom: 20px;
+}
+
+.betsize-advice {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 12px 0 8px;
+}
+
+.betsize-table td.betsize-how {
+  text-align: left;
+  white-space: normal;
+  font-size: 12px;
+}
+
+.betsize-table td.betsize-short {
+  color: var(--muted);
+}
