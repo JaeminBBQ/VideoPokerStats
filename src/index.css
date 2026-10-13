@@ -2340,3 +2340,36 @@ select {
     padding: 4px 3px;
   }
 }
+
+/* Goal table: adjustable table minimums, and a scroll box so eight columns never widen the page. */
+.odds-goal-mins {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.odds-goal-min {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.odds-goal-min-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.odds-goal-min-input {
+  width: 64px;
+}
+
+.odds-goal-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+@media (max-width: 640px) {
+  .odds-goal-scroll .odds-goal-table {
+    min-width: 520px;
+  }
+}

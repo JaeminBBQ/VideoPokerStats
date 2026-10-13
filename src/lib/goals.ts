@@ -50,24 +50,49 @@ export type GoalTable =
   | { ok: true; budgetBets: number; columns: GoalColumn[]; rows: GoalRow[] }
   | { ok: false; reason: 'below-one-bet' | 'too-many-bets'; budgetBets: number };
 
+/** The table minimums the owner can adjust; every craps column shares the craps minimum. */
+export interface TableMins {
+  blackjack: number;
+  craps: number;
+  roulette: number;
+}
+
+export const DEFAULT_TABLE_MINS: TableMins = { blackjack: 1500, craps: 300, roulette: 1500 };
+
+/** Which minimum a table column bets. */
+const minKey = (id: string): keyof TableMins => (id.startsWith('craps') ? 'craps' : (id as keyof TableMins));
+
+/** The extra video poker column's bet: a $1 hand (the owner's top bet), shown when the machine bets otherwise. */
+export const VP_DOLLAR_CENTS = 100;
+
 /**
- * The comparison table: this video poker game at perfect play (first column) against flat betting at
- * blackjack, craps, and roulette. Each table always bets its minimum (D25, amends D20), so a $1 video poker
- * hand faces a $15 blackjack hand and a $3 craps bet. `budgetBets`/`ok: false` refer to the video poker
- * bet. Integer cents throughout.
+ * The comparison table: this video poker game at perfect play (first column, plus the same paytable at $1 a
+ * hand when the machine's bet differs) against flat betting at blackjack, craps, and roulette. Each table
+ * always bets its minimum (D25, amends D20), which the owner can adjust (`mins`), so a $1 video poker hand
+ * faces a $15 blackjack hand and a $3 craps bet by default. `budgetBets`/`ok: false` refer to the video
+ * poker bet. Integer cents throughout.
  */
-export function goalTable(vpName: string, vpPerHand: Outcome[], budgetCents: number, betCents: number): GoalTable {
+export function goalTable(
+  vpName: string,
+  vpPerHand: Outcome[],
+  budgetCents: number,
+  betCents: number,
+  mins: TableMins = DEFAULT_TABLE_MINS,
+): GoalTable {
   const budgetBets = Math.floor(budgetCents / betCents);
   if (budgetBets < 1) return { ok: false, reason: 'below-one-bet', budgetBets };
   if (budgetBets > MAX_BUDGET_BETS) return { ok: false, reason: 'too-many-bets', budgetBets };
+  const vp = { unit: 'hand', name: vpName, outcomes: vpPerHand, minBetCents: 0 };
   const games = [
-    { id: 'video-poker', short: 'Video poker', unit: 'hand', name: vpName, rules: 'Perfect play, max bet', outcomes: vpPerHand, minBetCents: 0 },
-    ...TABLE_GAMES,
+    { ...vp, id: 'video-poker', short: 'Video poker', rules: 'Perfect play, max bet', betCents },
+    ...(betCents === VP_DOLLAR_CENTS
+      ? []
+      : [{ ...vp, id: 'video-poker-dollar', short: 'Video poker $1', rules: 'Same paytable at $1 a hand, perfect play', betCents: VP_DOLLAR_CENTS }]),
+    // Tables always bet their minimum: what the owner would actually do (D25, amends D20).
+    ...TABLE_GAMES.map((g) => ({ ...g, minBetCents: mins[minKey(g.id)], betCents: mins[minKey(g.id)] })),
   ];
   const columns: GoalColumn[] = games.map((g) => {
-    // Tables always bet their minimum: what the owner would actually do (D25, amends D20).
-    const bet = g.id === 'video-poker' ? betCents : g.minBetCents;
-    const { id, short, unit, name, rules, outcomes, minBetCents } = g;
+    const { id, short, unit, name, rules, outcomes, minBetCents, betCents: bet } = g;
     const avgWager = 'avgWagerBets' in g && g.avgWagerBets ? g.avgWagerBets : 1;
     return { id, short, unit, name, rules, edge: -edgeOf(outcomes) / avgWager, betCents: bet, minBetCents, budgetBets: budgetCents / bet, playable: budgetCents >= bet };
   });
@@ -77,8 +102,8 @@ export function goalTable(vpName: string, vpPerHand: Outcome[], budgetCents: num
     // Video poker plays whole bets (pays are whole coins); tables may reach half-bet results, so they get
     // the fractional bet counts and goalProbability rounds within their own units.
     const odds = games.map((g, i) =>
-      i === 0
-        ? goalProbability(g.outcomes, budgetBets, goalBets)
+      g.minBetCents === 0
+        ? goalProbability(g.outcomes, Math.floor(budgetCents / g.betCents), Math.ceil(goalCents / g.betCents))
         : 'tiers' in g && g.tiers
           ? goalProbabilityTiered(g.tiers, columns[i].budgetBets, goalCents / columns[i].betCents)
           : goalProbability(g.outcomes, columns[i].budgetBets, goalCents / columns[i].betCents),

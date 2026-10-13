@@ -143,3 +143,15 @@ describe('createStorage', () => {
     expect(() => s.saveSessionLog(log)).not.toThrow();
   });
 });
+
+describe('table minimums', () => {
+  it('defaults to $15 / $3 / $15, round-trips, and rejects bad values', () => {
+    const mem = new MemoryStorage();
+    const s = createStorage(mem);
+    expect(s.loadTableMins()).toEqual({ blackjack: 1500, craps: 300, roulette: 1500 });
+    s.saveTableMins({ blackjack: 1000, craps: 500, roulette: 2500 });
+    expect(s.loadTableMins()).toEqual({ blackjack: 1000, craps: 500, roulette: 2500 });
+    mem.setItem(STORAGE_KEYS.tableMins, JSON.stringify({ v: 1, data: { blackjack: 0, craps: 500, roulette: 2500 } }));
+    expect(s.loadTableMins()).toEqual({ blackjack: 1500, craps: 300, roulette: 1500 });
+  });
+});

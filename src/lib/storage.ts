@@ -1,6 +1,7 @@
 import type { GameId } from '../engine/index.ts';
 import type { Session } from './bankroll.ts';
 import type { DrillState } from './drill.ts';
+import { DEFAULT_TABLE_MINS, type TableMins } from './goals.ts';
 import type { Lifetime, SessionLogEntry } from './session.ts';
 import type { HandRecord, Totals } from './stats.ts';
 
@@ -12,6 +13,7 @@ export const STORAGE_KEYS = {
   session: 'vp.v1.session',
   lifetime: 'vp.v1.lifetime',
   sessionLog: 'vp.v1.sessionLog',
+  tableMins: 'vp.v1.tableMins',
 } as const;
 
 const VERSION = 1;
@@ -99,6 +101,11 @@ const isSessionLog = (x: unknown): x is SessionLogEntry[] => Array.isArray(x) &&
 const isDrillEntry = (x: unknown): x is { streak: number; cleared: boolean } =>
   isRecord(x) && typeof x.streak === 'number' && typeof x.cleared === 'boolean';
 
+/** Goal-table minimums: whole dollars, at least $1, in cents. */
+const isTableMins = (x: unknown): x is TableMins =>
+  isRecord(x) &&
+  (['blackjack', 'craps', 'roulette'] as const).every((k) => isNonNegInt(x[k]) && (x[k] as number) >= 100 && (x[k] as number) % 100 === 0);
+
 /** Drill state is one level of game → key → entry; anything else loads as empty. */
 const isDrillState = (x: unknown): x is DrillState =>
   isRecord(x) && Object.values(x).every((g) => isRecord(g) && Object.values(g).every(isDrillEntry));
@@ -118,6 +125,8 @@ export interface TrainerStorage {
   saveLifetime(lifetime: Lifetime): void;
   loadSessionLog(): SessionLogEntry[];
   saveSessionLog(log: SessionLogEntry[]): void;
+  loadTableMins(): TableMins;
+  saveTableMins(mins: TableMins): void;
 }
 
 /** Versioned JSON persistence. Corrupt, missing, or wrong-version data loads as defaults and never throws. */
@@ -155,5 +164,7 @@ export function createStorage(store: StorageLike): TrainerStorage {
     saveLifetime: (lifetime) => save(STORAGE_KEYS.lifetime, lifetime),
     loadSessionLog: () => load(STORAGE_KEYS.sessionLog, isSessionLog, [] as SessionLogEntry[]),
     saveSessionLog: (log) => save(STORAGE_KEYS.sessionLog, log),
+    loadTableMins: () => load(STORAGE_KEYS.tableMins, isTableMins, { ...DEFAULT_TABLE_MINS }),
+    saveTableMins: (mins) => save(STORAGE_KEYS.tableMins, mins),
   };
 }

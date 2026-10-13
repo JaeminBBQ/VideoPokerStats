@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { TABLE_RULES, blackjackOdds } from './blackjack.ts';
 import { mulberry32 } from './cards.ts';
+import { UNITS_PER_BET, crapsLeaveOdds } from './craps.ts';
 import { TABLE_GAMES, banded, edgeOf, goalProbability, goalProbabilityTiered, ladder, type Outcome } from './goals.ts';
 
 const steps = (outcomes: Outcome[]) => new Map(outcomes.map((o) => [o.net, o.p]));
@@ -115,5 +116,31 @@ describe('craps with odds (1× on 4/10, 2× on 5/6/8/9)', () => {
     }
     const sd = Math.sqrt((exact * (1 - exact)) / runs);
     expect(Math.abs(hits / runs - exact)).toBeLessThan(4 * sd);
+  });
+});
+
+describe("craps don't pass + lay odds (lay to win 1× on 4/10, 2× on 5/6/8/9)", () => {
+  const g = TABLE_GAMES.find((x) => x.id === 'craps-dont')!;
+
+  it("sums to 1, keeps the don't pass edge per line bet (3/220), and is 0.511% of all money bet", () => {
+    expect(g.outcomes.reduce((a, o) => a + o.p, 0)).toBeCloseTo(1, 15);
+    expect(g.tiers![1].outcomes.reduce((a, o) => a + o.p, 0)).toBeCloseTo(1, 15);
+    expect(edgeOf(g.outcomes)).toBeCloseTo(-3 / 220, 15);
+    expect(edgeOf(g.tiers![1].outcomes)).toBeCloseTo(-3 / 220, 15);
+    expect(-edgeOf(g.outcomes) / g.avgWagerBets!).toBeCloseTo(9 / 1760, 15);
+  });
+
+  it('matches the roll-by-roll engine (single don\'t with lay odds) when playing to a goal', () => {
+    // $100 at $3 → 33 whole bets in the roll-by-roll engine (fifths: 165 units); goal +10 bets.
+    for (const [start, goal] of [[33, 10], [12, 12], [5, 3]]) {
+      const exact = goalProbabilityTiered(g.tiers!, start, goal);
+      const roll = crapsLeaveOdds({ side: 'dont', style: 'single', odds: true }, start * UNITS_PER_BET, {
+        winUnits: goal * UNITS_PER_BET,
+        lossUnits: Infinity,
+        maxRolls: 20000,
+      })!;
+      expect(roll.pTime).toBeLessThan(1e-9);
+      expect(roll.pWin).toBeCloseTo(exact, 8);
+    }
   });
 });

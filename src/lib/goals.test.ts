@@ -10,7 +10,7 @@ describe('goalTable', () => {
     const t = goalTable('JoB 9/5', job95, 10000, 100); // $100 budget, $1 bets
     if (!t.ok) throw new Error('expected a table');
     expect(t.budgetBets).toBe(100);
-    expect(t.columns.map((c) => c.id)).toEqual(['video-poker', 'blackjack', 'craps', 'roulette', 'craps-odds']);
+    expect(t.columns.map((c) => c.id)).toEqual(['video-poker', 'blackjack', 'craps', 'roulette', 'craps-odds', 'craps-dont']);
     expect(t.rows.map((r) => r.label)).toEqual(GOALS.map((g) => g.label));
     expect(t.rows.map((r) => r.goalBets)).toEqual([5, 10, 15, 25, 50, 100, 200]);
     expect(t.rows[0].odds[0]).toBeCloseTo(goalProbability(job95, 100, 5), 15);
@@ -18,13 +18,14 @@ describe('goalTable', () => {
     expect(t.columns[0].edge).toBeCloseTo(1 - 0.984498, 5);
     expect(t.columns[3].edge).toBeCloseTo(2 / 38, 12);
     expect(t.columns[4].edge).toBeCloseTo(42 / 6435, 12);
+    expect(t.columns[5].edge).toBeCloseTo(9 / 1760, 12);
     for (const r of t.rows) expect(r.odds[r.best]).toBe(Math.max(...r.odds));
   });
 
   it('bets each table its minimum, whatever the video poker bet', () => {
     const t = goalTable('JoB 9/5', job95, 10000, 100); // $100, $1 video poker
     if (!t.ok) throw new Error('expected a table');
-    expect(t.columns.map((c) => c.betCents)).toEqual([100, 1500, 300, 1500, 300]);
+    expect(t.columns.map((c) => c.betCents)).toEqual([100, 1500, 300, 1500, 300, 300]);
     expect(t.columns[1].budgetBets).toBeCloseTo(100 / 15, 12);
     // +$5 at $15 blackjack: any result of at least +0.5 bet. Same as asking for +$7.50.
     expect(t.rows[0].odds[1]).toBeCloseTo(goalProbability(TABLE_GAMES[0].outcomes, 100 / 15, 0.5), 15);
@@ -32,15 +33,33 @@ describe('goalTable', () => {
     expect(t.rows[0].odds[3]).toBeCloseTo(t.rows[2].odds[3], 15);
     const big = goalTable('DWBP', job95, 10000, 1000); // $10 video poker
     if (!big.ok) throw new Error('expected a table');
-    expect(big.columns.map((c) => c.betCents)).toEqual([1000, 1500, 300, 1500, 300]);
-    expect(big.columns.map((c) => c.unit)).toEqual(['hand', 'hand', 'bet', 'spin', 'bet']);
+    expect(big.columns.map((c) => c.betCents)).toEqual([1000, 100, 1500, 300, 1500, 300, 300]);
+    expect(big.columns.map((c) => c.unit)).toEqual(['hand', 'hand', 'hand', 'bet', 'spin', 'bet', 'bet']);
+  });
+
+  it('adds the same paytable at $1 a hand when the machine bets something else', () => {
+    const t = goalTable('JoB 9/5', job95, 10000, 25); // $100 at 25¢
+    if (!t.ok) throw new Error('expected a table');
+    expect(t.columns[1]).toMatchObject({ id: 'video-poker-dollar', betCents: 100, budgetBets: 100, playable: true });
+    expect(t.columns[1].edge).toBe(t.columns[0].edge);
+    expect(t.rows[0].odds[1]).toBeCloseTo(goalProbability(job95, 100, 5), 15);
+    expect(t.rows[5].odds[1]).toBeCloseTo(goalProbability(job95, 100, 100), 15);
+    expect(t.rows[0].odds[0]).toBeCloseTo(goalProbability(job95, 400, 20), 15);
+  });
+
+  it('bets the adjusted table minimums; every craps column shares the craps minimum', () => {
+    const t = goalTable('JoB 9/5', job95, 10000, 100, { blackjack: 1000, craps: 500, roulette: 500 });
+    if (!t.ok) throw new Error('expected a table');
+    expect(t.columns.map((c) => c.betCents)).toEqual([100, 1000, 500, 500, 500, 500]);
+    expect(t.columns.map((c) => c.minBetCents)).toEqual([0, 1000, 500, 500, 500, 500]);
+    expect(t.rows[0].odds[2]).toBeCloseTo(goalProbability(TABLE_GAMES[1].outcomes, 20, 1), 15);
   });
 
   it('marks tables the budget cannot cover as unplayable with 0 odds', () => {
     const t = goalTable('x', job95, 1000, 25); // $10 budget at 25¢
     if (!t.ok) throw new Error('expected a table');
-    expect(t.columns.map((c) => c.playable)).toEqual([true, false, true, false, true]);
-    expect(t.rows.every((r) => r.odds[1] === 0 && r.odds[3] === 0)).toBe(true);
+    expect(t.columns.map((c) => c.playable)).toEqual([true, true, false, true, false, true, true]);
+    expect(t.rows.every((r) => r.odds[2] === 0 && r.odds[4] === 0)).toBe(true);
   });
 
   it('rounds goals up to whole bets and floors the budget', () => {

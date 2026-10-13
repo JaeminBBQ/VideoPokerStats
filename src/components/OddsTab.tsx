@@ -2,10 +2,10 @@ import { useMemo, useState } from 'react';
 import { SIDE_BETS_CONFIRMED } from '../engine/craps.ts';
 import { parseHand, type GameDef, type GameId } from '../engine/index.ts';
 import { formatCents } from '../lib/bankroll.ts';
-import { GOALS, goalTable, type GoalTable } from '../lib/goals.ts';
+import { GOALS, goalTable, type GoalTable, type TableMins } from '../lib/goals.ts';
 import { ODDS_BY_GAME, oneIn } from '../lib/odds.ts';
 import { pct, pace, percent2, sessionLabel, signedBets, withArticle } from '../lib/oddsFormat.ts';
-import { DENOM_LABELS } from '../lib/storage.ts';
+import { DENOM_LABELS, createStorage } from '../lib/storage.ts';
 import { SIDE_BET_TABLE } from '../lib/tableSim.ts';
 import { isWildCard } from '../lib/wild.ts';
 import MiniCard from './MiniCard.tsx';
@@ -19,6 +19,15 @@ interface Props {
   maxCoins: number;
 }
 
+const storage = createStorage(window.localStorage);
+
+/** The table minimums the owner can set, in the order shown. */
+const MIN_FIELDS: { key: keyof TableMins; label: string }[] = [
+  { key: 'blackjack', label: 'Blackjack' },
+  { key: 'craps', label: 'Craps' },
+  { key: 'roulette', label: 'Roulette' },
+];
+
 /** Categories too ordinary to headline the picker; they still appear in the table. */
 const NOT_HEADLINE = new Set(['nothing', 'three-kind', 'two-pair', 'jacks-or-better']);
 
@@ -30,7 +39,7 @@ type GoalTableOk = Extract<GoalTable, { ok: true }>;
 /** The takeaway above the goal table, from whichever column is best at doubling. */
 function goalTakeaway(table: GoalTableOk): string {
   const best = table.columns[table.rows[DOUBLE_INDEX].best];
-  return best.id === 'video-poker'
+  return best.id.startsWith('video-poker')
     ? 'Video poker gives you the best shot at doubling here (the royal does the heavy lifting).'
     : `${best.short} gives you the best shot at doubling. Bigger bets reach a goal in fewer rounds, so the house edge has less time to work on you.`;
 }
@@ -47,9 +56,26 @@ export default function OddsTab({ game, gameId, bet, denomination, maxCoins }: P
   // Not persisted: the goal table is a scratch comparison.
   const [budgetDollars, setBudgetDollars] = useState('100');
   const budgetCents = (Number.parseInt(budgetDollars, 10) || 0) * 100;
+  // Table minimums are the owner's local tables, so they're remembered.
+  const [mins, setMins] = useState<TableMins>(() => storage.loadTableMins());
+  const [minText, setMinText] = useState<Record<keyof TableMins, string>>(() => ({
+    blackjack: String(mins.blackjack / 100),
+    craps: String(mins.craps / 100),
+    roulette: String(mins.roulette / 100),
+  }));
+  const setMin = (key: keyof TableMins, text: string) => {
+    const digits = text.replace(/[^0-9]/g, '');
+    setMinText((t) => ({ ...t, [key]: digits }));
+    const dollars = Number.parseInt(digits, 10);
+    if (dollars >= 1) {
+      const next = { ...mins, [key]: dollars * 100 };
+      setMins(next);
+      storage.saveTableMins(next);
+    }
+  };
   const goalData = useMemo(
-    () => (odds ? goalTable(game.name, odds.perHand, budgetCents, bet) : null),
-    [odds, game.name, budgetCents, bet],
+    () => (odds ? goalTable(game.name, odds.perHand, budgetCents, bet, mins) : null),
+    [odds, game.name, budgetCents, bet, mins],
   );
 
   if (!odds) {
@@ -193,21 +219,40 @@ export default function OddsTab({ game, gameId, bet, denomination, maxCoins }: P
           aria-label="Starting budget in whole dollars"
         />
       </div>
+      <div className="odds-goal-label">Table minimums</div>
+      <div className="odds-goal-mins">
+        {MIN_FIELDS.map(({ key, label }) => (
+          <label className="odds-goal-min" key={key}>
+            <span className="odds-goal-min-label">{label}</span>
+            <span className="odds-goal-input-row">
+              <span className="odds-goal-dollar">$</span>
+              <input
+                className="odds-goal-input odds-goal-min-input"
+                inputMode="numeric"
+                value={minText[key]}
+                onChange={(e) => setMin(key, e.target.value)}
+                onBlur={() => setMinText((t) => ({ ...t, [key]: String(mins[key] / 100) }))}
+                aria-label={`${label} minimum bet in whole dollars`}
+              />
+            </span>
+          </label>
+        ))}
+      </div>
       <p className="odds-goal-sub">
         Video poker bets {formatCents(bet)} a hand ({maxCoins} coins × {denomLabel}): {goalData?.budgetBets ?? 0}{' '}
         bets.{' '}
         {goalData && goalData.ok && (
           <>
-            Tables bet their minimum ({goalData.columns
-              .filter((c) => c.minBetCents > 0)
-              .map((c) => `${c.short} $${c.minBetCents / 100}`)
-              .join(', ')}).
+            Tables bet their minimum (blackjack ${mins.blackjack / 100}, craps ${mins.craps / 100}, roulette $
+            {mins.roulette / 100}).
+            {bet !== 100 && ' "Video poker $1" is the same paytable at $1 a hand.'}
           </>
         )}
       </p>
       {goalData && goalData.ok && takeaway !== null && <p className="odds-goal-takeaway">{takeaway}</p>}
       {goalData && goalData.ok ? (
         <>
+          <div className="odds-goal-scroll">
           <table className="odds-goal-table">
             <thead>
               <tr>
@@ -257,6 +302,7 @@ export default function OddsTab({ game, gameId, bet, denomination, maxCoins }: P
               </tr>
             </tbody>
           </table>
+          </div>
           {goalData.columns
             .filter((c) => !c.playable)
             .map((c) => (
@@ -272,8 +318,9 @@ export default function OddsTab({ game, gameId, bet, denomination, maxCoins }: P
                 {c.short}: {c.rules}.{' '}
               </span>
             ))}
-            Craps odds counts the odds money in its house edge; the odds bet itself has no edge, so taking
-            odds adds swing, not expected loss. Blackjack assumes you can always afford a double or split.
+            Craps odds and craps don&apos;t count the odds money in their house edge; the odds bet itself has
+            no edge, so taking or laying odds adds swing, not expected loss. Don&apos;t come is the same bet as
+            don&apos;t pass, so its odds are the same. Blackjack assumes you can always afford a double or split.
             Tables always bet their minimum. Goals round up to the
             smallest win each game can reach: whole bets in video poker, half a bet in blackjack.{' '}
             {rouletteCol && `At ${formatCents(rouletteCol.betCents)} roulette, one win covers a +$5 goal.`}

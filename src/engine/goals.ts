@@ -197,6 +197,28 @@ export const PASS_ODDS: Outcome[] = [
   { net: -3, p: (8 / 36) * (3 / 5) + (10 / 36) * (6 / 11) },
 ];
 
+/** Don't pass (or don't come) alone, per decision: come-out wins 2/3 (3/36), pushes 12 (1/36), loses 7/11. */
+export const DONT_PASS: Outcome[] = [
+  { net: 1, p: 3 / 36 + (6 / 36) * (2 / 3) + (8 / 36) * (3 / 5) + (10 / 36) * (6 / 11) },
+  { net: 0, p: 1 / 36 },
+  { net: -1, p: 8 / 36 + (6 / 36) * (1 / 3) + (8 / 36) * (2 / 5) + (10 / 36) * (5 / 11) },
+];
+
+/**
+ * Don't pass with lay odds sized to win the same multiple as the pass side (D31): 4/10 lay 2 to win 1,
+ * 5/9 lay 3 to win 2, 6/8 lay 2.4 to win 2, in line-bet units. The 7 beats the point (2/3, 3/5, 6/11).
+ */
+export const DONT_ODDS: Outcome[] = [
+  { net: 1, p: 3 / 36 },
+  { net: 0, p: 1 / 36 },
+  { net: -1, p: 8 / 36 },
+  { net: 2, p: (6 / 36) * (2 / 3) },
+  { net: 3, p: (8 / 36) * (3 / 5) + (10 / 36) * (6 / 11) },
+  { net: -3, p: (6 / 36) * (1 / 3) },
+  { net: -4, p: (8 / 36) * (2 / 5) },
+  { net: -3.4, p: (10 / 36) * (5 / 11) },
+];
+
 /**
  * Comparison games, flat-betting their table minimum every round (D25).
  * Roulette and craps are exact from their rules. Blackjack is computed exactly (infinite deck, basic
@@ -250,5 +272,21 @@ export const TABLE_GAMES: TableGame[] = [
       { coverBets: 1, outcomes: PASS_LINE },
     ],
     avgWagerBets: 1 + 1 * (6 / 36) + 2 * (18 / 36),
+  },
+  {
+    id: 'craps-dont',
+    name: "Craps — don't pass + lay odds",
+    short: "Craps don't",
+    unit: 'bet',
+    rules: "Don't pass or don't come plus lay odds sized to win 1× on 4/10 and 2× on 5/6/8/9 (lay 2:1, 3:2, 6:5), dropping to the bare line when the bankroll can't cover line + the biggest lay (0.51% of all money bet, the lowest edge here)",
+    source: "exact from the dice: don't pass wins 949/1980, pushes the 12, loses 976/1980; lay odds pay true odds",
+    minBetCents: 300,
+    outcomes: DONT_ODDS,
+    tiers: [
+      { coverBets: 4, outcomes: DONT_ODDS },
+      { coverBets: 1, outcomes: DONT_PASS },
+    ],
+    // Flat bet plus the lay: 2 on 4/10, 3 on 5/9, 2.4 on 6/8.
+    avgWagerBets: 1 + 2 * (6 / 36) + 3 * (8 / 36) + 2.4 * (10 / 36),
   },
 ];
