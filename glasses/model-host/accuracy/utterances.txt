@@ -1,0 +1,50 @@
+# One utterance per line, spoken as written. Lines starting with # are ignored.
+# Prefix "noise:" marks a phrase that must not enter cards (parse error or empty is a pass).
+# Every card line must parse under the VOICE.md rules (a suit applies to ALL pending ranks).
+# rank-of-suit, one card at a time
+ace of spades king of hearts queen of diamonds jack of clubs ten of spades
+two of clubs three of diamonds four of hearts five of spades six of clubs
+seven of hearts eight of diamonds nine of clubs ten of hearts jack of spades
+queen of clubs king of diamonds ace of hearts deuce of spades three of clubs
+four of diamonds four of clubs nine of hearts nine of spades king of clubs
+six of diamonds seven of spades eight of hearts nine of diamonds ten of clubs
+deuce of hearts deuce of diamonds deuce of clubs ace of clubs five of hearts
+jack of diamonds ten of diamonds three of spades seven of clubs queen of hearts
+# grouped by suit
+ace king queen jack ten of spades
+king queen jack of spades seven of diamonds three of clubs
+ten jack queen of hearts two three of clubs
+ace five of diamonds nine ten of spades king of hearts
+deuce four six of clubs eight ten of hearts
+seven eight nine ten jack of diamonds
+queen of spades jack ten nine of hearts ace of clubs
+three four five six of hearts seven of spades
+ace of spades ace of hearts
+king of diamonds king of clubs queen of hearts queen of spades
+# singular / plural suits mixed
+ace of spade king of heart queen of diamond jack of club ten of spade
+two of club deuce of diamond three of heart four of spade five of clubs
+jack of hearts jack of spade jack of diamonds jack of club two of hearts
+six seven of club eight of heart nine of spade ten of diamond
+# partial hands (fewer than five)
+king of spades
+ace of hearts ten of clubs
+seven of diamonds seven of clubs
+queen jack of diamonds
+deuce of spades
+five six of hearts
+# tens and mixed shapes
+ten of spades ten of hearts ten of diamonds ten of clubs ace of spades
+ten of hearts ten of diamonds four five six of clubs
+ace of diamonds two three four five of clubs
+nine of clubs eight seven six of spades five of diamonds
+king queen of hearts jack of clubs jack of spades three of diamonds
+four of spades deuce three of hearts six of diamonds seven of clubs
+eight of spades eight of clubs ace of diamonds ace of hearts
+jack of hearts queen of hearts king of hearts ace of hearts ten of hearts
+# noise / irrelevant
+noise: hey what time is it
+noise: can I get another drink please
+noise: um let me think about that
+noise: thanks have a good night
+noise: deal me in

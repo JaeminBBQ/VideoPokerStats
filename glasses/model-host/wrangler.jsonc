@@ -1,0 +1,11 @@
+// Static-assets-only Worker that serves the trimmed Vosk model to the glasses app.
+// Build first (npm run model:build), then deploy from glasses/: npm run model:deploy
+{
+  "name": "vp-voice-model",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "none"
+  }
+}

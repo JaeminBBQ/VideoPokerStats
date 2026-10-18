@@ -1,0 +1,33 @@
+{
+  "name": "vp-hold-helper",
+  "private": true,
+  "version": "0.5.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "sim": "evenhub-simulator http://localhost:5173",
+    "pack": "npm run build && npx -y @evenrealities/evenhub-cli@0.1.14 pack app.json dist -o vpholdhelper.ehpk --sdk-ver 0.0.16",
+    "model:build": "node model-host/scripts/build-model.mjs",
+    "model:deploy": "test -f model-host/public/manifest.json || (echo 'Run npm run model:build first' && exit 1); npx -y wrangler@4 deploy --config model-host/wrangler.jsonc"
+  },
+  "dependencies": {
+    "@evenrealities/even_hub_sdk": "0.0.16",
+    "@evenrealities/pretext": "0.1.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "vosk-browser": "0.0.8"
+  },
+  "devDependencies": {
+    "@evenrealities/evenhub-simulator": "0.9.5",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.3"
+  }
+}

@@ -1,0 +1,163 @@
+/* Phone UI. Mobile-first, dark by default, no external assets (the app is packaged offline). */
+:root {
+  color-scheme: dark;
+  --bg: #111317;
+  --panel: #1b1e24;
+  --panel-2: #23272f;
+  --line: #333944;
+  --text: #eceff4;
+  --muted: #9aa3b2;
+  --red: #ff6b6b;
+  --black: #e8ecf2;
+  --accent: #4da3ff;
+  --held: #f5c542;
+  --ok: #43d17a;
+  --warn: #f0b429;
+  --bad: #ff5d5d;
+  --gap: 4px;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+}
+*, *::before, *::after { box-sizing: border-box; }
+button { font: inherit; color: inherit; touch-action: manipulation; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.red { color: var(--red); }
+.black { color: var(--black); }
+
+.app {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: max(8px, env(safe-area-inset-top)) 8px max(16px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-x: hidden;
+}
+
+/* Game picker */
+.picker { display: flex; gap: 8px; align-items: center; }
+.picker-label { flex: 1; min-width: 0; }
+.picker select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 10px;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 16px; /* ≥16px keeps iOS from zooming */
+}
+.status {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 10px;
+  border-radius: 10px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.status .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--warn); }
+.status-loading .dot { animation: pulse 1s ease-in-out infinite; }
+.status-ready .dot { background: var(--ok); }
+.status-error { color: var(--bad); cursor: pointer; }
+.status-error .dot { background: var(--bad); }
+@keyframes pulse { 50% { opacity: 0.3; } }
+
+/* Card grid: one row per suit, ranks A → 2 across */
+.grid { display: flex; flex-direction: column; gap: 10px; padding-top: 6px; }
+.suit-row { display: grid; grid-template-columns: 22px repeat(13, minmax(0, 1fr)); height: 76px; gap: 3px; align-items: stretch; }
+.suit-label { display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.gcard {
+  min-width: 0;
+  padding: 0;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  color: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  user-select: none;
+}
+.gcard:active:not(:disabled) { background: #3a4150; transform: scale(0.94); }
+.gcard:disabled { opacity: 0.18; }
+.actions { display: flex; gap: 8px; margin-top: 4px; }
+.act {
+  flex: 1;
+  min-height: 56px;
+  padding: 0;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--accent);
+}
+.act:disabled { opacity: 0.4; }
+.joker-btn { color: #b48cff; }
+
+.section-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 8px 2px 6px; }
+/* Settings */
+.settings { padding-bottom: 8px; }
+.toggle { display: flex; gap: 12px; align-items: center; min-height: 44px; padding: 6px 10px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; font-size: 15px; }
+.toggle input { width: 22px; height: 22px; accent-color: var(--accent); flex: none; }
+.hint { color: var(--muted); font-size: 13px; }
+
+@media (max-width: 359px) {
+  .gcard { font-size: 15px; }
+  .suit-row { grid-template-columns: 18px repeat(13, minmax(0, 1fr)); gap: 2px; }
+}
+@media (min-height: 800px) {
+  .suit-row { height: 92px; }
+}
+
+/* Voice (Settings) */
+.voice { display: flex; flex-direction: column; gap: 8px; padding: 10px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; }
+.voice-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+.voice-status { flex: 1 1 140px; min-width: 0; font-size: 15px; overflow-wrap: anywhere; }
+.voice-ok { color: var(--ok); }
+.voice-bad { color: var(--bad); }
+.voice-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.vbtn { min-height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel-2); font-size: 15px; font-weight: 600; color: var(--accent); }
+.vbtn-primary { background: var(--accent); border-color: var(--accent); color: #0b1220; }
+.voice-bar { height: 6px; border-radius: 3px; background: var(--panel-2); overflow: hidden; }
+.voice-bar > div { height: 100%; background: var(--accent); transition: width 0.2s; }
+.voice-howto { margin: 0; line-height: 1.35; }
+.voice-test { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.voice-test input { flex: 1 1 160px; min-width: 0; min-height: 44px; padding: 0 10px; background: var(--panel-2); color: var(--text); border: 1px solid var(--line); border-radius: 10px; font-size: 16px; }
+.voice-test output { flex-basis: 100%; }
+
+/* Discreet mode: one muted color, big keys, nothing that reads as cards */
+.discreet { gap: 12px; }
+.dots { display: flex; justify-content: center; gap: 10px; padding: 6px 0; }
+.dots .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+.dots .dot.on { background: var(--muted); }
+.dpad-ranks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.dpad-suits, .dpad-actions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.dpad-actions { grid-template-columns: 1fr; }
+.dkey {
+  min-height: 64px;
+  padding: 0;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 22px;
+  font-weight: 600;
+  user-select: none;
+}
+.dkey:active:not(:disabled) { background: var(--panel-2); }
+.dkey:disabled { opacity: 0.3; }
+.dexit { align-self: center; margin-top: 8px; min-height: 44px; padding: 0 12px; background: none; border: none; color: var(--line); font-size: 13px; }
