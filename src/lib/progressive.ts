@@ -1,4 +1,5 @@
 import type { GameId, Offer } from '../engine/index.ts';
+import { ODDS_BY_GAME } from './odds.ts';
 import { interpolateReturn, meterFromRoyalPerCoin, royalPerCoinFromMeter, type ProgressiveCurve } from '../engine/progressive.ts';
 
 /**
@@ -22,4 +23,17 @@ export function returnAtMeter(gameId: GameId, offer: Offer, dollars: number): nu
 export function breakEvenMeter(gameId: GameId, offer: Offer): number | undefined {
   const curve = PROGRESSIVE_CURVES[gameId];
   return curve && meterFromRoyalPerCoin(curve.breakEvenRoyal, offer.denomination, offer.maxCoins);
+}
+
+/**
+ * What playing the reset (800) strategy at this meter gives up against perfect play re-solved for the meter,
+ * as a fraction of the bet. The reset strategy's return is linear in the royal: base + P(royal) × (royal − 800),
+ * with P(royal) its exact perfect-play royal chance (`perRow[0].best`).
+ */
+export function resetStrategyCost(gameId: GameId, offer: Offer, dollars: number): number | undefined {
+  const curve = PROGRESSIVE_CURVES[gameId];
+  const pRoyal = ODDS_BY_GAME[gameId]?.perRow[0].best;
+  if (!curve || pRoyal === undefined) return undefined;
+  const royal = Math.min(royalPerCoinFromMeter(dollars, offer.denomination, offer.maxCoins), curve.points[curve.points.length - 1].royal);
+  return Math.max(0, interpolateReturn(curve, royal) - (curve.points[0].return + pRoyal * (royal - 800)));
 }

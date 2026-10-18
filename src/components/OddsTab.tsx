@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react';
 import { SIDE_BETS_CONFIRMED } from '../engine/craps.ts';
-import { parseHand, type GameDef, type GameId } from '../engine/index.ts';
+import { offerAt, parseHand, type GameDef, type GameId, type Offer } from '../engine/index.ts';
+import { meterFromRoyalPerCoin } from '../engine/progressive.ts';
 import { formatCents } from '../lib/bankroll.ts';
 import { GOALS, goalTable, type GoalTable, type TableMins } from '../lib/goals.ts';
 import { ODDS_BY_GAME, oneIn } from '../lib/odds.ts';
 import { pct, pace, percent2, sessionLabel, signedBets, withArticle } from '../lib/oddsFormat.ts';
+import { breakEvenMeter, resetStrategyCost, returnAtMeter } from '../lib/progressive.ts';
 import { DENOM_LABELS, createStorage } from '../lib/storage.ts';
 import { SIDE_BET_TABLE } from '../lib/tableSim.ts';
 import { isWildCard } from '../lib/wild.ts';
@@ -50,8 +52,95 @@ function sideBetOneIn(p: number): string {
   return `1 in ${n < 100 ? n.toFixed(2) : n.toFixed(1)}`.replace(/\.0$/, '');
 }
 
+/** The royal meter the input starts at: the photographed meter, else the reset (800 per coin). */
+function defaultMeterText(offer: Offer, reset: number): string {
+  return offer.meterSeen ? String(offer.meterSeen.dollars) : reset.toFixed(2);
+}
+
+/** Digits with one dot and at most two decimals: "229.79", "4000.00". */
+function meterInput(text: string): string {
+  const cleaned = text.replace(/[^0-9.]/g, '');
+  const dot = cleaned.indexOf('.');
+  if (dot === -1) return cleaned;
+  return cleaned.slice(0, dot + 1) + cleaned.slice(dot + 1).replace(/\./g, '').slice(0, 2);
+}
+
+interface ProgressiveMeterProps {
+  gameId: GameId;
+  denomination: number;
+  maxCoins: number;
+  offer: Offer;
+}
+
+/**
+ * D35: the exact return at whatever the progressive royal meter shows. Below the reset the meter is
+ * meaningless (the machine starts there), so a lower or unparsable input reads as the reset.
+ */
+function ProgressiveMeter({ gameId, denomination, maxCoins, offer }: ProgressiveMeterProps) {
+  const reset = meterFromRoyalPerCoin(800, denomination, maxCoins);
+  const [text, setText] = useState(() => defaultMeterText(offer, reset));
+  const dollars = useMemo(() => {
+    const n = Number.parseFloat(text);
+    return Number.isFinite(n) && n >= reset ? n : reset;
+  }, [text, reset]);
+  const atMeter = returnAtMeter(gameId, offer, dollars);
+  const atReset = returnAtMeter(gameId, offer, reset);
+  // Every progressive offer has a curve (T022a); this guard just keeps a missing one from blanking the tab.
+  if (atMeter === undefined || atReset === undefined) return null;
+  const breakEven = breakEvenMeter(gameId, offer);
+  const topMeter = meterFromRoyalPerCoin(2000, denomination, maxCoins);
+  const strategyCost = resetStrategyCost(gameId, offer, dollars) ?? 0;
+  const breakEvenLine =
+    breakEven !== undefined && breakEven > topMeter
+      ? `It doesn't reach 100% below ${formatCents(topMeter * 100)}.`
+      : breakEven !== undefined
+        ? `It pays back 100% at about ${formatCents(breakEven * 100)}.`
+        : null;
+
+  return (
+    <section className="progressive-meter">
+      <h3>Progressive royal</h3>
+      <label className="odds-goal-label" htmlFor="progressive-meter-input">
+        Meter now
+      </label>
+      <div className="odds-goal-input-row">
+        <span className="odds-goal-dollar">$</span>
+        <input
+          id="progressive-meter-input"
+          className="odds-goal-input"
+          inputMode="decimal"
+          value={text}
+          onChange={(e) => setText(meterInput(e.target.value))}
+          aria-label="Progressive royal meter in dollars"
+        />
+      </div>
+      <p className="progressive-line">
+        At {formatCents(dollars * 100)}, perfect play returns {(atMeter * 100).toFixed(2)}% (
+        {(atReset * 100).toFixed(2)}% at the {formatCents(reset * 100)} reset).
+      </p>
+      {breakEvenLine !== null && <p className="progressive-line">{breakEvenLine}</p>}
+      {dollars > topMeter && (
+        <p className="sim-note">Above {formatCents(topMeter * 100)} the app shows the {formatCents(topMeter * 100)} figures.</p>
+      )}
+      {offer.meterSeen && (
+        <p className="sim-note">
+          Photographed at {formatCents(offer.meterSeen.dollars * 100)} on {offer.meterSeen.date}.
+        </p>
+      )}
+      <p className="sim-note">
+        Other numbers in the app use the {formatCents(reset * 100)} reset, since the meter moves. The trainer
+        teaches the reset strategy;{' '}
+        {strategyCost < 0.0001
+          ? 'at this meter that costs almost nothing.'
+          : `at this meter it gives up about ${(strategyCost * 100).toFixed(2)}% (perfect play goes after royals harder).`}
+      </p>
+    </section>
+  );
+}
+
 export default function OddsTab({ game, gameId, bet, denomination, maxCoins }: Props) {
   const odds = ODDS_BY_GAME[gameId];
+  const offer = offerAt(game, denomination);
   const [selectedKey, setSelectedKey] = useState<string>(() => odds?.categories[0]?.key ?? '');
   // Not persisted: the goal table is a scratch comparison.
   const [budgetDollars, setBudgetDollars] = useState('100');
@@ -101,6 +190,16 @@ export default function OddsTab({ game, gameId, bet, denomination, maxCoins }: P
   return (
     <section className="panel odds-panel">
       <h2>Odds — {game.name}</h2>
+
+      {offer?.progressive && (
+        <ProgressiveMeter
+          key={`${gameId}-${denomination}`}
+          gameId={gameId}
+          denomination={denomination}
+          maxCoins={maxCoins}
+          offer={offer}
+        />
+      )}
 
       <h3>Pick a hand</h3>
       <div className="odds-chips" role="group" aria-label="Hand to see odds for">

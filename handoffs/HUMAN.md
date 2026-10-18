@@ -3,9 +3,9 @@
 Items Claude needs from the user. Claude adds items; the user answers inline or in chat.
 
 ## Open
-- [ ] **Commit T022a** (Claude verified: 330 tests, typecheck, lint, build; all 5 new returns match): see the command in chat.
-- [ ] **Hand T022 to DeepSeek:** "read handoffs/TO_DEEPSEEK.md" (meter input on the Odds tab).
-- [ ] *(next Dotty's visit, Sparks / Pyramid near Costco)* Bet **20 credits ($1)** and photograph the pay columns: does the royal still pay 800 per coin? Until then the app plays 25 credits ($1.25), the bet in the photo. Also note the machine number. (Players club payback: unknown, no app; comps stay at zero.)
+- [ ] **Commit T022:** see the command in chat.
+- [ ] **Check the Odds tab meter** (`npm run dev`, 375px): Legends Bay → Jacks or Better 9/5 (5¢ progressive): $229.79 → 98.75% (98.45% at $200.00), 100% at about $339.26, strategy line "almost nothing" or ~0.01%. Type 500 → strategy gives up about 0.53%. Type 600 → the "Above $500.00" note. Deuces 20/12/10 (progressive): 97.86%, 100% at about $441.50. GSR and Dotty's games: no section.
+- [ ] *(next Dotty's visit, Sparks / Pyramid near Costco)* Bet **20 credits ($1)** and photograph the pay columns: owner says it pays the same (2026-10-18); the photo confirms it before the app changes. Until then the app plays 25 credits ($1.25), the bet in the photo. Also note the machine number. (Players club payback: unknown, no app; comps stay at zero.)
 - [ ] *(next Legends Bay visit)* **#20047:** is it 5¢ only? Photograph the meter again when you play: the app takes any meter on the Odds tab once T022 is in.
 - [ ] *(next GSR visit)* **Photograph the paytable at smaller bets (D34).** On the 5¢ Jacks 9/5 machine, bet **5 coins** and then **10 coins** and photograph the pay columns each time. Does a 25¢–75¢ bet already pay the full 800 royal, like the 5¢ deuces machine does at 5 coins? Also photograph the $1 machines at **5 coins**. Until then the app only offers 16–20 coins on the 5¢ Jacks.
 - [ ] **Check "How much should I bet?"** (Bankroll tab, top). On Legends Bay JoB 8/5 with $100, a $1 limit and Double, the pick is 25¢ (5¢ × 5) at 18.8%, ahead of 50¢ (10.4%) and the short $1.00 bet (11.3%). Under "Make it last", ~4 hours at 95% should pick 25¢ (5¢ × 5). On GSR JoB 9/5 with $100 and "Make it last" at ~2 hours, it should say no bet lasts. Check the table at 375px.
@@ -28,6 +28,8 @@ Items Claude needs from the user. Claude adds items; the user answers inline or 
 - [ ] *(next casino visit)* **Legends Bay #12139:** photograph the paytables you haven't shot (Joker Poker, Double Bonus, Double Double Bonus, Deuces Wild Bonus Poker, Super Bonus Deuces Wild, Double Joker, Aces & Faces, Triple Double, Super Aces) and the same games at 25¢ and $1.
 
 ## Done
+- [x] T022a committed (2026-10-18). T022 verified by Claude (2026-10-18).
+- [x] Dotty's (2026-10-18): Sparks, Pyramid Way near Costco; players club payback unknown, no app (D36).
 - [x] T013 + simulator math committed (2026-10-10). T014 + T014a verified by Claude (2026-10-10).
 - [x] Players club answers (2026-10-10): promos don't stack (assumed), GSR 1,000 pts = $1, LB 100 pts = $1 (LB video poker earns 1 pt per $6, from its site). Owner bets at most $1 a hand.
 - [x] Blackjack rules answered (2026-10-10): 3:2, S17, double any two, DAS (table-dependent), no surrender. Molly = 2× odds cap at bubble craps.

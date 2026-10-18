@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { GAMES } from './games.ts';
 import { interpolateReturn, meterFromRoyalPerCoin, royalPerCoinFromMeter, withRoyal, type ProgressiveCurve } from './progressive.ts';
-import { PROGRESSIVE_CURVES, breakEvenMeter, returnAtMeter } from '../lib/progressive.ts';
+import { PROGRESSIVE_CURVES, breakEvenMeter, resetStrategyCost, returnAtMeter } from '../lib/progressive.ts';
 
 describe('progressive royals (D35)', () => {
   it('converts the photographed meter to pays per coin and back', () => {
@@ -42,5 +42,14 @@ describe('progressive royals (D35)', () => {
     expect(atMeter).toBeGreaterThan(GAMES['lb-job-9-5'].publishedReturn);
     expect(atMeter).toBeLessThan(1);
     expect(breakEvenMeter('lb-job-9-5', offer)!).toBeGreaterThan(offer.meterSeen!.dollars);
+  });
+
+  it('prices playing the reset strategy at a higher meter', () => {
+    const offer = GAMES['lb-job-9-5'].offers[0];
+    expect(resetStrategyCost('lb-job-9-5', offer, 200)).toBe(0);
+    // Exact at $229.79: re-solved 98.7480% vs reset strategy 98.7465% (D35).
+    expect(resetStrategyCost('lb-job-9-5', offer, 229.79)!).toBeLessThan(0.0002);
+    // 2,000 per coin ($500 at 5¢ × 5): about 0.53%.
+    expect(resetStrategyCost('lb-job-9-5', offer, 500)!).toBeCloseTo(0.00533, 4);
   });
 });

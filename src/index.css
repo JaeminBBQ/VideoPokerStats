@@ -1453,6 +1453,23 @@ select {
   margin-top: 6px;
 }
 
+/* progressive royal meter (D35) */
+
+.progressive-meter .odds-goal-input {
+  width: 120px;
+}
+
+.progressive-line {
+  font-size: 14.5px;
+  line-height: 1.5;
+  margin: 8px 0 4px;
+}
+
+.progressive-meter .sim-note {
+  display: block;
+  margin: 6px 0 0;
+}
+
 .odds-chips {
   display: flex;
   flex-wrap: wrap;
