@@ -2,24 +2,29 @@
 
 A video poker strategy trainer: deal a hand, pick holds, and get told, exactly, whether that was the best play and what a mistake cost. Every answer comes from exact enumeration of all 32 holds over every possible draw. No sampling, no hand-typed charts.
 
-**Owner:** plays in Reno/Sparks (Legends Bay; GSR next). Wants perfect play on the games actually on those floors.
+**Owner:** plays in Reno/Sparks (Legends Bay, GSR, Dotty's). Wants perfect play on the games actually on those floors.
 
 ## Games (proof required)
 **Rule (D10):** a game is in the app only if the owner photographed its paytable on a real machine (`context/`), and the engine reproduces the published return for that paytable. No games from websites or databases. All pays are per coin at max bet.
 
 | Game (id) | Paytable (pair/2P/3K/St/Fl/FH/4K/SF/RF) | Return (engine = published) | Proof |
 |---|---|---|---|
-| Jacks or Better 8/5 (`job-8-5`) | 1-2-3-4-5-8-25-50-800 | 97.2984% | Legends Bay Game King #12139, 10¢, `context/3.webp` |
-| Bonus Poker 6/5 (`bonus-6-5`) | 1-2-3-4-5-6-(25 / 2s–4s 40 / A 80)-50-800 | 96.8687% | same machine, `context/2.webp` |
-| Deuces Wild 16/13 (`lb-deuces-16-13`) | 3K 1, St 2, Fl 2, FH 3, 4K 4, SF 13, 5K 16, WR 25, 4D 200, RF 800 | 96.7651% | same machine, `context/4.webp` |
-| Bonus Poker Deluxe 7/5 (`bpd-7-5`) | 1-1-3-4-5-7-80-50-800 | 96.2526% | same machine, `context/1.webp` |
+| Jacks or Better 8/5 (`job-8-5`) | 1-2-3-4-5-8-25-50-800 | 97.2984% | Legends Bay Game King #12139, 10¢, `context/legends/3.webp` |
+| Bonus Poker 6/5 (`bonus-6-5`) | 1-2-3-4-5-6-(25 / 2s–4s 40 / A 80)-50-800 | 96.8687% | same machine, `context/legends/2.webp` |
+| Deuces Wild 16/13 (`lb-deuces-16-13`) | 3K 1, St 2, Fl 2, FH 3, 4K 4, SF 13, 5K 16, WR 25, 4D 200, RF 800 | 96.7651% | same machine, `context/legends/4.webp` |
+| Bonus Poker Deluxe 7/5 (`bpd-7-5`) | 1-1-3-4-5-7-80-50-800 | 96.2526% | same machine, `context/legends/1.webp` |
 | **GSR** Jacks or Better 9/5, 5¢, 20 coins (`gsr-job-9-5`) | 1-2-3-4-5-9-25-50-800 | 98.4498% | GSR #13013, `context/gsr/1.webp` |
 | **GSR** Jacks or Better 9/6, $1, 10 coins (`gsr-job-9-6`) | 1-2-3-4-6-9-25-50-800 | 99.5439% | GSR, `context/gsr/preview.webp` |
 | **GSR** Double Bonus 9/7/5, $1, 10 coins (`gsr-db-9-7-5`) | 1-1-3-5-7-9-(50 / 2s–4s 80 / A 160)-50-800 | 99.1065% | GSR #13013, `context/gsr/2.webp` |
 | **GSR** Deuces Wild Bonus Poker, $1, 10 coins (`gsr-dwbp`) | 3K 1, St 1, Fl 3, FH 4, 4K 4, SF 9, WR 25, 5 6s–Ks 20, 5 3s–5s 40, 5A 80, 4D 200, 4D+A 400, RF 800 | 99.4502% | GSR #13013, `context/gsr/3.webp` |
 | **GSR** Deuces Wild 20/12/10, 5¢, 20 coins (`gsr-deuces-20-12-10`) | 3K 1, St 2, Fl 3, FH 4, 4K 4, SF 10, 5K 12, WR 20, 4D 200, RF 800 | 97.5791% | GSR, `context/gsr/4.webp` |
+| Jacks or Better 9/5, 5¢ progressive (`lb-job-9-5`) | 1-2-3-4-5-9-25-50-800 | 98.4498% | Legends Bay #20047, `context/legends/photo.jpeg` |
+| Bonus Poker 7/5, 5¢ progressive (`lb-bonus-7-5`) | 1-2-3-4-5-7-(25 / 2s–4s 40 / A 80)-50-800 | 98.0147% | Legends Bay #20047, `context/legends/photo(1).jpeg` |
+| Deuces Wild 20/12/10, 5¢ progressive (`lb-deuces-20-12-10`) | as GSR 20/12/10 | 97.5791% | Legends Bay #20047, `context/legends/photo(2).jpeg` |
+| Double Bonus 9/6/5, 5¢ progressive (`lb-db-9-6-5`) | 1-1-3-5-6-9-(50 / 2s–4s 80 / A 160)-50-800 | 97.8062% | Legends Bay #20047, `context/legends/photo(3).jpeg` |
+| **Dotty's** Bonus Poker 6/5, 5¢, 25 credits (`dottys-bonus-6-5`) | as Bonus Poker 6/5 | 96.8687% | Dotty's, `context/dottys/IMG_8659.JPG` |
 
-GSR machines offer 5¢, 10¢, 25¢, 50¢ and $1, with a different paytable at each denomination and a progressive royal from 25¢ up. Returns above use the royal's 800-per-coin reset; a progressive above reset adds return. Not yet photographed (so not in the app): GSR at 10¢/25¢/50¢, the other games on each menu, and Legends Bay's other games.
+GSR machines offer 5¢, 10¢, 25¢, 50¢ and $1, with a different paytable at each denomination and a progressive royal from 25¢ up. Returns above use the royal's 800-per-coin reset; a progressive above reset adds return. Legends Bay #20047 is 5¢ only with one progressive royal meter shared by its four games; `npm run progressive` computes the exact return at any royal (D35). Not yet photographed (so not in the app): GSR at 10¢/25¢/50¢, the other games on each menu, and Legends Bay's other games.
 
 ## Features
 - **Trainer:** choose a game, deal, toggle holds (click or keys 1–5), submit. Feedback: optimal or not; if not, the correct hold and the EV cost. Top holds with EVs, the user's hold always shown with its rank.

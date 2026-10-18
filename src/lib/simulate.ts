@@ -17,9 +17,10 @@ export const COMP_RATE_PER_MULTIPLIER = 0.0005;
 /**
  * Free play per dollar of video poker coin-in at 1×, by venue (D24). GSR: 1 point per $2, 1,000 points = $1
  * (owner confirmed). Legends Bay: 1 point per $6 (legendsbaycasino.com/rewards), 100 points = $1 (owner),
- * so 1/600.
+ * so 1/600. Dotty's: not modeled until the owner confirms a rate (D35), so 0.
  */
 export function compRatePerMultiplier(venue: Venue): number {
+  if (venue === "Dotty's") return 0;
   return venue === 'Legends Bay' ? 1 / 600 : COMP_RATE_PER_MULTIPLIER;
 }
 

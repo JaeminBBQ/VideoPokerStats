@@ -16,11 +16,16 @@ export type GameId =
   | 'gsr-job-9-6'
   | 'gsr-db-9-7-5'
   | 'gsr-dwbp'
-  | 'gsr-deuces-20-12-10';
+  | 'gsr-deuces-20-12-10'
+  | 'lb-job-9-5'
+  | 'lb-bonus-7-5'
+  | 'lb-deuces-20-12-10'
+  | 'lb-db-9-6-5'
+  | 'dottys-bonus-6-5';
 
 /** Casinos where the owner has photographed a paytable. Add one only with a photo in `context/`. */
-export type Venue = 'Legends Bay' | 'GSR';
-export const VENUES: Venue[] = ['Legends Bay', 'GSR'];
+export type Venue = 'Legends Bay' | 'GSR' | "Dotty's";
+export const VENUES: Venue[] = ['Legends Bay', 'GSR', "Dotty's"];
 
 /**
  * A denomination the game is offered at with this paytable. `maxCoins` is the bet that earns the
@@ -37,6 +42,8 @@ export interface Offer {
    * engine pays the base royal (800 per coin), so returns are a slight underestimate when the meter is up.
    */
   progressive?: boolean;
+  /** A royal meter the owner photographed at this denomination (dollars at max bet), for reference only (D35). */
+  meterSeen?: { dollars: number; date: string };
   /**
    * Bets below `maxCoins` that the owner's photo shows the pays for (D34). Every row pays the same per coin
    * as at max bet except the natural royal, which pays `royalPerCoin` (250 short, 800 full). Bets not listed
@@ -263,7 +270,7 @@ const quads = (aces: number, low: number, rest: number): QuadRule[] => [
   { key: 'four-5-k', label: 'Four 5s–Ks', pays: rest, quad: () => true },
 ];
 
-// Legends Bay Game King #12139, 10¢ (owner photos, context/1-4.webp, 2026-10-04).
+// Legends Bay Game King #12139, 10¢ (owner photos, context/legends/1-4.webp, 2026-10-04).
 const job85 = bonusGame([{ key: 'four-kind', label: 'Four of a Kind', pays: 25, quad: () => true }], 8, 5, 4, 2);
 const bonus65 = bonusGame(quads(80, 40, 25), 6, 5, 4, 2);
 const bpd75 = bonusGame([{ key: 'four-kind', label: 'Four of a Kind', pays: 80, quad: () => true }], 7, 5, 4, 1);
@@ -288,6 +295,23 @@ const LB_OFFERS: Offer[] = [0.01, 0.05, 0.1, 0.25, 0.5, 1, 2, 5].map((denominati
   ...(denomination <= 0.25 ? { shortBets: shortRoyal([1, 2, 3, 4]) } : {}),
 }));
 
+// Legends Bay machine #20047 (owner photos context/legends/photo*.jpeg, 2026-10-18): 5¢ only, 5-coin max,
+// one progressive royal meter shared by all four games ($229.35 and $229.79 seen; base $200 = 800 per coin).
+const bonus75 = bonusGame(quads(80, 40, 25), 7, 5, 4, 2);
+const db965 = bonusGame(quads(160, 80, 50), 9, 6, 5, 1);
+
+/** #20047: the photos show 1–4 coins at a 250 royal (fixed, not progressive) and the meter at 5 coins. */
+const LB_20047: Offer[] = [
+  {
+    denomination: 0.05,
+    maxCoins: 5,
+    confirmed: true,
+    progressive: true,
+    meterSeen: { dollars: 229.79, date: '2026-10-18' },
+    shortBets: shortRoyal([1, 2, 3, 4]),
+  },
+];
+
 /** GSR $1 machines (10 coins max): the photos show 1–4 coins at a 250 royal; 5–9 aren't shown. */
 const GSR_DOLLAR: Offer[] = [{ denomination: 1, maxCoins: 10, confirmed: true, shortBets: shortRoyal([1, 2, 3, 4]) }];
 
@@ -297,7 +321,7 @@ export const GAMES: Record<GameId, GameDef> = {
   'lb-deuces-16-13': {
     id: 'lb-deuces-16-13',
     venue: 'Legends Bay',
-    proof: 'context/4.webp',
+    proof: 'context/legends/4.webp',
     name: 'Deuces Wild — 16/13',
     where: 'Legends Bay Game King #12139, 10¢ (photographed 2026-10-04)',
     offers: LB_OFFERS,
@@ -306,12 +330,12 @@ export const GAMES: Record<GameId, GameDef> = {
     evaluate: deucesEvaluate,
     publishedReturn: 0.967651,
     publishedDecimals: 4,
-    source: 'https://wizardofodds.com/games/video-poker/tables/deuces-wild/ (0.967651); paytable from owner photo context/4.webp',
+    source: 'https://wizardofodds.com/games/video-poker/tables/deuces-wild/ (0.967651); paytable from owner photo context/legends/4.webp',
   },
   'job-8-5': {
     id: 'job-8-5',
     venue: 'Legends Bay',
-    proof: 'context/3.webp',
+    proof: 'context/legends/3.webp',
     name: 'Jacks or Better — 8/5',
     where: 'Legends Bay Game King #12139, 10¢ (photographed 2026-10-04)',
     offers: LB_OFFERS,
@@ -324,7 +348,7 @@ export const GAMES: Record<GameId, GameDef> = {
   'bonus-6-5': {
     id: 'bonus-6-5',
     venue: 'Legends Bay',
-    proof: 'context/2.webp',
+    proof: 'context/legends/2.webp',
     name: 'Bonus Poker — 6/5',
     where: 'Legends Bay Game King #12139, 10¢ (photographed 2026-10-04)',
     offers: LB_OFFERS,
@@ -337,7 +361,7 @@ export const GAMES: Record<GameId, GameDef> = {
   'bpd-7-5': {
     id: 'bpd-7-5',
     venue: 'Legends Bay',
-    proof: 'context/1.webp',
+    proof: 'context/legends/1.webp',
     name: 'Bonus Poker Deluxe — 7/5',
     where: 'Legends Bay Game King #12139, 10¢ (photographed 2026-10-04)',
     offers: LB_OFFERS,
@@ -415,6 +439,74 @@ export const GAMES: Record<GameId, GameDef> = {
     publishedReturn: 0.975791,
     publishedDecimals: 4,
     source: 'https://wizardofodds.com/games/video-poker/tables/deuces-wild/ (20-12-10-4-4-3: 0.975791); paytable from owner photo',
+  },
+  'lb-job-9-5': {
+    id: 'lb-job-9-5',
+    venue: 'Legends Bay',
+    proof: 'context/legends/photo.jpeg',
+    name: 'Jacks or Better — 9/5 (5¢ progressive)',
+    where: 'Legends Bay machine #20047, 5¢, progressive royal (photographed 2026-10-18)',
+    offers: LB_20047,
+    deckSize: 52,
+    ...job95,
+    publishedReturn: 0.9845,
+    publishedDecimals: 2,
+    source: 'https://wizardofodds.com/games/video-poker/tables/jacks-or-better/ (9/5: 98.45%, 800 royal); paytable from owner photo',
+  },
+  'lb-bonus-7-5': {
+    id: 'lb-bonus-7-5',
+    venue: 'Legends Bay',
+    proof: 'context/legends/photo(1).jpeg',
+    name: 'Bonus Poker — 7/5 (5¢ progressive)',
+    where: 'Legends Bay machine #20047, 5¢, progressive royal (photographed 2026-10-18)',
+    offers: LB_20047,
+    deckSize: 52,
+    ...bonus75,
+    publishedReturn: 0.9801,
+    publishedDecimals: 2,
+    source: 'https://wizardofodds.com/games/video-poker/tables/bonus-poker/ (7/5: 98.01%, 800 royal); paytable from owner photo',
+  },
+  'lb-deuces-20-12-10': {
+    id: 'lb-deuces-20-12-10',
+    venue: 'Legends Bay',
+    proof: 'context/legends/photo(2).jpeg',
+    name: 'Deuces Wild — 20/12/10 (5¢ progressive)',
+    where: 'Legends Bay machine #20047, 5¢, progressive royal (photographed 2026-10-18)',
+    offers: LB_20047,
+    deckSize: 52,
+    rows: deucesRows([800, 200, 20, 12, 10, 4, 4, 3, 2, 1]),
+    evaluate: deucesEvaluate,
+    publishedReturn: 0.975791,
+    publishedDecimals: 4,
+    source: 'https://wizardofodds.com/games/video-poker/tables/deuces-wild/ (20-12-10-4-4-3: 0.975791, 800 royal); same paytable as gsr-deuces-20-12-10; owner photo',
+  },
+  'lb-db-9-6-5': {
+    id: 'lb-db-9-6-5',
+    venue: 'Legends Bay',
+    proof: 'context/legends/photo(3).jpeg',
+    name: 'Double Bonus — 9/6/5 (5¢ progressive)',
+    where: 'Legends Bay machine #20047, 5¢, progressive royal (photographed 2026-10-18)',
+    offers: LB_20047,
+    deckSize: 52,
+    ...db965,
+    publishedReturn: 0.9781,
+    publishedDecimals: 2,
+    source: 'https://wizardofodds.com/games/video-poker/tables/double-bonus/ (9/6/5: 97.81%, 800 royal); paytable from owner photo',
+  },
+  'dottys-bonus-6-5': {
+    id: 'dottys-bonus-6-5',
+    venue: "Dotty's",
+    proof: 'context/dottys/IMG_8659.JPG',
+    name: 'Bonus Poker — 6/5 (5¢)',
+    where: "Dotty's (location not recorded), 5¢, bet 25 credits (photographed 2026-10-18)",
+    // Every photographed bet (22–25 and 100 credits) pays the same per coin, royal included: no max-bet bonus.
+    // The app plays 25 credits ($1.25), the bet in the photo; 1–21 credits aren't shown.
+    offers: [{ denomination: 0.05, maxCoins: 25, confirmed: true, shortBets: [22, 23, 24].map((c) => ({ coins: c, royalPerCoin: 800 })) }],
+    deckSize: 52,
+    ...bonus65,
+    publishedReturn: 0.9687,
+    publishedDecimals: 2,
+    source: 'https://wizardofodds.com/games/video-poker/tables/bonus-poker/ (6/5: 96.87%); same paytable as bonus-6-5; owner photo',
   },
 };
 

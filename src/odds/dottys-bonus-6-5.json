@@ -1,0 +1,1022 @@
+{
+  "generatedBy": "node scripts/gen-odds.ts",
+  "gameId": "dottys-bonus-6-5",
+  "categories": [
+    {
+      "key": "royal",
+      "label": "Royal Flush",
+      "dealt": 0.0000015390771693292702,
+      "perfect": 0.000024853348862469753
+    },
+    {
+      "key": "straight-flush",
+      "label": "Straight Flush",
+      "dealt": 0.000013851694523963431,
+      "perfect": 0.00010763726763449803
+    },
+    {
+      "key": "four-kind",
+      "label": "Four of a Kind",
+      "dealt": 0.00024009603841536616,
+      "perfect": 0.0023668563444992053
+    },
+    {
+      "key": "full-house",
+      "label": "Full House",
+      "dealt": 0.0014405762304921968,
+      "perfect": 0.011406914266495894
+    },
+    {
+      "key": "flush",
+      "label": "Flush",
+      "dealt": 0.001965401545233478,
+      "perfect": 0.010899558820258844
+    },
+    {
+      "key": "straight",
+      "label": "Straight",
+      "dealt": 0.003924646781789639,
+      "perfect": 0.011274926565970893
+    },
+    {
+      "key": "three-kind",
+      "label": "Three of a Kind",
+      "dealt": 0.02112845138055222,
+      "perfect": 0.07453068751972101
+    },
+    {
+      "key": "two-pair",
+      "label": "Two Pair",
+      "dealt": 0.0475390156062425,
+      "perfect": 0.12925389720691954
+    },
+    {
+      "key": "jacks-or-better",
+      "label": "Jacks or Better",
+      "dealt": 0.13002123926493675,
+      "perfect": 0.21517582552546993
+    },
+    {
+      "key": "nothing",
+      "label": "No win",
+      "dealt": 0.7937251823806446,
+      "perfect": 0.5449588431341678
+    }
+  ],
+  "draws": [
+    {
+      "label": "4 to a Royal",
+      "hand": "As Ks Qs Js 3d",
+      "hold": 4,
+      "targets": [
+        "royal"
+      ],
+      "odds": {
+        "royal": 0.02127659574468085
+      }
+    },
+    {
+      "label": "3 to a Royal",
+      "hand": "As Ks Qs 7d 3c",
+      "hold": 3,
+      "targets": [
+        "royal"
+      ],
+      "odds": {
+        "royal": 0.0009250693802035153
+      }
+    },
+    {
+      "label": "2 to a Royal",
+      "hand": "As Ks 8d 7c 3h",
+      "hold": 2,
+      "targets": [
+        "royal"
+      ],
+      "odds": {
+        "royal": 0.00006167129201356769
+      }
+    },
+    {
+      "label": "1 Royal card",
+      "hand": "As 8d 7c 5h 3d",
+      "hold": 1,
+      "targets": [
+        "royal"
+      ],
+      "odds": {
+        "royal": 0.000005606481092142517
+      }
+    },
+    {
+      "label": "4 to an open Straight Flush",
+      "hand": "8s 7s 6s 5s Kd",
+      "hold": 4,
+      "targets": [
+        "straight-flush"
+      ],
+      "odds": {
+        "straight-flush": 0.0425531914893617
+      }
+    },
+    {
+      "label": "4 to an inside Straight Flush",
+      "hand": "9s 7s 6s 5s Kd",
+      "hold": 4,
+      "targets": [
+        "straight-flush"
+      ],
+      "odds": {
+        "straight-flush": 0.02127659574468085
+      }
+    },
+    {
+      "label": "3 to a Straight Flush",
+      "hand": "8s 7s 6s Kd 2c",
+      "hold": 3,
+      "targets": [
+        "straight-flush"
+      ],
+      "odds": {
+        "straight-flush": 0.0027752081406105457
+      }
+    },
+    {
+      "label": "Three of a Kind",
+      "hand": "8s 8d 8h Kc 3d",
+      "hold": 3,
+      "targets": [
+        "four-kind",
+        "full-house"
+      ],
+      "odds": {
+        "four-kind": 0.0425531914893617,
+        "full-house": 0.06105457909343201
+      }
+    },
+    {
+      "label": "Two Pair",
+      "hand": "8s 8d 5h 5c Kd",
+      "hold": 4,
+      "targets": [
+        "full-house"
+      ],
+      "odds": {
+        "full-house": 0.0851063829787234
+      }
+    },
+    {
+      "label": "A Pair",
+      "hand": "8s 8d Kc 5h 3d",
+      "hold": 2,
+      "targets": [
+        "four-kind",
+        "full-house",
+        "three-kind"
+      ],
+      "odds": {
+        "four-kind": 0.0027752081406105457,
+        "full-house": 0.010175763182238668,
+        "three-kind": 0.11433857539315449
+      }
+    },
+    {
+      "label": "One card",
+      "hand": "8s Kc 5h 3d 2d",
+      "hold": 1,
+      "targets": [
+        "four-kind",
+        "three-kind"
+      ],
+      "odds": {
+        "four-kind": 0.00029153701679141084,
+        "three-kind": 0.022997785439968603
+      }
+    },
+    {
+      "label": "4 to a Flush",
+      "hand": "Ks 9s 6s 3s 7d",
+      "hold": 4,
+      "targets": [
+        "flush"
+      ],
+      "odds": {
+        "flush": 0.19148936170212766
+      }
+    },
+    {
+      "label": "3 to a Flush",
+      "hand": "Ks 9s 6s 7d 4c",
+      "hold": 3,
+      "targets": [
+        "flush"
+      ],
+      "odds": {
+        "flush": 0.041628122109158186
+      }
+    },
+    {
+      "label": "2 to a Flush",
+      "hand": "Ks 9s 6d 7d 4c",
+      "hold": 2,
+      "targets": [
+        "flush"
+      ],
+      "odds": {
+        "flush": 0.0101140918902251
+      }
+    },
+    {
+      "label": "4 to an open Straight",
+      "hand": "9d 8c 7h 6s Kd",
+      "hold": 4,
+      "targets": [
+        "straight"
+      ],
+      "odds": {
+        "straight": 0.1702127659574468
+      }
+    },
+    {
+      "label": "4 to an inside Straight",
+      "hand": "9d 8c 6h 5s Kd",
+      "hold": 4,
+      "targets": [
+        "straight"
+      ],
+      "odds": {
+        "straight": 0.0851063829787234
+      }
+    },
+    {
+      "label": "3 to a Straight",
+      "hand": "9d 8c 7h Ks 3d",
+      "hold": 3,
+      "targets": [
+        "straight"
+      ],
+      "odds": {
+        "straight": 0.04440333024976873
+      }
+    },
+    {
+      "label": "Nothing (discard all 5)",
+      "hand": "9d 7c 5h 4s 3d",
+      "hold": 0,
+      "targets": [
+        "royal",
+        "straight-flush",
+        "four-kind",
+        "full-house",
+        "flush",
+        "straight",
+        "three-kind"
+      ],
+      "odds": {
+        "royal": 0.0000026076656242523335,
+        "straight-flush": 0.000009126829684883167,
+        "four-kind": 0.00022425924368570067,
+        "full-house": 0.001384670446477989,
+        "flush": 0.001838404265097895,
+        "straight": 0.003745911669238477,
+        "three-kind": 0.020536670623799252
+      }
+    }
+  ],
+  "sessions": [
+    {
+      "hands": 100,
+      "ahead": 0.29908955648974705,
+      "even": 0.01649937231633193,
+      "behind": 0.684411071193924,
+      "aheadNoRoyal": 0.29660727668293874,
+      "avgBets": -3.131284456884287
+    },
+    {
+      "hands": 600,
+      "ahead": 0.26403060089503577,
+      "even": 0.005241040223346228,
+      "behind": 0.7307283588816467,
+      "aheadNoRoyal": 0.2492290424167815,
+      "avgBets": -18.78770674130572
+    },
+    {
+      "hands": 1200,
+      "ahead": 0.22127961981297564,
+      "even": 0.003181470759085352,
+      "behind": 0.7755389094280016,
+      "aheadNoRoyal": 0.19189558898984702,
+      "avgBets": -37.57541348261144
+    },
+    {
+      "hands": 2400,
+      "ahead": 0.17761974044075493,
+      "even": 0.0016362007895098967,
+      "behind": 0.8207440587698573,
+      "aheadNoRoyal": 0.11971510006191095,
+      "avgBets": -75.15082696522288
+    },
+    {
+      "hands": 4800,
+      "ahead": 0.1641343244604843,
+      "even": 0.0006092012214222527,
+      "behind": 0.8352564743183444,
+      "aheadNoRoyal": 0.0516791850194608,
+      "avgBets": -150.30165393044575
+    },
+    {
+      "hands": 12000,
+      "ahead": 0.2138435714111459,
+      "even": 0.00034253120612491746,
+      "behind": 0.785813897383357,
+      "aheadNoRoyal": 0.005423119398004127,
+      "avgBets": -375.7541348261144
+    },
+    {
+      "hands": 24000,
+      "ahead": 0.14171860960953273,
+      "even": 0.00023565550837938571,
+      "behind": 0.8580457348833452,
+      "aheadNoRoyal": 0.00016362874687635224,
+      "avgBets": -751.5082696522288
+    }
+  ],
+  "perHand": [
+    {
+      "net": -1,
+      "p": 0.5449588431341678
+    },
+    {
+      "net": 0,
+      "p": 0.21517582552546993
+    },
+    {
+      "net": 1,
+      "p": 0.12925389720691954
+    },
+    {
+      "net": 2,
+      "p": 0.07453068751972101
+    },
+    {
+      "net": 3,
+      "p": 0.011274926565970893
+    },
+    {
+      "net": 4,
+      "p": 0.010899558820258844
+    },
+    {
+      "net": 5,
+      "p": 0.011406914266495894
+    },
+    {
+      "net": 24,
+      "p": 0.0016390998155470825
+    },
+    {
+      "net": 39,
+      "p": 0.0005272518302003917
+    },
+    {
+      "net": 49,
+      "p": 0.00010763726763449803
+    },
+    {
+      "net": 79,
+      "p": 0.00020050469875173115
+    },
+    {
+      "net": 799,
+      "p": 0.000024853348862469753
+    }
+  ],
+  "perRow": [
+    {
+      "key": "royal",
+      "label": "Royal Flush",
+      "category": "royal",
+      "pays": 800,
+      "best": 0.000024853348862469753,
+      "second": 0.0000040463721086455305,
+      "holds": [
+        {
+          "label": "3 to a Royal",
+          "best": 0.000010092986173335057,
+          "second": 0.000001533382156676803
+        },
+        {
+          "label": "4 to a Royal",
+          "best": 0.000007662639523894665,
+          "second": 3.27463227516866e-8
+        },
+        {
+          "label": "Pat Royal Flush",
+          "best": 0.0000015390771693292702,
+          "second": 0
+        },
+        {
+          "label": "Suited AK",
+          "best": 6.979238005598596e-7,
+          "second": 9.254395560259257e-8
+        },
+        {
+          "label": "Suited AQ",
+          "best": 6.95076294233626e-7,
+          "second": 9.709996572456634e-8
+        },
+        {
+          "label": "Suited AJ",
+          "best": 6.91944037274769e-7,
+          "second": 9.852371888768317e-8
+        },
+        {
+          "label": "Suited KQ",
+          "best": 6.358481626479668e-7,
+          "second": 1.5518909477973215e-7
+        },
+        {
+          "label": "Suited KJ",
+          "best": 6.330006563217331e-7,
+          "second": 1.5718234920809567e-7
+        },
+        {
+          "label": "Suited QJ",
+          "best": 5.740572753686972e-7,
+          "second": 1.913524251228991e-7
+        },
+        {
+          "label": "Suited JT",
+          "best": 3.3486674396507337e-7,
+          "second": 2.186884858547418e-7
+        },
+        {
+          "label": "Suited QT",
+          "best": 2.434617908929743e-7,
+          "second": 1.748368884307441e-7
+        },
+        {
+          "label": "K only",
+          "best": 2.1628104868801704e-7,
+          "second": 5.5707578309588586e-8
+        },
+        {
+          "label": "Q only",
+          "best": 2.1480552268260507e-7,
+          "second": 1.4750082769890136e-7
+        },
+        {
+          "label": "A only",
+          "best": 2.0797150749964437e-7,
+          "second": 3.376883638701595e-7
+        },
+        {
+          "label": "J only",
+          "best": 2.0514988759455833e-7,
+          "second": 2.4245222046821875e-7
+        },
+        {
+          "label": "Suited KT",
+          "best": 1.3668030365921363e-7,
+          "second": 1.363955530265903e-7
+        },
+        {
+          "label": "Discard everything",
+          "best": 7.157896452202476e-8,
+          "second": 3.1957689921376656e-8
+        },
+        {
+          "label": "Suited AT",
+          "best": 0,
+          "second": 2.776318668077777e-7
+        },
+        {
+          "label": "other (1 cards)",
+          "best": 0,
+          "second": 6.54926455033732e-8
+        }
+      ]
+    },
+    {
+      "key": "straight-flush",
+      "label": "Straight Flush",
+      "category": "straight-flush",
+      "pays": 50,
+      "best": 0.00010763726763449803,
+      "second": 0.00004469578612614912,
+      "holds": [
+        {
+          "label": "4 to a Straight Flush",
+          "best": 0.000050298351746590614,
+          "second": 0.000015685488598057883
+        },
+        {
+          "label": "Pat Straight Flush",
+          "best": 0.000013851694523963431,
+          "second": 0
+        },
+        {
+          "label": "3 to a Straight Flush (0 high, 1 gap)",
+          "best": 0.000009601791332059757,
+          "second": 0.000003929558730202392
+        },
+        {
+          "label": "3 to a Straight Flush (0 high, no gaps)",
+          "best": 0.00000701767934100275,
+          "second": 0.000007760878492149724
+        },
+        {
+          "label": "3 to a Royal",
+          "best": 0.000004937575969689093,
+          "second": 0.0000015319584035136862
+        },
+        {
+          "label": "3 to a Straight Flush (1 high, 2 gaps)",
+          "best": 0.0000043993972740309385,
+          "second": 8.414381194020339e-7
+        },
+        {
+          "label": "3 to a Straight Flush (1 high, 1 gap)",
+          "best": 0.000003780064648075127,
+          "second": 0.000001853726618378085
+        },
+        {
+          "label": "3 to a Straight Flush (0 high, 2 gaps)",
+          "best": 0.0000024089903519936404,
+          "second": 0.000004339599641180032
+        },
+        {
+          "label": "3 to a Straight Flush (2 high, 2 gaps)",
+          "best": 0.0000016401636439105637,
+          "second": 1.1105274672311107e-7
+        },
+        {
+          "label": "3 to a Straight Flush (1 high, no gaps)",
+          "best": 0.0000016273498654425123,
+          "second": 0.0000017811152070591275
+        },
+        {
+          "label": "4 to a Royal",
+          "best": 0.0000015063308465775835,
+          "second": 3.27463227516866e-8
+        },
+        {
+          "label": "Suited QJ",
+          "best": 0.0000011481145507373944,
+          "second": 3.374294996586837e-7
+        },
+        {
+          "label": "Suited JT",
+          "best": 0.0000010046002318952202,
+          "second": 5.663690082878665e-7
+        },
+        {
+          "label": "3 to a Straight Flush (2 high, 1 gap)",
+          "best": 9.225920496996921e-7,
+          "second": 9.140495307209912e-7
+        },
+        {
+          "label": "Suited KQ",
+          "best": 6.358481626479668e-7,
+          "second": 1.2642928088477262e-7
+        },
+        {
+          "label": "Suited KJ",
+          "best": 6.330006563217331e-7,
+          "second": 1.295615378436296e-7
+        },
+        {
+          "label": "J only",
+          "best": 5.024554344744955e-7,
+          "second": 6.833238590326254e-7
+        },
+        {
+          "label": "Suited QT",
+          "best": 4.869235817859486e-7,
+          "second": 3.368599983934369e-7
+        },
+        {
+          "label": "Discard everything",
+          "best": 3.8754681501998356e-7,
+          "second": 1.8866685943128638e-7
+        },
+        {
+          "label": "Q only",
+          "best": 3.6453258260019817e-7,
+          "second": 2.8664034136713494e-7
+        },
+        {
+          "label": "K only",
+          "best": 1.929832696551965e-7,
+          "second": 5.1539864504828473e-8
+        },
+        {
+          "label": "A only",
+          "best": 1.526004526649743e-7,
+          "second": 3.178075924288193e-7
+        },
+        {
+          "label": "Suited KT",
+          "best": 1.3668030365921363e-7,
+          "second": 1.363955530265903e-7
+        },
+        {
+          "label": "other (2 cards)",
+          "best": 0,
+          "second": 0.00000233865694573567
+        },
+        {
+          "label": "other (1 cards)",
+          "best": 0,
+          "second": 4.1449337541502435e-7
+        }
+      ]
+    },
+    {
+      "key": "four-aces",
+      "label": "Four Aces",
+      "category": "four-kind",
+      "pays": 80,
+      "best": 0.00020050469875173115,
+      "second": 0.00008765675460845667,
+      "holds": [
+        {
+          "label": "Pair of Aces",
+          "best": 0.00009010649018733658,
+          "second": 1.0251022774441023e-7
+        },
+        {
+          "label": "Three Aces",
+          "best": 0.00007387570412780497,
+          "second": 0
+        },
+        {
+          "label": "Pat Four Aces",
+          "best": 0.00001846892603195124,
+          "second": 0
+        },
+        {
+          "label": "A only",
+          "best": 0.000010261273797215462,
+          "second": 0.00001837552782445078
+        },
+        {
+          "label": "AK unsuited",
+          "best": 0.000001430302427667146,
+          "second": 9.709996572456634e-8
+        },
+        {
+          "label": "AQ unsuited",
+          "best": 0.0000014183429010969646,
+          "second": 4.285497020981594e-7
+        },
+        {
+          "label": "AJ unsuited",
+          "best": 0.0000013013103910887632,
+          "second": 8.45424628258761e-7
+        },
+        {
+          "label": "Discard everything",
+          "best": 9.099077033373786e-7,
+          "second": 4.0162782410467794e-7
+        },
+        {
+          "label": "Suited AK",
+          "best": 6.979238005598596e-7,
+          "second": 1.1646300874295496e-7
+        },
+        {
+          "label": "Suited AQ",
+          "best": 6.95076294233626e-7,
+          "second": 1.2101901886492873e-7
+        },
+        {
+          "label": "Suited AJ",
+          "best": 6.91944037274769e-7,
+          "second": 1.2158852013017546e-7
+        },
+        {
+          "label": "K only",
+          "best": 2.275416418872136e-7,
+          "second": 7.235254710748146e-8
+        },
+        {
+          "label": "Q only",
+          "best": 2.1480552268260507e-7,
+          "second": 1.8004005908140735e-7
+        },
+        {
+          "label": "J only",
+          "best": 2.0514988759455833e-7,
+          "second": 2.533762901924968e-7
+        },
+        {
+          "label": "other (4 cards)",
+          "best": 0,
+          "second": 0.00003458011682578105
+        },
+        {
+          "label": "other (3 cards)",
+          "best": 0,
+          "second": 0.0000300269542101335
+        },
+        {
+          "label": "other (2 cards)",
+          "best": 0,
+          "second": 0.0000015496129427363343
+        },
+        {
+          "label": "Suited AT",
+          "best": 0,
+          "second": 2.776318668077777e-7
+        },
+        {
+          "label": "other (1 cards)",
+          "best": 0,
+          "second": 1.068591464972034e-7
+        }
+      ]
+    },
+    {
+      "key": "four-2-4",
+      "label": "Four 2s–4s",
+      "category": "four-kind",
+      "pays": 40,
+      "best": 0.0005272518302003917,
+      "second": 0.00021731989665509048,
+      "holds": [
+        {
+          "label": "Low Pair (22–TT)",
+          "best": 0.0002617854941022876,
+          "second": 0.000008457093788913842
+        },
+        {
+          "label": "Three of a Kind",
+          "best": 0.0002074807009546863,
+          "second": 0.000014146411428728612
+        },
+        {
+          "label": "Pat Four 2s–4s",
+          "best": 0.000055406778095853724,
+          "second": 0
+        },
+        {
+          "label": "Discard everything",
+          "best": 0.0000011458624320975551,
+          "second": 5.534516841352248e-7
+        },
+        {
+          "label": "A only",
+          "best": 3.8886581847892184e-7,
+          "second": 8.355101289592384e-7
+        },
+        {
+          "label": "K only",
+          "best": 3.712112792562734e-7,
+          "second": 1.3800051113774012e-7
+        },
+        {
+          "label": "Q only",
+          "best": 3.476805224331247e-7,
+          "second": 3.5536878951395544e-7
+        },
+        {
+          "label": "J only",
+          "best": 3.2523699529817426e-7,
+          "second": 5.383340141850391e-7
+        },
+        {
+          "label": "other (4 cards)",
+          "best": 0,
+          "second": 0.00010374035047734314
+        },
+        {
+          "label": "other (3 cards)",
+          "best": 0,
+          "second": 0.00008644174954547393
+        },
+        {
+          "label": "other (2 cards)",
+          "best": 0,
+          "second": 0.000001773426939978297
+        },
+        {
+          "label": "other (1 cards)",
+          "best": 0,
+          "second": 3.4019934672147455e-7
+        }
+      ]
+    },
+    {
+      "key": "four-5-k",
+      "label": "Four 5s–Ks",
+      "category": "four-kind",
+      "pays": 25,
+      "best": 0.0016390998155470825,
+      "second": 0.0006872980200664651,
+      "holds": [
+        {
+          "label": "Three of a Kind",
+          "best": 0.0006224421028640589,
+          "second": 0.000042439234286185834
+        },
+        {
+          "label": "Low Pair (22–TT)",
+          "best": 0.0005203291022521582,
+          "second": 0.000019476943271437943
+        },
+        {
+          "label": "High Pair (JJ–KK)",
+          "best": 0.00027024258789120145,
+          "second": 3.844133540415383e-7
+        },
+        {
+          "label": "Pat Four 5s–Ks",
+          "best": 0.0001662203342875612,
+          "second": 0
+        },
+        {
+          "label": "K only",
+          "best": 0.00001123341245699162,
+          "second": 0.000003584285644935992
+        },
+        {
+          "label": "Q only",
+          "best": 0.000010607401134379733,
+          "second": 0.000009343574281112663
+        },
+        {
+          "label": "J only",
+          "best": 0.0000101374072720243,
+          "second": 0.000014415112480240476
+        },
+        {
+          "label": "Discard everything",
+          "best": 0.000005223491491264095,
+          "second": 0.0000022579430845975208
+        },
+        {
+          "label": "KQ unsuited",
+          "best": 0.0000033987835509924454,
+          "second": 5.917118145913456e-7
+        },
+        {
+          "label": "KJ unsuited",
+          "best": 0.000003262103247333232,
+          "second": 6.913745360095223e-7
+        },
+        {
+          "label": "QJ unsuited",
+          "best": 0.00000317553905501573,
+          "second": 0.0000011133749735573445
+        },
+        {
+          "label": "A only",
+          "best": 0.0000014768203264693442,
+          "second": 0.0000025054949300318125
+        },
+        {
+          "label": "AK unsuited",
+          "best": 0.000001430302427667146,
+          "second": 9.709996572456634e-8
+        },
+        {
+          "label": "AQ unsuited",
+          "best": 0.0000014183429010969646,
+          "second": 4.285497020981594e-7
+        },
+        {
+          "label": "AJ unsuited",
+          "best": 0.0000013013103910887632,
+          "second": 8.45424628258761e-7
+        },
+        {
+          "label": "Suited KQ",
+          "best": 0.0000012716963252959336,
+          "second": 4.0605440212091384e-7
+        },
+        {
+          "label": "Suited KJ",
+          "best": 0.0000012660013126434663,
+          "second": 4.083324071819007e-7
+        },
+        {
+          "label": "Suited QJ",
+          "best": 0.0000011481145507373944,
+          "second": 5.023001159476101e-7
+        },
+        {
+          "label": "Suited AK",
+          "best": 6.979238005598596e-7,
+          "second": 1.1646300874295496e-7
+        },
+        {
+          "label": "Suited AQ",
+          "best": 6.95076294233626e-7,
+          "second": 1.2101901886492873e-7
+        },
+        {
+          "label": "Suited AJ",
+          "best": 6.91944037274769e-7,
+          "second": 1.2158852013017546e-7
+        },
+        {
+          "label": "Suited JT",
+          "best": 6.697334879301467e-7,
+          "second": 4.373769717094836e-7
+        },
+        {
+          "label": "Suited QT",
+          "best": 4.869235817859486e-7,
+          "second": 3.496737768614882e-7
+        },
+        {
+          "label": "Suited KT",
+          "best": 2.7336060731842725e-7,
+          "second": 2.727911060531806e-7
+        },
+        {
+          "label": "other (4 cards)",
+          "best": 0,
+          "second": 0.00031122105143202946
+        },
+        {
+          "label": "other (3 cards)",
+          "best": 0,
+          "second": 0.0002596071517627189
+        },
+        {
+          "label": "other (2 cards)",
+          "best": 0,
+          "second": 0.000010172431599836974
+        },
+        {
+          "label": "other (1 cards)",
+          "best": 0,
+          "second": 0.000005109617124635898
+        },
+        {
+          "label": "Suited AT",
+          "best": 0,
+          "second": 2.776318668077777e-7
+        }
+      ]
+    },
+    {
+      "key": "full-house",
+      "label": "Full House",
+      "category": "full-house",
+      "pays": 6,
+      "best": 0.011406914266495894,
+      "second": 0.005577474032825108
+    },
+    {
+      "key": "flush",
+      "label": "Flush",
+      "category": "flush",
+      "pays": 5,
+      "best": 0.010899558820258844,
+      "second": 0.004947056017784505
+    },
+    {
+      "key": "straight",
+      "label": "Straight",
+      "category": "straight",
+      "pays": 4,
+      "best": 0.011274926565970893,
+      "second": 0.006876342836537554
+    },
+    {
+      "key": "three-kind",
+      "label": "Three of a Kind",
+      "category": "three-kind",
+      "pays": 3,
+      "best": 0.07453068751972101,
+      "second": 0.061981786152621544
+    },
+    {
+      "key": "two-pair",
+      "label": "Two Pair",
+      "category": "two-pair",
+      "pays": 2,
+      "best": 0.12925389720691954,
+      "second": 0.13916119399865604
+    },
+    {
+      "key": "jacks-or-better",
+      "label": "Jacks or Better",
+      "category": "jacks-or-better",
+      "pays": 1,
+      "best": 0.21517582552546993,
+      "second": 0.19857470064696814
+    },
+    {
+      "key": "nothing",
+      "label": "No win",
+      "category": "nothing",
+      "pays": 0,
+      "best": 0.5449588431341678,
+      "second": 0.5818404294850423
+    }
+  ]
+}

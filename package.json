@@ -12,7 +12,8 @@
     "test": "vitest run",
     "verify": "node scripts/verify-returns.ts",
     "chart": "node scripts/gen-chart.ts",
-    "odds": "node scripts/gen-odds.ts"
+    "odds": "node scripts/gen-odds.ts",
+    "progressive": "node scripts/gen-progressive.ts"
   },
   "dependencies": {
     "react": "^19.2.8",

@@ -3,6 +3,10 @@
 Items Claude needs from the user. Claude adds items; the user answers inline or in chat.
 
 ## Open
+- [ ] **Commit T022a** (Claude verified: 330 tests, typecheck, lint, build; all 5 new returns match): see the command in chat.
+- [ ] **Hand T022 to DeepSeek:** "read handoffs/TO_DEEPSEEK.md" (meter input on the Odds tab).
+- [ ] *(Dotty's questions)* (1) Which Dotty's (address or cross streets), and the machine number? (2) Bet **20 credits ($1)** and photograph the pay columns: does it still pay 800 per coin on the royal? Until then the app plays 25 credits ($1.25), the bet in the photo. (3) What does Dotty's players club pay back (points per $, points per $1)? Comps count as zero until then.
+- [ ] *(next Legends Bay visit)* **#20047:** is it 5¢ only? Photograph the meter again when you play: the app takes any meter on the Odds tab once T022 is in.
 - [ ] *(next GSR visit)* **Photograph the paytable at smaller bets (D34).** On the 5¢ Jacks 9/5 machine, bet **5 coins** and then **10 coins** and photograph the pay columns each time. Does a 25¢–75¢ bet already pay the full 800 royal, like the 5¢ deuces machine does at 5 coins? Also photograph the $1 machines at **5 coins**. Until then the app only offers 16–20 coins on the 5¢ Jacks.
 - [ ] **Check "How much should I bet?"** (Bankroll tab, top). On Legends Bay JoB 8/5 with $100, a $1 limit and Double, the pick is 25¢ (5¢ × 5) at 18.8%, ahead of 50¢ (10.4%) and the short $1.00 bet (11.3%). Under "Make it last", ~4 hours at 95% should pick 25¢ (5¢ × 5). On GSR JoB 9/5 with $100 and "Make it last" at ~2 hours, it should say no bet lasts. Check the table at 375px.
 - [ ] **Commit T014:** `git add -A && git commit -m "T014/T014a: Simulator tab (D23, D24); D25: goal table tables bet their minimum, per-game round names" && git push`

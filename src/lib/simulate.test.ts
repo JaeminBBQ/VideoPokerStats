@@ -60,6 +60,7 @@ describe('comps by venue', () => {
   it('GSR 0.05% and Legends Bay 1/6% of coin-in per 1×', () => {
     expect(compRatePerMultiplier('GSR')).toBe(0.0005);
     expect(compRatePerMultiplier('Legends Bay')).toBeCloseTo(1 / 600, 15);
+    expect(compRatePerMultiplier("Dotty's")).toBe(0);
   });
 });
 

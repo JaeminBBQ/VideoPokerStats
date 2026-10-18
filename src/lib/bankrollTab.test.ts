@@ -5,21 +5,28 @@ describe('bankroll tab helpers', () => {
   it('builds one row per game offered at the denomination, sorted by the 2,000-hand column (cheapest first)', () => {
     const rows = compareRows(0.05, 0, 0.95);
     expect(rows.map((r) => r.game.id)).toEqual([
+      'lb-job-9-5',
       'job-8-5',
+      'lb-bonus-7-5',
       'bonus-6-5',
+      'lb-deuces-20-12-10',
       'lb-deuces-16-13',
+      'lb-db-9-6-5',
       'bpd-7-5',
       'gsr-job-9-5',
       'gsr-deuces-20-12-10',
+      'dottys-bonus-6-5',
     ]);
     const mid = rows.map((r) => r.cells.find((c) => c.hands === 2000)!.cents);
     expect(mid).toEqual([...mid].sort((a, b) => a - b));
-    expect(mid[0]).toBe(5950); // JoB 238 bets at 5¢ = $59.50
-    expect(mid[1]).toBe(6600); // Bonus 264 bets at 5¢ = $66.00
-    expect(mid[2]).toBe(7775); // Deuces 311 bets at 5¢ = $77.75
-    expect(mid[3]).toBe(10325); // BPD 413 bets at 5¢ = $103.25
-    expect(mid[4]).toBe(22000); // GSR JoB 9/5: 220 bets × 20 coins × 5¢ = $220
-    expect(mid[5]).toBe(27900); // GSR Deuces 20/12/10: 279 bets × 20 coins × 5¢
+    const at = (id: string) => mid[rows.findIndex((r) => r.game.id === id)];
+    expect(at('job-8-5')).toBe(5950); // JoB 238 bets at 5¢ = $59.50
+    expect(at('bonus-6-5')).toBe(6600); // Bonus 264 bets at 5¢ = $66.00
+    expect(at('lb-deuces-16-13')).toBe(7775); // Deuces 311 bets at 5¢ = $77.75
+    expect(at('bpd-7-5')).toBe(10325); // BPD 413 bets at 5¢ = $103.25
+    expect(at('gsr-job-9-5')).toBe(22000); // GSR JoB 9/5: 220 bets × 20 coins × 5¢ = $220
+    expect(at('gsr-deuces-20-12-10')).toBe(27900); // GSR Deuces 20/12/10: 279 bets × 20 coins × 5¢
+    expect(at('lb-deuces-20-12-10')).toBe(279 * 25); // same paytable as GSR's, at 5 coins
   });
 
   it('uses each machine\'s max bet: GSR $1 plays 10 coins, Legends Bay 5', () => {

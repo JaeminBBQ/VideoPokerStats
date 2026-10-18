@@ -3841,6 +3841,1561 @@
           ]
         }
       ]
+    },
+    {
+      "gameId": "lb-job-9-5",
+      "name": "Jacks or Better — 9/5 (5¢ progressive)",
+      "publishedReturn": 0.9845,
+      "returnBest": 0.9844980757130477,
+      "returnSecond": 0.7953746652011853,
+      "maxPayBets": 800,
+      "capCheck": {
+        "margin": 1000,
+        "checkMargin": 4000,
+        "maxAbsDiff": 0
+      },
+      "perError": [
+        {
+          "errorRate": 0,
+          "return": 0.9844980757130478,
+          "sdPerHandBets": 4.415386199610042,
+          "tableMaxBankrollBets": 1801,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 7.750962143476093,
+              "sdOfResultBets": 98.7310368924251,
+              "bankrollNeededBets": {
+                "0.9": 79,
+                "0.95": 91,
+                "0.99": 112
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 19.75
+                },
+                "0.95": {
+                  "5¢": 22.75
+                },
+                "0.99": {
+                  "5¢": 28
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 31.00384857390437,
+              "sdOfResultBets": 197.4620737848502,
+              "bankrollNeededBets": {
+                "0.9": 194,
+                "0.95": 220,
+                "0.99": 269
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 48.5
+                },
+                "0.95": {
+                  "5¢": 55
+                },
+                "0.99": {
+                  "5¢": 67.25
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 155.01924286952183,
+              "sdOfResultBets": 441.5386199610042,
+              "bankrollNeededBets": {
+                "0.9": 604,
+                "0.95": 670,
+                "0.99": 793
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 151
+                },
+                "0.95": {
+                  "5¢": 167.5
+                },
+                "0.99": {
+                  "5¢": 198.25
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        },
+        {
+          "errorRate": 0.005,
+          "return": 0.9835524586604886,
+          "sdPerHandBets": 4.406961542980336,
+          "tableMaxBankrollBets": 1807,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 8.223770669755714,
+              "sdOfResultBets": 98.54265584331394,
+              "bankrollNeededBets": {
+                "0.9": 80,
+                "0.95": 91,
+                "0.99": 112
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 20
+                },
+                "0.95": {
+                  "5¢": 22.75
+                },
+                "0.99": {
+                  "5¢": 28
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 32.895082679022856,
+              "sdOfResultBets": 197.08531168662788,
+              "bankrollNeededBets": {
+                "0.9": 195,
+                "0.95": 222,
+                "0.99": 270
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 48.75
+                },
+                "0.95": {
+                  "5¢": 55.5
+                },
+                "0.99": {
+                  "5¢": 67.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 164.4754133951143,
+              "sdOfResultBets": 440.6961542980336,
+              "bankrollNeededBets": {
+                "0.9": 611,
+                "0.95": 678,
+                "0.99": 801
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 152.75
+                },
+                "0.95": {
+                  "5¢": 169.5
+                },
+                "0.99": {
+                  "5¢": 200.25
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        },
+        {
+          "errorRate": 0.01,
+          "return": 0.9826068416079291,
+          "sdPerHandBets": 4.398520547016374,
+          "tableMaxBankrollBets": 1814,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 8.696579196035447,
+              "sdOfResultBets": 98.35390943558173,
+              "bankrollNeededBets": {
+                "0.9": 80,
+                "0.95": 91,
+                "0.99": 113
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 20
+                },
+                "0.95": {
+                  "5¢": 22.75
+                },
+                "0.99": {
+                  "5¢": 28.25
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 34.78631678414179,
+              "sdOfResultBets": 196.70781887116345,
+              "bankrollNeededBets": {
+                "0.9": 197,
+                "0.95": 223,
+                "0.99": 272
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 49.25
+                },
+                "0.95": {
+                  "5¢": 55.75
+                },
+                "0.99": {
+                  "5¢": 68
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 173.93158392070896,
+              "sdOfResultBets": 439.85205470163737,
+              "bankrollNeededBets": {
+                "0.9": 619,
+                "0.95": 686,
+                "0.99": 809
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 154.75
+                },
+                "0.95": {
+                  "5¢": 171.5
+                },
+                "0.99": {
+                  "5¢": 202.25
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        },
+        {
+          "errorRate": 0.02,
+          "return": 0.9807156075028105,
+          "sdPerHandBets": 4.38158915917624,
+          "tableMaxBankrollBets": 1827,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 9.642196248594747,
+              "sdOfResultBets": 97.9753120939422,
+              "bankrollNeededBets": {
+                "0.9": 81,
+                "0.95": 92,
+                "0.99": 113
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 20.25
+                },
+                "0.95": {
+                  "5¢": 23
+                },
+                "0.99": {
+                  "5¢": 28.25
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 38.56878499437899,
+              "sdOfResultBets": 195.9506241878844,
+              "bankrollNeededBets": {
+                "0.9": 200,
+                "0.95": 226,
+                "0.99": 275
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 50
+                },
+                "0.95": {
+                  "5¢": 56.5
+                },
+                "0.99": {
+                  "5¢": 68.75
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 192.84392497189495,
+              "sdOfResultBets": 438.15891591762403,
+              "bankrollNeededBets": {
+                "0.9": 635,
+                "0.95": 702,
+                "0.99": 825
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 158.75
+                },
+                "0.95": {
+                  "5¢": 175.5
+                },
+                "0.99": {
+                  "5¢": 206.25
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gameId": "lb-bonus-7-5",
+      "name": "Bonus Poker — 7/5 (5¢ progressive)",
+      "publishedReturn": 0.9801,
+      "returnBest": 0.9801469405642739,
+      "returnSecond": 0.7924325356353131,
+      "maxPayBets": 800,
+      "capCheck": {
+        "margin": 1000,
+        "checkMargin": 4000,
+        "maxAbsDiff": 0
+      },
+      "perError": [
+        {
+          "errorRate": 0,
+          "return": 0.980146940564274,
+          "sdPerHandBets": 4.555631485729837,
+          "tableMaxBankrollBets": 1894,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 9.926529717863009,
+              "sdOfResultBets": 101.86701682530278,
+              "bankrollNeededBets": {
+                "0.9": 86,
+                "0.95": 97,
+                "0.99": 118
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 21.5
+                },
+                "0.95": {
+                  "5¢": 24.25
+                },
+                "0.99": {
+                  "5¢": 29.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 39.706118871452034,
+              "sdOfResultBets": 203.73403365060557,
+              "bankrollNeededBets": {
+                "0.9": 217,
+                "0.95": 245,
+                "0.99": 295
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 54.25
+                },
+                "0.95": {
+                  "5¢": 61.25
+                },
+                "0.99": {
+                  "5¢": 73.75
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 198.53059435726016,
+              "sdOfResultBets": 455.56314857298366,
+              "bankrollNeededBets": {
+                "0.9": 685,
+                "0.95": 759,
+                "0.99": 894
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 171.25
+                },
+                "0.95": {
+                  "5¢": 189.75
+                },
+                "0.99": {
+                  "5¢": 223.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        },
+        {
+          "errorRate": 0.005,
+          "return": 0.9792083685396291,
+          "sdPerHandBets": 4.547138074024658,
+          "tableMaxBankrollBets": 1900,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 10.395815730185443,
+              "sdOfResultBets": 101.67709836596606,
+              "bankrollNeededBets": {
+                "0.9": 86,
+                "0.95": 97,
+                "0.99": 118
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 21.5
+                },
+                "0.95": {
+                  "5¢": 24.25
+                },
+                "0.99": {
+                  "5¢": 29.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 41.583262920741774,
+              "sdOfResultBets": 203.35419673193212,
+              "bankrollNeededBets": {
+                "0.9": 219,
+                "0.95": 246,
+                "0.99": 297
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 54.75
+                },
+                "0.95": {
+                  "5¢": 61.5
+                },
+                "0.99": {
+                  "5¢": 74.25
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 207.91631460370886,
+              "sdOfResultBets": 454.71380740246576,
+              "bankrollNeededBets": {
+                "0.9": 693,
+                "0.95": 767,
+                "0.99": 902
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 173.25
+                },
+                "0.95": {
+                  "5¢": 191.75
+                },
+                "0.99": {
+                  "5¢": 225.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        },
+        {
+          "errorRate": 0.01,
+          "return": 0.9782697965149844,
+          "sdPerHandBets": 4.538628574016761,
+          "tableMaxBankrollBets": 1906,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 10.865101742507822,
+              "sdOfResultBets": 101.48682016124414,
+              "bankrollNeededBets": {
+                "0.9": 86,
+                "0.95": 98,
+                "0.99": 118
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 21.5
+                },
+                "0.95": {
+                  "5¢": 24.5
+                },
+                "0.99": {
+                  "5¢": 29.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 43.460406970031286,
+              "sdOfResultBets": 202.97364032248828,
+              "bankrollNeededBets": {
+                "0.9": 220,
+                "0.95": 248,
+                "0.99": 298
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 55
+                },
+                "0.95": {
+                  "5¢": 62
+                },
+                "0.99": {
+                  "5¢": 74.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 217.30203485015642,
+              "sdOfResultBets": 453.86285740167614,
+              "bankrollNeededBets": {
+                "0.9": 700,
+                "0.95": 775,
+                "0.99": 910
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 175
+                },
+                "0.95": {
+                  "5¢": 193.75
+                },
+                "0.99": {
+                  "5¢": 227.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        },
+        {
+          "errorRate": 0.02,
+          "return": 0.9763926524656947,
+          "sdPerHandBets": 4.521560945586186,
+          "tableMaxBankrollBets": 1919,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 11.803673767152635,
+              "sdOfResultBets": 101.1051763873894,
+              "bankrollNeededBets": {
+                "0.9": 87,
+                "0.95": 98,
+                "0.99": 119
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 21.75
+                },
+                "0.95": {
+                  "5¢": 24.5
+                },
+                "0.99": {
+                  "5¢": 29.75
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 47.21469506861054,
+              "sdOfResultBets": 202.2103527747788,
+              "bankrollNeededBets": {
+                "0.9": 223,
+                "0.95": 251,
+                "0.99": 301
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 55.75
+                },
+                "0.95": {
+                  "5¢": 62.75
+                },
+                "0.99": {
+                  "5¢": 75.25
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 236.07347534305268,
+              "sdOfResultBets": 452.15609455861863,
+              "bankrollNeededBets": {
+                "0.9": 716,
+                "0.95": 790,
+                "0.99": 925
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 179
+                },
+                "0.95": {
+                  "5¢": 197.5
+                },
+                "0.99": {
+                  "5¢": 231.25
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gameId": "lb-deuces-20-12-10",
+      "name": "Deuces Wild — 20/12/10 (5¢ progressive)",
+      "publishedReturn": 0.975791,
+      "returnBest": 0.975791355673953,
+      "returnSecond": 0.7524105789936326,
+      "maxPayBets": 800,
+      "capCheck": {
+        "margin": 1000,
+        "checkMargin": 4000,
+        "maxAbsDiff": 0
+      },
+      "perError": [
+        {
+          "errorRate": 0,
+          "return": 0.975791355673953,
+          "sdPerHandBets": 4.972460436035985,
+          "tableMaxBankrollBets": 2083,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 12.104322163023484,
+              "sdOfResultBets": 111.18759550404708,
+              "bankrollNeededBets": {
+                "0.9": 93,
+                "0.95": 105,
+                "0.99": 127
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 23.25
+                },
+                "0.95": {
+                  "5¢": 26.25
+                },
+                "0.99": {
+                  "5¢": 31.75
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 48.41728865209394,
+              "sdOfResultBets": 222.37519100809416,
+              "bankrollNeededBets": {
+                "0.9": 252,
+                "0.95": 279,
+                "0.99": 329
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 63
+                },
+                "0.95": {
+                  "5¢": 69.75
+                },
+                "0.99": {
+                  "5¢": 82.25
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 242.08644326046968,
+              "sdOfResultBets": 497.2460436035985,
+              "bankrollNeededBets": {
+                "0.9": 827,
+                "0.95": 914,
+                "0.99": 1064
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 206.75
+                },
+                "0.95": {
+                  "5¢": 228.5
+                },
+                "0.99": {
+                  "5¢": 266
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        },
+        {
+          "errorRate": 0.005,
+          "return": 0.9746744517905516,
+          "sdPerHandBets": 4.964834171026162,
+          "tableMaxBankrollBets": 2091,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 12.662774104724217,
+              "sdOfResultBets": 111.01706703428316,
+              "bankrollNeededBets": {
+                "0.9": 94,
+                "0.95": 106,
+                "0.99": 127
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 23.5
+                },
+                "0.95": {
+                  "5¢": 26.5
+                },
+                "0.99": {
+                  "5¢": 31.75
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 50.65109641889687,
+              "sdOfResultBets": 222.03413406856632,
+              "bankrollNeededBets": {
+                "0.9": 253,
+                "0.95": 281,
+                "0.99": 331
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 63.25
+                },
+                "0.95": {
+                  "5¢": 70.25
+                },
+                "0.99": {
+                  "5¢": 82.75
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 253.25548209448434,
+              "sdOfResultBets": 496.48341710261616,
+              "bankrollNeededBets": {
+                "0.9": 836,
+                "0.95": 923,
+                "0.99": 1074
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 209
+                },
+                "0.95": {
+                  "5¢": 230.75
+                },
+                "0.99": {
+                  "5¢": 268.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        },
+        {
+          "errorRate": 0.01,
+          "return": 0.9735575479071499,
+          "sdPerHandBets": 4.957195921958938,
+          "tableMaxBankrollBets": 2100,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 13.22122604642506,
+              "sdOfResultBets": 110.84627059284928,
+              "bankrollNeededBets": {
+                "0.9": 94,
+                "0.95": 106,
+                "0.99": 128
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 23.5
+                },
+                "0.95": {
+                  "5¢": 26.5
+                },
+                "0.99": {
+                  "5¢": 32
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 52.88490418570024,
+              "sdOfResultBets": 221.69254118569856,
+              "bankrollNeededBets": {
+                "0.9": 255,
+                "0.95": 283,
+                "0.99": 333
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 63.75
+                },
+                "0.95": {
+                  "5¢": 70.75
+                },
+                "0.99": {
+                  "5¢": 83.25
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 264.42452092850124,
+              "sdOfResultBets": 495.7195921958938,
+              "bankrollNeededBets": {
+                "0.9": 846,
+                "0.95": 933,
+                "0.99": 1083
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 211.5
+                },
+                "0.95": {
+                  "5¢": 233.25
+                },
+                "0.99": {
+                  "5¢": 270.75
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        },
+        {
+          "errorRate": 0.02,
+          "return": 0.9713237401403467,
+          "sdPerHandBets": 4.941883249292236,
+          "tableMaxBankrollBets": 2117,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 14.338129929826637,
+              "sdOfResultBets": 110.50386882284981,
+              "bankrollNeededBets": {
+                "0.9": 95,
+                "0.95": 107,
+                "0.99": 128
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 23.75
+                },
+                "0.95": {
+                  "5¢": 26.75
+                },
+                "0.99": {
+                  "5¢": 32
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 57.35251971930655,
+              "sdOfResultBets": 221.00773764569962,
+              "bankrollNeededBets": {
+                "0.9": 259,
+                "0.95": 286,
+                "0.99": 336
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 64.75
+                },
+                "0.95": {
+                  "5¢": 71.5
+                },
+                "0.99": {
+                  "5¢": 84
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 286.76259859653277,
+              "sdOfResultBets": 494.18832492922365,
+              "bankrollNeededBets": {
+                "0.9": 865,
+                "0.95": 952,
+                "0.99": 1102
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 216.25
+                },
+                "0.95": {
+                  "5¢": 238
+                },
+                "0.99": {
+                  "5¢": 275.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gameId": "lb-db-9-6-5",
+      "name": "Double Bonus — 9/6/5 (5¢ progressive)",
+      "publishedReturn": 0.9781,
+      "returnBest": 0.9780622652885758,
+      "returnSecond": 0.7230047271119611,
+      "maxPayBets": 800,
+      "capCheck": {
+        "margin": 1000,
+        "checkMargin": 4000,
+        "maxAbsDiff": 0
+      },
+      "perError": [
+        {
+          "errorRate": 0,
+          "return": 0.9780622652885755,
+          "sdPerHandBets": 5.547804046590223,
+          "tableMaxBankrollBets": 2262,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 10.96886735571223,
+              "sdOfResultBets": 124.0526697402415,
+              "bankrollNeededBets": {
+                "0.9": 125,
+                "0.95": 139,
+                "0.99": 162
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 31.25
+                },
+                "0.95": {
+                  "5¢": 34.75
+                },
+                "0.99": {
+                  "5¢": 40.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 43.87546942284892,
+              "sdOfResultBets": 248.105339480483,
+              "bankrollNeededBets": {
+                "0.9": 319,
+                "0.95": 361,
+                "0.99": 432
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 79.75
+                },
+                "0.95": {
+                  "5¢": 90.25
+                },
+                "0.99": {
+                  "5¢": 108
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 219.37734711424463,
+              "sdOfResultBets": 554.7804046590223,
+              "bankrollNeededBets": {
+                "0.9": 933,
+                "0.95": 1054,
+                "0.99": 1272
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 233.25
+                },
+                "0.95": {
+                  "5¢": 263.5
+                },
+                "0.99": {
+                  "5¢": 318
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        },
+        {
+          "errorRate": 0.005,
+          "return": 0.9767869775976928,
+          "sdPerHandBets": 5.53909736911431,
+          "tableMaxBankrollBets": 2271,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 11.60651120115358,
+              "sdOfResultBets": 123.85798251329841,
+              "bankrollNeededBets": {
+                "0.9": 125,
+                "0.95": 139,
+                "0.99": 163
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 31.25
+                },
+                "0.95": {
+                  "5¢": 34.75
+                },
+                "0.99": {
+                  "5¢": 40.75
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 46.42604480461432,
+              "sdOfResultBets": 247.71596502659682,
+              "bankrollNeededBets": {
+                "0.9": 321,
+                "0.95": 362,
+                "0.99": 434
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 80.25
+                },
+                "0.95": {
+                  "5¢": 90.5
+                },
+                "0.99": {
+                  "5¢": 108.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 232.1302240230716,
+              "sdOfResultBets": 553.909736911431,
+              "bankrollNeededBets": {
+                "0.9": 944,
+                "0.95": 1064,
+                "0.99": 1282
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 236
+                },
+                "0.95": {
+                  "5¢": 266
+                },
+                "0.99": {
+                  "5¢": 320.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        },
+        {
+          "errorRate": 0.01,
+          "return": 0.9755116899068096,
+          "sdPerHandBets": 5.530376690332936,
+          "tableMaxBankrollBets": 2281,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 12.244155046595207,
+              "sdOfResultBets": 123.6629822076475,
+              "bankrollNeededBets": {
+                "0.9": 126,
+                "0.95": 139,
+                "0.99": 163
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 31.5
+                },
+                "0.95": {
+                  "5¢": 34.75
+                },
+                "0.99": {
+                  "5¢": 40.75
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 48.97662018638083,
+              "sdOfResultBets": 247.325964415295,
+              "bankrollNeededBets": {
+                "0.9": 323,
+                "0.95": 364,
+                "0.99": 436
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 80.75
+                },
+                "0.95": {
+                  "5¢": 91
+                },
+                "0.99": {
+                  "5¢": 109
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 244.88310093190412,
+              "sdOfResultBets": 553.0376690332936,
+              "bankrollNeededBets": {
+                "0.9": 954,
+                "0.95": 1075,
+                "0.99": 1293
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 238.5
+                },
+                "0.95": {
+                  "5¢": 268.75
+                },
+                "0.99": {
+                  "5¢": 323.25
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        },
+        {
+          "errorRate": 0.02,
+          "return": 0.9729611145250434,
+          "sdPerHandBets": 5.5128930629682396,
+          "tableMaxBankrollBets": 2300,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 13.519442737478293,
+              "sdOfResultBets": 123.27203641484013,
+              "bankrollNeededBets": {
+                "0.9": 126,
+                "0.95": 140,
+                "0.99": 164
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 31.5
+                },
+                "0.95": {
+                  "5¢": 35
+                },
+                "0.99": {
+                  "5¢": 41
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 54.07777094991317,
+              "sdOfResultBets": 246.54407282968026,
+              "bankrollNeededBets": {
+                "0.9": 327,
+                "0.95": 368,
+                "0.99": 439
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 81.75
+                },
+                "0.95": {
+                  "5¢": 92
+                },
+                "0.99": {
+                  "5¢": 109.75
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 270.3888547495659,
+              "sdOfResultBets": 551.289306296824,
+              "bankrollNeededBets": {
+                "0.9": 975,
+                "0.95": 1096,
+                "0.99": 1314
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 243.75
+                },
+                "0.95": {
+                  "5¢": 274
+                },
+                "0.99": {
+                  "5¢": 328.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gameId": "dottys-bonus-6-5",
+      "name": "Bonus Poker — 6/5 (5¢)",
+      "publishedReturn": 0.9687,
+      "returnBest": 0.9686871554311571,
+      "returnSecond": 0.7869076164639338,
+      "maxPayBets": 800,
+      "capCheck": {
+        "margin": 1000,
+        "checkMargin": 4000,
+        "maxAbsDiff": 0
+      },
+      "perError": [
+        {
+          "errorRate": 0,
+          "return": 0.968687155431157,
+          "sdPerHandBets": 4.544739413014206,
+          "tableMaxBankrollBets": 2004,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 15.65642228442149,
+              "sdOfResultBets": 101.62346267522257,
+              "bankrollNeededBets": {
+                "0.9": 90,
+                "0.95": 101,
+                "0.99": 121
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 112.5
+                },
+                "0.95": {
+                  "5¢": 126.25
+                },
+                "0.99": {
+                  "5¢": 151.25
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 62.62568913768596,
+              "sdOfResultBets": 203.24692535044514,
+              "bankrollNeededBets": {
+                "0.9": 237,
+                "0.95": 264,
+                "0.99": 314
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 296.25
+                },
+                "0.95": {
+                  "5¢": 330
+                },
+                "0.99": {
+                  "5¢": 392.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 313.1284456884298,
+              "sdOfResultBets": 454.4739413014206,
+              "bankrollNeededBets": {
+                "0.9": 790,
+                "0.95": 865,
+                "0.99": 999
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 987.5
+                },
+                "0.95": {
+                  "5¢": 1081.25
+                },
+                "0.99": {
+                  "5¢": 1248.75
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        },
+        {
+          "errorRate": 0.005,
+          "return": 0.967778257736321,
+          "sdPerHandBets": 4.5362305395219,
+          "tableMaxBankrollBets": 2010,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 16.11087113183951,
+              "sdOfResultBets": 101.43319847981515,
+              "bankrollNeededBets": {
+                "0.9": 90,
+                "0.95": 101,
+                "0.99": 121
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 112.5
+                },
+                "0.95": {
+                  "5¢": 126.25
+                },
+                "0.99": {
+                  "5¢": 151.25
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 64.44348452735804,
+              "sdOfResultBets": 202.8663969596303,
+              "bankrollNeededBets": {
+                "0.9": 238,
+                "0.95": 266,
+                "0.99": 315
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 297.5
+                },
+                "0.95": {
+                  "5¢": 332.5
+                },
+                "0.99": {
+                  "5¢": 393.75
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 322.2174226367902,
+              "sdOfResultBets": 453.62305395219,
+              "bankrollNeededBets": {
+                "0.9": 798,
+                "0.95": 872,
+                "0.99": 1007
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 997.5
+                },
+                "0.95": {
+                  "5¢": 1090
+                },
+                "0.99": {
+                  "5¢": 1258.75
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        },
+        {
+          "errorRate": 0.01,
+          "return": 0.966869360041485,
+          "sdPerHandBets": 4.527705492960816,
+          "tableMaxBankrollBets": 2017,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 16.565319979257474,
+              "sdOfResultBets": 101.2425726435958,
+              "bankrollNeededBets": {
+                "0.9": 90,
+                "0.95": 102,
+                "0.99": 122
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 112.5
+                },
+                "0.95": {
+                  "5¢": 127.5
+                },
+                "0.99": {
+                  "5¢": 152.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 66.2612799170299,
+              "sdOfResultBets": 202.4851452871916,
+              "bankrollNeededBets": {
+                "0.9": 240,
+                "0.95": 267,
+                "0.99": 316
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 300
+                },
+                "0.95": {
+                  "5¢": 333.75
+                },
+                "0.99": {
+                  "5¢": 395
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 331.3063995851495,
+              "sdOfResultBets": 452.77054929608164,
+              "bankrollNeededBets": {
+                "0.9": 806,
+                "0.95": 880,
+                "0.99": 1014
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 1007.5
+                },
+                "0.95": {
+                  "5¢": 1100
+                },
+                "0.99": {
+                  "5¢": 1267.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        },
+        {
+          "errorRate": 0.02,
+          "return": 0.9650515646518126,
+          "sdPerHandBets": 4.51060651365315,
+          "tableMaxBankrollBets": 2029,
+          "horizons": [
+            {
+              "hands": 500,
+              "expectedLossBets": 17.474217674093683,
+              "sdOfResultBets": 100.86022784281778,
+              "bankrollNeededBets": {
+                "0.9": 91,
+                "0.95": 102,
+                "0.99": 122
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 113.75
+                },
+                "0.95": {
+                  "5¢": 127.5
+                },
+                "0.99": {
+                  "5¢": 152.5
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 2000,
+              "expectedLossBets": 69.89687069637473,
+              "sdOfResultBets": 201.72045568563556,
+              "bankrollNeededBets": {
+                "0.9": 242,
+                "0.95": 270,
+                "0.99": 319
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 302.5
+                },
+                "0.95": {
+                  "5¢": 337.5
+                },
+                "0.99": {
+                  "5¢": 398.75
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            },
+            {
+              "hands": 10000,
+              "expectedLossBets": 349.48435348187365,
+              "sdOfResultBets": 451.06065136531504,
+              "bankrollNeededBets": {
+                "0.9": 821,
+                "0.95": 895,
+                "0.99": 1029
+              },
+              "bankrollNeededDollars": {
+                "0.9": {
+                  "5¢": 1026.25
+                },
+                "0.95": {
+                  "5¢": 1118.75
+                },
+                "0.99": {
+                  "5¢": 1286.25
+                }
+              },
+              "capTruncationMaxAbsDiff": 0
+            }
+          ]
+        }
+      ]
     }
   ]
 }

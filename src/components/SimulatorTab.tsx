@@ -45,7 +45,7 @@ const GAME_CHIPS: { id: 'vp' | TableSimId; label: string }[] = [
 ];
 
 /** The owner's tier: GSR Premier 2× everyday, no Legends Bay tier (D24). */
-const DEFAULT_MULTIPLIER: Record<Venue, number> = { GSR: 2, 'Legends Bay': 1 };
+const DEFAULT_MULTIPLIER: Record<Venue, number> = { GSR: 2, 'Legends Bay': 1, "Dotty's": 1 };
 
 /** Multiplier hint and points rate per venue (D24; the rate feeds the footnote). */
 const VENUE_POINTS: Record<Venue, { hint: string; rate: string }> = {
@@ -56,6 +56,10 @@ const VENUE_POINTS: Record<Venue, { hint: string; rate: string }> = {
   'Legends Bay': {
     hint: 'Everyday 1× · Monster Multiplier Mondays 3×–5× (spin to reveal; points days capped at 10,000 points). 1 point per $6, 100 points = $1.',
     rate: '1 per $6, 100 = $1',
+  },
+  "Dotty's": {
+    hint: "Dotty's points aren't modeled yet (no confirmed rate), so comps count as zero here.",
+    rate: 'not modeled',
   },
 };
 
@@ -236,7 +240,9 @@ function VideoPokerSimulator(props: Props) {
         ) : (
           <>
             . The house keeps {edgePct(1 - total)}%. Break-even needs {edgePct(edge.breakEvenCompRate)} back
-            (about {(edge.breakEvenCompRate / compRatePerMultiplier(game.venue)).toFixed(1)}× points).
+            {compRatePerMultiplier(game.venue) > 0 &&
+              ` (about ${(edge.breakEvenCompRate / compRatePerMultiplier(game.venue)).toFixed(1)}× points)`}
+            .
           </>
         )}
       </p>
