@@ -499,9 +499,16 @@ export const GAMES: Record<GameId, GameDef> = {
     proof: 'context/dottys/IMG_8659.JPG',
     name: 'Bonus Poker — 6/5 (5¢)',
     where: "Dotty's, Sparks, Pyramid Way near Costco; 5¢, bet 25 credits (photographed 2026-10-18)",
-    // Every photographed bet (22–25 and 100 credits) pays the same per coin, royal included: no max-bet bonus.
-    // The app plays 25 credits ($1.25), the bet in the photo; 1–21 credits aren't shown.
-    offers: [{ denomination: 0.05, maxCoins: 25, confirmed: true, shortBets: [22, 23, 24].map((c) => ({ coins: c, royalPerCoin: 800 })) }],
+    // 22–25 and 100 credits pay the same per coin, royal included: no max-bet bonus. 1–4 credits pay a 250
+    // royal (context/dottys/IMG_8671.jpeg). The app plays 25 credits ($1.25); 5–21 credits aren't shown.
+    offers: [
+      {
+        denomination: 0.05,
+        maxCoins: 25,
+        confirmed: true,
+        shortBets: [...shortRoyal([1, 2, 3, 4]), ...[22, 23, 24].map((c) => ({ coins: c, royalPerCoin: 800 }))],
+      },
+    ],
     deckSize: 52,
     ...bonus65,
     publishedReturn: 0.9687,
