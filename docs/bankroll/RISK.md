@@ -515,3 +515,37 @@ Return with errors: 0.0% → 96.869%, 0.5% → 96.778%, 1.0% → 96.687%, 2.0% �
 | Denom | 500 h, 0% err | 500 h, 1% err | 2,000 h, 0% err | 2,000 h, 1% err | 10,000 h, 0% err | 10,000 h, 1% err |
 |---|--:|--:|--:|--:|--:|--:|
 | 5¢ (25 coins) | $126 | $128 | $330 | $334 | $1,081 | $1,100 |
+
+## Bonus Poker — 8/5 ($1)
+
+Perfect play returns **99.166%** (published 99.17%); always playing the next-best hold returns 79.79%. Per-hand std dev (perfect play): **4.57 bets**. Cap check: 0.0e+0.
+
+### Bankroll needed, in bets
+
+| Horizon | Survive | 0.0% errors | 0.5% errors | 1.0% errors | 2.0% errors |
+|---|---|--:|--:|--:|--:|
+| 500 hands | 90% | 82 | 82 | 83 | 83 |
+| 500 hands | 95% | 94 | 94 | 94 | 95 |
+| 500 hands | 99% | 114 | 115 | 115 | 116 |
+| 2,000 hands | 90% | 199 | 200 | 202 | 205 |
+| 2,000 hands | 95% | 227 | 228 | 230 | 233 |
+| 2,000 hands | 99% | 278 | 279 | 281 | 283 |
+| 10,000 hands | 90% | 582 | 590 | 598 | 614 |
+| 10,000 hands | 95% | 656 | 664 | 672 | 688 |
+| 10,000 hands | 99% | 792 | 800 | 808 | 824 |
+
+### Expected loss over the horizon, in bets
+
+| Horizon | 0.0% errors | 0.5% errors | 1.0% errors | 2.0% errors |
+|---|--:|--:|--:|--:|
+| 500 hands | 4.2 | 4.7 | 5.1 | 6.1 |
+| 2,000 hands | 16.7 | 18.6 | 20.6 | 24.4 |
+| 10,000 hands | 83.4 | 93.1 | 102.8 | 122.2 |
+
+Return with errors: 0.0% → 99.166%, 0.5% → 99.069%, 1.0% → 98.972%, 2.0% → 98.778%.
+
+### Dollars for 95% survival
+
+| Denom | 500 h, 0% err | 500 h, 1% err | 2,000 h, 0% err | 2,000 h, 1% err | 10,000 h, 0% err | 10,000 h, 1% err |
+|---|--:|--:|--:|--:|--:|--:|
+| $1 (50 coins) | $4,700 | $4,700 | $11,350 | $11,500 | $32,800 | $33,600 |

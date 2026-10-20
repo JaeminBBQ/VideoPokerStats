@@ -3,6 +3,8 @@
 Items Claude needs from the user. Claude adds items; the user answers inline or in chat.
 
 ## Open
+- [ ] **Dotty's IMG_8673 (Bonus Poker 7/5, max column 100 credits):** what denomination is it? Same machine as the 5¢ Bonus 6/5? It ships once the denomination is known (D41).
+- [ ] **Commit the Dotty's $1 Bonus 8/5:** see the command in chat.
 - [ ] **Commit T022:** see the command in chat.
 - [ ] **Check the Odds tab meter** (`npm run dev`, 375px): Legends Bay → Jacks or Better 9/5 (5¢ progressive): $229.79 → 98.75% (98.45% at $200.00), 100% at about $339.26, strategy line "almost nothing" or ~0.01%. Type 500 → strategy gives up about 0.53%. Type 600 → the "Above $500.00" note. Deuces 20/12/10 (progressive): 97.86%, 100% at about $441.50. GSR and Dotty's games: no section.
 - [ ] *(next Dotty's visit, Sparks / Pyramid near Costco)* Bet **20 credits ($1)** and photograph the pay columns: owner says it pays the same (2026-10-18); the photo confirms it before the app changes. Until then the app plays 25 credits ($1.25), the bet in the photo. Also note the machine number. (Players club payback: unknown, no app; comps stay at zero.) New photo (D40): 1–4 credits pay a 250 royal, so the jump to 800 is somewhere in 5–22. Bet 20 is the one to photograph. **Also:** the $1 Double Bonus 9/7/5 photo (IMG_8670) cuts off the max-bet column. Re-shoot it with the whole table in frame to add it as a reference game.

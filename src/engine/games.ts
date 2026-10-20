@@ -21,7 +21,8 @@ export type GameId =
   | 'lb-bonus-7-5'
   | 'lb-deuces-20-12-10'
   | 'lb-db-9-6-5'
-  | 'dottys-bonus-6-5';
+  | 'dottys-bonus-6-5'
+  | 'dottys-bonus-8-5';
 
 /** Casinos where the owner has photographed a paytable. Add one only with a photo in `context/`. */
 export type Venue = 'Legends Bay' | 'GSR' | "Dotty's";
@@ -300,6 +301,9 @@ const LB_OFFERS: Offer[] = [0.01, 0.05, 0.1, 0.25, 0.5, 1, 2, 5].map((denominati
 const bonus75 = bonusGame(quads(80, 40, 25), 7, 5, 4, 2);
 const db965 = bonusGame(quads(160, 80, 50), 9, 6, 5, 1);
 
+// Dotty's $1 (owner photo context/dottys/IMG_8674.jpeg, 2026-10-20).
+const bonus85 = bonusGame(quads(80, 40, 25), 8, 5, 4, 2);
+
 /** #20047: the photos show 1–4 coins at a 250 royal (fixed, not progressive) and the meter at 5 coins. */
 const LB_20047: Offer[] = [
   {
@@ -514,6 +518,20 @@ export const GAMES: Record<GameId, GameDef> = {
     publishedReturn: 0.9687,
     publishedDecimals: 2,
     source: 'https://wizardofodds.com/games/video-poker/tables/bonus-poker/ (6/5: 96.87%); same paytable as bonus-6-5; owner photo',
+  },
+  'dottys-bonus-8-5': {
+    id: 'dottys-bonus-8-5',
+    venue: "Dotty's",
+    proof: 'context/dottys/IMG_8674.jpeg',
+    name: 'Bonus Poker — 8/5 ($1)',
+    where: "Dotty's, Sparks, Pyramid Way near Costco; $1, max bet 50 credits (photographed 2026-10-20)",
+    // Photo (bet 1) shows 1–4 credits at a 250 royal and 50 credits at 40,000 (800 per coin); 5–49 aren't shown.
+    offers: [{ denomination: 1, maxCoins: 50, confirmed: true, shortBets: shortRoyal([1, 2, 3, 4]) }],
+    deckSize: 52,
+    ...bonus85,
+    publishedReturn: 0.9917,
+    publishedDecimals: 2,
+    source: 'https://wizardofodds.com/games/video-poker/tables/bonus-poker/ (8/5: 99.17%); paytable from owner photo',
   },
 };
 
